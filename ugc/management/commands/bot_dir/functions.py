@@ -7,6 +7,7 @@ from .keyboards import start_keyboard, post_keyboard
 from .translates import translates
 import smtplib
 from platform import system
+from time import sleep
 
 
 settings = Settings()
@@ -30,7 +31,7 @@ def create_post_button(user, chat_id, bot: Bot, update: Update):
 
 
 def take_users():
-    conn = sqlite3.connect('database.sqlite3')
+    conn = sqlite3.connect('./ugc/management/commands/bot_dir/database.sqlite3')
     cur = conn.cursor()
     cur.execute("SELECT USER_ID from USERS")
     users = [i[0] for i in cur.fetchall()]
@@ -49,27 +50,27 @@ def send_email(user):
     message = 'Subject: {}\n\n{}'.format(subject, msg)
     server.sendmail(user.email, user.email, message)
     server.quit()
-    print("Success: Email sent!")
 
 
 def take_emails():
     if system() == 'Linux':
-        conn = sqlite3.connect(settings.path +  '/db.sqlite3')
+        conn = sqlite3.connect('./db.sqlite3')
     else:
-        conn = sqlite3.connect(settings.path + '\db.sqlite3')
+        conn = sqlite3.connect('db.sqlite3')
     cur = conn.cursor()
     cur.execute("SELECT email from auth_user")
     emails = [i[0] for i in cur.fetchall()]
-    emails = ['Shmelev507@gmail.com']
+    # emails = ['Shmelev507@gmail.com']
     cur.close()
     conn.close()
     return emails
 
 
 def take_user_data(user, chat_id):
+    print('USERS DATA')
     user.user_registration = True
     user.chat_id = chat_id
-    conn = sqlite3.connect('database.sqlite3')
+    conn = sqlite3.connect('./ugc/management/commands/bot_dir/database.sqlite3')
     cur = conn.cursor()
     cur.execute("SELECT USERNAME from users WHERE user_id=?",(chat_id, ))
     user.username = cur.fetchone()[0]
@@ -79,24 +80,27 @@ def take_user_data(user, chat_id):
     user.channels = [i[0] for i in cur.fetchall()]
     cur.execute("SELECT post_id from posts WHERE user_id=? and PUBLISHED=?",(chat_id, 0))
     ids = cur.fetchall()
-    try:
-        # for i in cur.fetchall():
-        #     user.unpublished_posts[i[0]] = None
-        cur.execute("SELECT created_at from posts WHERE user_id=? and PUBLISHED=?",(chat_id, 0)) 
-        item_index = min(ids)
-        for date in cur.fetchall():
-            user.unpublished_posts[item_index[0]] = date[0]
-            user.unpublished_posts_reverse[date[0]] = item_index[0]
-            item_index += 1
-    except:
-        pass
+    print(ids)
+    # for i in cur.fetchall():
+    #     user.unpublished_posts[i[0]] = None
+    cur.execute("SELECT created_at from posts WHERE user_id=? and PUBLISHED=?",(chat_id, 0)) 
+    # item_indexes = min(ids)
+    posts = cur.fetchall()
+    for date in enumerate(posts):
+        # print(date)
+        # print(ids[date[0]][0])
+        user.unpublished_posts[ids[date[0]][0]] = date[1][0]
+        user.unpublished_posts_reverse[date[1][0]] = ids[date[0]][0]
+    print(user.unpublished_posts, 'user.unpublished_posts')
+    print(user.unpublished_posts_reverse, 'user.unpublished_posts_reverse')
     cur.close()
     conn.close()
     return user
 
 
 def change_language(user, chat_id, language):
-    conn = sqlite3.connect('database.sqlite3')
+    conn = sqlite3.connect(
+        './ugc/management/commands/bot_dir/database.sqlite3')
     cur = conn.cursor()
     cur.execute("UPDATE users SET LANGUAGE = ? WHERE USER_ID= ? ", (language ,chat_id))
     conn.commit()
@@ -108,7 +112,8 @@ def change_language(user, chat_id, language):
 
 
 def add_channel(user, chat_id):
-    conn = sqlite3.connect('database.sqlite3')
+    conn = sqlite3.connect(
+        './ugc/management/commands/bot_dir/database.sqlite3')
     cur = conn.cursor()
     cur.execute(
         'INSERT INTO CHANNELS (channel_id, USER_ID) VALUES(?,?)',
@@ -123,7 +128,8 @@ def add_channel(user, chat_id):
 
 
 def remove_channel(user, chat_id):
-    conn = sqlite3.connect('database.sqlite3')
+    conn = sqlite3.connect(
+        './ugc/management/commands/bot_dir/database.sqlite3')
     cur = conn.cursor()
     cur.execute(
         "DELETE FROM CHANNELS WHERE channel_id=? and user_id=?",
@@ -144,7 +150,8 @@ def add_user_to_database(settings, user, chat_id):
     user.check_email = False
     user.access = False
     settings.users.append(chat_id)
-    conn = sqlite3.connect('database.sqlite3')
+    conn = sqlite3.connect(
+        './ugc/management/commands/bot_dir/database.sqlite3')
     cur = conn.cursor()
     cur.execute(
         'INSERT INTO USERS (USERNAME, USER_ID, LANGUAGE, EMAIL) VALUES(?,?,?,?)',
@@ -275,14 +282,13 @@ def show_created_post(user, chat_id, bot: Bot, update: Update, context = Callbac
             user.all_channels = False
         else:
             send_post(chat_id)
+            
     return user
     
 
 def save_post(user, chat_id, bot: Bot, update: Update, context = CallbackContext):
     
     def save(user):
-        print('SAVE')
-        print(user.media)
         if user.location[1] != '':
             location = True
         else:
@@ -291,7 +297,8 @@ def save_post(user, chat_id, bot: Bot, update: Update, context = CallbackContext
             media = True
         else:
             media = False
-        conn = sqlite3.connect('database.sqlite3')
+        conn = sqlite3.connect(
+            './ugc/management/commands/bot_dir/database.sqlite3')
         cur = conn.cursor()
         post_date = datetime.today().strftime('"%A, %d. %B %Y %H:%M:%S"')
         cur.execute('INSERT INTO POSTS (USER_ID,CREATED_AT,POST_TEXT,LOCATION,MEDIA,CREATOR_NAME,PUBLISHED) VALUES(?,?,?,?,?,?,?)',
@@ -329,7 +336,8 @@ def save_post(user, chat_id, bot: Bot, update: Update, context = CallbackContext
     
 
     def make_published():
-        conn = sqlite3.connect('database.sqlite3')
+        conn = sqlite3.connect(
+            './ugc/management/commands/bot_dir/database.sqlite3')
         cur = conn.cursor()
         cur.execute("UPDATE posts SET PUBLISHED = ? WHERE POST_ID= ? ", (True, user.current_post_id, ))
         conn.commit()
@@ -355,28 +363,38 @@ def find_post(user, post_date):
     user.event[0] = True
     user.date = post_date
     user.current_post_id = user.unpublished_posts_reverse[post_date]
-    conn = sqlite3.connect('database.sqlite3')
+    conn = sqlite3.connect(
+        './ugc/management/commands/bot_dir/database.sqlite3')
     cur = conn.cursor()
     cur.execute("SELECT * from posts WHERE post_id=?",
                 (user.current_post_id, ))
+
     post_data = cur.fetchall()[0]
+    print(post_data, '!!!!!!!!!!!')
     user.text[1] = post_data[3]
-    print(post_data)
     if post_data[4]:
         # location
         cur.execute("SELECT * from post_location WHERE post_id=?",
                     (user.current_post_id, ))
-        location = cur.fetchall()[0]
-        user.location[1] = location[1]  # latitude
-        user.location[2] = location[2]  # longitude
+        try:
+            location = cur.fetchall()[0]
+            user.location[1] = location[1]  # latitude
+            user.location[2] = location[2]  # longitude
+        except:
+            pass
+        
     if post_data[5]:
         # media
         cur.execute("SELECT * from post_media WHERE post_id=?",
                     (user.current_post_id, ))
-        media = cur.fetchall()[0]
-        print(media, '!!!!!!!!!!!')
-        for i in enumerate(media[1:-1]):
-            user.media[i[0] + 1] = i[1] 
+        try:
+            media = cur.fetchall()[0]
+            for i in enumerate(media[1:-1]):
+                user.media[i[0] + 1] = i[1]
+        except:
+            pass
+        
+        
     return user
 
 
@@ -384,14 +402,14 @@ def update_post(user, chat_id, bot: Bot, update: Update, context=CallbackContext
 
 
     def update():
-        conn = sqlite3.connect('database.sqlite3')
+        conn = sqlite3.connect(
+            './ugc/management/commands/bot_dir/database.sqlite3')
         cur = conn.cursor()
         
         cur.execute('UPDATE POSTS set POST_TEXT=?, LOCATION=?, MEDIA=? WHERE POST_ID= ?',(user.text[1], True, True, user.current_post_id))
         conn.commit()
         
         if not cur.execute("SELECT * from POST_MEDIA WHERE post_id=?", (user.current_post_id, )).fetchall():
-            print('TRUE')
             cur.execute('INSERT INTO POST_MEDIA (POST_ID,MEDIA_1,MEDIA_2,MEDIA_3,MEDIA_4,MEDIA_5,MEDIA_6,MEDIA_7,MEDIA_8,MEDIA_9)'
                         ' VALUES(?,?,?,?,?,?,?,?,?,?)', (
                             user.current_post_id, user.media[1], user.media[2], user.media[3], user.media[4],
@@ -399,7 +417,6 @@ def update_post(user, chat_id, bot: Bot, update: Update, context=CallbackContext
                         )
                         )
         else:
-            print('FALSE')
             cur.execute('UPDATE  POST_MEDIA set MEDIA_1=?,MEDIA_2=?,MEDIA_3=?,MEDIA_4=?,MEDIA_5=?,MEDIA_6=?,MEDIA_7=?,MEDIA_8=?,MEDIA_9=?'
                         ' where post_id=?', (
                             user.media[1], user.media[2], user.media[3], user.media[4],
@@ -409,13 +426,10 @@ def update_post(user, chat_id, bot: Bot, update: Update, context=CallbackContext
                         )
         conn.commit()
     
-        print(True)
         if not cur.execute("SELECT * from post_location WHERE post_id=?",(user.current_post_id, )).fetchall():
-            print(1)
             cur.execute(
                 'INSERT INTO POST_LOCATION (POST_ID,LATITUDE,LONGITUDE) VALUES(?,?,?)', (user.current_post_id, user.location[1], user.location[2]))
         else:
-            print(2)
             cur.execute('UPDATE  POST_LOCATION set LATITUDE=?,LONGITUDE=?'
                         ' where post_id=?', (user.location[1], user.location[2], user.current_post_id))
             conn.commit()
@@ -424,8 +438,8 @@ def update_post(user, chat_id, bot: Bot, update: Update, context=CallbackContext
     
 
     def make_published():
-        print(user.current_post_id)
-        conn = sqlite3.connect('database.sqlite3')
+        conn = sqlite3.connect(
+            './ugc/management/commands/bot_dir/database.sqlite3')
         cur = conn.cursor()
         cur.execute("UPDATE posts SET PUBLISHED = ? WHERE POST_ID= ? ",
                     (True, user.current_post_id, ))
@@ -446,9 +460,6 @@ def update_post(user, chat_id, bot: Bot, update: Update, context=CallbackContext
             bot=bot, update=update,
             context=CallbackContext
         )
-        print(user.unpublished_posts, 'user.unpublished_posts')
-        print(user.unpublished_posts_reverse,
-              ' user.unpublished_posts_reverse')
         try:
             del user.unpublished_posts[user.current_post_id]
             del user.unpublished_posts_reverse[user.date]

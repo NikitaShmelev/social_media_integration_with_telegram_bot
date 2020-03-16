@@ -58,6 +58,7 @@ translates = {
         'publish_and_update': 'publish_and_update',
         'update_post': 'Обновить пост',
         'updated': 'updated',
+        'welcome':'start_page',
     },
     'RU': {
         'START_PAGE': 'Назад',
@@ -118,5 +119,6 @@ translates = {
         'publish_and_update': 'Опубликовать и заапдейтить',
         'update_post': 'Обновить пост',
         'updated': 'обновлено',
+        'welcome': 'start_page',
     }
 }
