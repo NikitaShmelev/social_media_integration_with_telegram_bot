@@ -57,30 +57,17 @@ def unpublished_keyboard(user):
         ],
     ]
     if len(user.unpublished_posts) > 0:
+        i = min(user.unpublished_posts.keys())
+        print(user.unpublished_posts.keys())
+        # while i <= max(user.unpublished_posts.keys()):
         for i in user.unpublished_posts.keys():
-            try:
-                keyboard.append(
-                    [
-                    KeyboardButton(
-                        user.unpublished_posts[i]
-                        ),
-                    KeyboardButton(
-                        user.unpublished_posts[i+1]
-                        )
-                    ]
-                    )
-                i+=2
-            except KeyError:
-                try:
-                    keyboard.append(
-                        [
-                        KeyboardButton(
-                            user.unpublished_posts[i]
-                            ),
-                        ]
-                        )
-                except KeyError:
-                    pass
+            keyboard.append(
+                [
+                KeyboardButton(
+                    user.unpublished_posts[i]
+                    ),
+                ]
+                )
     return ReplyKeyboardMarkup(
         keyboard=keyboard,
         resize_keyboard=True,

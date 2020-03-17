@@ -192,9 +192,7 @@ def take_text(bot: Bot, update: Update, context=CallbackContext):
 			    user.user[chat_id].current_channel = ''
 			    bot.send_message(
 			        chat_id=chat_id,
-			        text=translates[user.user[chat_id].language]['welcome']
-			        + user.user[chat_id].username,
-			        reply_markup=start_keyboard(user.user[chat_id]),
+			        text=translates[user.user[chat_id].language]['welcome'],			        reply_markup=start_keyboard(user.user[chat_id]),
 			    )
 
 			elif user.user[chat_id].data == translates[user.user[chat_id].language]['list_of_channels']:
@@ -290,23 +288,16 @@ def take_text(bot: Bot, update: Update, context=CallbackContext):
 					    reply_markup=start_keyboard(user.user[chat_id])
 					)
 			elif user.user[chat_id].data == translates[user.user[chat_id].language]['update_post']:
-				if user.user[chat_id].event[0]:
-					if not any([user.user[update.message.chat_id].text[1], user.user[update.message.chat_id].media[1], user.user[update.message.chat_id].location[1]]):
-						bot.send_message(
-			        		chat_id=chat_id,
-			        		text='Nothing to update',
-			        		reply_markup=post_keyboard(user.user[chat_id])
-			        		)
-					elif any([user.user[update.message.chat_id].text[1], user.user[update.message.chat_id].media[1], user.user[update.message.chat_id].location[1]]):
-						user.user[update.message.chat_id].update_post = True
-						update_post(
-				            user.user[chat_id], chat_id,
-				            bot=bot, update=update, context=context,
-							)
-						bot.send_message(
-					        chat_id=chat_id,
-					        text=translates[user.user[chat_id].language]['updated'],
-					        reply_markup=start_keyboard(user.user[chat_id]),
+				if user.user[chat_id].event[0]:					
+					user.user[update.message.chat_id].update_post = True
+					update_post(
+						user.user[chat_id], chat_id,
+						bot=bot, update=update, context=context,
+						)
+					bot.send_message(
+						chat_id=chat_id,
+						text=translates[user.user[chat_id].language]['updated'],
+						reply_markup=start_keyboard(user.user[chat_id]),
 					        )
 			elif user.user[chat_id].data == translates[user.user[chat_id].language]['BUTTON5_TEXT_FOR_POST']:
 				if user.user[chat_id].event[0]:
