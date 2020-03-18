@@ -624,7 +624,7 @@ class Command(BaseCommand):
     help = 'Telegram-bot'
 
     def handle(self, *args, **options):
-        # 1 -- правильное подключение
+		
         request = Request(
             connect_timeout=0.5,
             read_timeout=1.0,
@@ -636,7 +636,6 @@ class Command(BaseCommand):
         )
         print(bot.get_me())
 
-        # 2 -- обработчики
         updater = Updater(
             bot=bot,
         )
@@ -661,7 +660,7 @@ class Command(BaseCommand):
             Filters.location,
             get_location
         )
-        # dispatchers
+
         updater.dispatcher.add_handler(start_handler)
         updater.dispatcher.add_handler(text_message_handler)
         updater.dispatcher.add_handler(img_message_handler)
@@ -669,8 +668,4 @@ class Command(BaseCommand):
         updater.dispatcher.add_handler(video_message_handler)
         updater.start_polling()
         updater.idle()
-        # message_handler = MessageHandler(Filters.text, do_echo)
-        # updater.dispatcher.add_handler(message_handler)
-        # updater.dispatcher.add_handler(CommandHandler('count', do_count))
-
-        # 3 -- запустить бесконечную обработку входящих сообщений
+   
