@@ -40,6 +40,16 @@ def take_users():
     return users
 
 
+def take_emails():
+    conn = sqlite3.connect(DATABASE_PATH)
+    cur = conn.cursor()
+    cur.execute("SELECT email from USERS")
+    emails = [i[0] for i in cur.fetchall()]
+    cur.close()
+    conn.close()
+    return emails
+
+
 def send_email(user):
     server = smtplib.SMTP('smtp.gmail.com:587')
     server.ehlo()
@@ -53,7 +63,6 @@ def send_email(user):
 
 
 def take_user_data(user, chat_id):
-    print('USERS DATA')
     user.user_registration = True
     user.chat_id = chat_id
     conn = sqlite3.connect(DATABASE_PATH)
@@ -66,19 +75,11 @@ def take_user_data(user, chat_id):
     user.channels = [i[0] for i in cur.fetchall()]
     cur.execute("SELECT post_id from posts WHERE user_id=? and PUBLISHED=?",(chat_id, 0))
     ids = cur.fetchall()
-    print(ids)
-    # for i in cur.fetchall():
-    #     user.unpublished_posts[i[0]] = None
-    cur.execute("SELECT created_at from posts WHERE user_id=? and PUBLISHED=?",(chat_id, 0)) 
-    # item_indexes = min(ids)
+    cur.execute("SELECT created_at from posts WHERE user_id=? and PUBLISHED=?",(chat_id, 0))
     posts = cur.fetchall()
     for date in enumerate(posts):
-        # print(date)
-        # print(ids[date[0]][0])
         user.unpublished_posts[ids[date[0]][0]] = date[1][0]
         user.unpublished_posts_reverse[date[1][0]] = ids[date[0]][0]
-    print(user.unpublished_posts, 'user.unpublished_posts')
-    print(user.unpublished_posts_reverse, 'user.unpublished_posts_reverse')
     cur.close()
     conn.close()
     return user
@@ -349,7 +350,6 @@ def find_post(user, post_date):
                 (user.current_post_id, ))
 
     post_data = cur.fetchall()[0]
-    print(post_data, '!!!!!!!!!!!')
     user.text[1] = post_data[3]
     if post_data[4]:
         # location

@@ -20,7 +20,7 @@ from .bot_dir.functions import take_users, take_user_data, cancel_post,\
     text_for_post, show_created_post, save_post, \
     create_post_button, change_language, update_post, \
     send_email, remove_channel, add_channel, \
-    find_post
+    find_post, take_emails
 from .bot_dir.keyboards import LANGUAGE_EN, LANGUAGE_RU, \
     start_keyboard, conifrm_keyboard, post_keyboard, language_keyboard, email_keyboard, \
     regisration_keyboard, channels_keyboard, unpublished_keyboard, find_post_keyboard
@@ -34,34 +34,34 @@ user = User()
 
 @debug_requests
 def do_start(bot: Bot, update: Update, context=CallbackContext):
-    chat_id = update.message.chat_id
-    if len(settings.users) == 0 and settings.request_count == 0:
-        settings.request_count += 1
-        settings.users = take_users()
-        # settings.emails = take_emails()
-    if chat_id not in user.user:
-        user.user[chat_id] = User_params()
-        if chat_id not in settings.users:
-            bot.send_message(
-                chat_id=chat_id,
-                text='Select language / Выберите язык',
-                reply_markup=language_keyboard(user.user[chat_id]),
-            )
-        else:
-            take_user_data(user.user[chat_id], chat_id)
-            bot.send_message(
-                chat_id=update.message.chat_id,
-                text=translates[user.user[chat_id].language]['Hello'] +
-                user.user[chat_id].username,
-                reply_markup=start_keyboard(user.user[chat_id]),
-                )
-    else:
-        if chat_id not in settings.users and not user.user[chat_id].check_email:
-            user.user[chat_id].check_email = True
-            bot.send_message(
-                chat_id=update.message.chat_id,
-                text=translates[user.user[chat_id].language]['Tap email'],
-                )
+	chat_id = update.message.chat_id
+	if len(settings.users) == 0 and settings.request_count == 0:
+		settings.request_count += 1
+		settings.users = take_users()
+		settings.emails = take_emails()
+	if chat_id not in user.user:
+		user.user[chat_id] = User_params()
+		if chat_id not in settings.users:
+			bot.send_message(
+				chat_id=chat_id,
+				text='Select language / Выберите язык',
+				reply_markup=language_keyboard(user.user[chat_id]),
+			)
+		else:
+			take_user_data(user.user[chat_id], chat_id)
+			bot.send_message(
+				chat_id=update.message.chat_id,
+				text=translates[user.user[chat_id].language]['Hello'] +
+				user.user[chat_id].username,
+				reply_markup=start_keyboard(user.user[chat_id]),
+				)
+	else:
+		if chat_id not in settings.users and not user.user[chat_id].check_email:
+			user.user[chat_id].check_email = True
+			bot.send_message(
+				chat_id=update.message.chat_id,
+				text=translates[user.user[chat_id].language]['Tap email'],
+				)
 
 
 @debug_requests
@@ -70,23 +70,16 @@ def take_text(bot: Bot, update: Update, context=CallbackContext):
 	if chat_id in user.user:
 		user.user[chat_id].data = update.message.text
 		if user.user[chat_id].check_email:
-			if (user.user[chat_id].data) in settings.emails:
-				bot.send_message(
-					chat_id=chat_id,
-					text='Проверьте введённый адрес, \nесли'
-					' всё верно, то нажмите на кнопку получить код.'
-					'\nВаш email → ' + update.message.text,
-					reply_markup=email_keyboard(user.user[chat_id]),
-					)
-				user.user[chat_id].email = user.user[chat_id].data
-				user.user[chat_id].check_email = False
-				user.user[chat_id].access = True
-			else:
-				bot.send_message(
-					chat_id=update.message.chat_id,
-					text='Register on site or try to rap correct email.\n'
-					'Just send me email again if you want to change it.',
-					)
+			bot.send_message(
+				chat_id=chat_id,
+				text='Проверьте введённый адрес, \nесли'
+				' всё верно, то нажмите на кнопку получить код.'
+				'\nВаш email → ' + update.message.text,
+				reply_markup=email_keyboard(user.user[chat_id]),
+				)
+			user.user[chat_id].email = user.user[chat_id].data
+			user.user[chat_id].check_email = False
+			user.user[chat_id].access = True
 		if not user.user[chat_id].check_email and  user.user[chat_id].language != '' and user.user[chat_id].data == translates[user.user[chat_id].language]["tap email again"]:
 			user.user[chat_id].check_email = True
 			bot.send_message(
@@ -136,7 +129,6 @@ def take_text(bot: Bot, update: Update, context=CallbackContext):
 					text='Код выслан.\n'
 					'Вышлите код мне для получения доступа к функциям бота',
 					)
-				print(user.user[chat_id].code)
 				return send_email(user.user[chat_id])
 		if user.user[chat_id].get_name:
 			if user.user[chat_id].data != translates[user.user[chat_id].language]["REGISTER_ME"]:
