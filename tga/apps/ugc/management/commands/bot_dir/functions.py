@@ -44,27 +44,12 @@ def send_email(user):
     server = smtplib.SMTP('smtp.gmail.com:587')
     server.ehlo()
     server.starttls()
-    server.login('poxhelyanaylicy@gmail.com', 'qweasdzcx')
+    server.login('apibotpython@gmail.com@', 'botapipassword')
     subject = 'Activation code'
-    msg = 'Hello, this is your code '+ str(user.code[0])
+    msg = f'Hello, this is your code {user.code[0]}'
     message = 'Subject: {}\n\n{}'.format(subject, msg)
     server.sendmail(user.email, user.email, message)
     server.quit()
-
-
-def take_emails():
-    pass
-#     if system() == 'Linux':
-#         conn = sqlite3.connect('./db.sqlite3')
-#     else:
-#         conn = sqlite3.connect('db.sqlite3')
-#     cur = conn.cursor()
-#     cur.execute("SELECT email from auth_user")
-#     emails = [i[0] for i in cur.fetchall()]
-#     # emails = ['Shmelev507@gmail.com']
-#     cur.close()
-#     conn.close()
-#     return emails
 
 
 def take_user_data(user, chat_id):
