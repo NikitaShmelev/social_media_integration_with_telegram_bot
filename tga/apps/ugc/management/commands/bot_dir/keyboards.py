@@ -57,9 +57,6 @@ def unpublished_keyboard(user):
         ],
     ]
     if len(user.unpublished_posts) > 0:
-        i = min(user.unpublished_posts.keys())
-        print(user.unpublished_posts.keys())
-        # while i <= max(user.unpublished_posts.keys()):
         for i in user.unpublished_posts.keys():
             keyboard.append(
                 [
@@ -186,7 +183,8 @@ def channels_keyboard(user):
     ]
     for i in user.channels:
         keyboard.append([KeyboardButton(str(i))])
-    keyboard.append([KeyboardButton(translates[user.language]['ALL_CHANNELS'])])
+    if user.all_channels:
+        keyboard.append([KeyboardButton(translates[user.language]['ALL_CHANNELS'])])
     return ReplyKeyboardMarkup(
         keyboard=keyboard,
         resize_keyboard=True,
