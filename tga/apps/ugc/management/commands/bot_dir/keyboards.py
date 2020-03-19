@@ -13,14 +13,10 @@ def start_keyboard(user):
         ],
         [
             KeyboardButton(translates[user.language]['BUTTON4_CREATE_POST']),
-        ],
-        [
             KeyboardButton(translates[user.language]['show_posts']),
         ],
-        [
+        [   
             KeyboardButton(translates[user.language]['list_of_channels']),
-        ],
-        [
             KeyboardButton(translates[user.language]['add_channel']),
             KeyboardButton(translates[user.language]['remove_channel'])
         ],
