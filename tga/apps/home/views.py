@@ -6,3 +6,7 @@ from django.http import HttpResponse
 def index(request):
     # return HttpResponse("asdsa")
     return render(request, 'index.html')
+
+
+def leave_feedback(request):
+    pass

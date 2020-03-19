@@ -1,3 +1,8 @@
 from django.contrib import admin
+from .forms import PostForm
+from .models import Post
 
-# Register your models here.
+@admin.register(Post)
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ('name', 'email', 'message', 'created_at')
+    form = PostForm
