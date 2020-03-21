@@ -234,6 +234,17 @@
             </div>
             <div class="row" style='width:100%;'>
                 <div class="col-lg-8 mx-auto">
+                    {% comment %} {% if  messages %}
+                    <ul class="messages">
+                        {% for msg in  messages%}
+                        <li>
+                            <div class="{{ message.tags }}" role="alert">
+                                {{msg.messages}}
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %} {% endcomment %}
                     <form action="{% url 'leave_feedback' %}" method='POST'>
                         
                         {% csrf_token %}
