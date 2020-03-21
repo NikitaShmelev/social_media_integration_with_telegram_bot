@@ -184,7 +184,8 @@ def take_text(bot: Bot, update: Update, context=CallbackContext):
 			    user.user[chat_id].current_channel = ''
 			    bot.send_message(
 			        chat_id=chat_id,
-			        text=translates[user.user[chat_id].language]['welcome'],			        reply_markup=start_keyboard(user.user[chat_id]),
+			        text=translates[user.user[chat_id].language]['welcome'],
+					reply_markup=start_keyboard(user.user[chat_id]),
 			    )
 
 			elif user.user[chat_id].data == translates[user.user[chat_id].language]['list_of_channels']:
