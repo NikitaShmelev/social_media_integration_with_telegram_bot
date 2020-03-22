@@ -6,6 +6,28 @@ LANGUAGE_RU = 'Русский'
 LANGUAGE_EN  = 'English'
 
 
+def help_keyboard(user):
+    keyboard = [
+        [
+            KeyboardButton(translates[user.language]['START_PAGE']),
+        ],
+        [
+            KeyboardButton(translates[user.language]['how_to_create']),
+            KeyboardButton(translates[user.language]['how_to_update']),
+            KeyboardButton(translates[user.language]['work_with_channels']),
+        ],
+        [
+            KeyboardButton(translates[user.language]['location_guide']),
+            KeyboardButton(translates[user.language]['media_guide']),
+            KeyboardButton(translates[user.language]['text_guide']),
+        ],
+    ]
+    return ReplyKeyboardMarkup(
+        keyboard=keyboard,
+        resize_keyboard=True,
+    )
+
+
 def start_keyboard(user):
     keyboard = [
         [

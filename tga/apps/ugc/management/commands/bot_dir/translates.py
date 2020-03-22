@@ -7,9 +7,9 @@ translates = {
         'BUTTON5_TEXT_FOR_POST': 'Add text',
         'BUTTON6_ADD_LOCATION': 'Add location',
         'BUTTON7_ADD_MEDIA': 'Add media',
-        'BUTTON10_CANCEL_POST': 'Cancel post creation',
-        'BUTTON9_SAVE_POST': 'Save post',
-        'BUTTON8_SHOW_POST': 'Show post',
+        'BUTTON10_CANCEL_POST': 'Cancel creation',
+        'BUTTON9_SAVE_POST': 'Save',
+        'BUTTON8_SHOW_POST': 'Show',
         'START_PAGE': 'Go to the start page',
         'CHANGE_LANGUAGE': 'Change language',
         'nothing_to_cancel': 'Nothing to cancel.',
@@ -33,8 +33,7 @@ translates = {
         'attachment_limit':"A lot of attachments.\n"
                     "Send attachment number to remove this.\n"
                     "Send attachment again if you have a slot for this.",
-        'location_accepted': 'Location accepted.\n'
-                'Send location if you want to change this.',
+        'location_accepted': 'Location accepted.\n',
         'help_text': 'EN help text.',
         'Tap email': 'Tap your Email for send comfirm code.',
         'email error': 'You are not in a registred users list',
@@ -48,17 +47,51 @@ translates = {
         'channel_added': 'Channel successfully added',
         'action_canсeled': 'Action canceled',
         'channel_removed': 'Channel was removed.',
-        'publish_and_save':'Publish and save post',
+        'publish_and_save':'Publish&Save',
         'show_posts':'Show unpublished posts',
         'ALL_CHANNELS': 'Select all channels',
         'list_of_channels': 'Channels list',
         'DELETE_TEXT': 'Remove text',
         'text_deleted': 'Text was successfully removed',
         'DELETE_MEDIA': 'Delete all media',
-        'publish_and_update': 'publish_and_update',
-        'update_post': 'Обновить пост',
+        'publish_and_update': 'Update&Publish',
+        'update_post': 'Update post',
         'updated': 'updated',
-        'welcome':'Вы вернулись на начальную страницу',
+        'welcome':'You were redirected to the start page.',
+        'how_to_create': 'Post create guide',
+        'how_to_update': 'Post update guide',
+        'text_guide': 'Text usage guide',
+        'location_guide': 'Location usage guide',
+        'media_guide': 'Media usage guide',
+        'work_with_channels': 'Channels work guide',
+        ###
+        'create_guide': 
+            "Press 'Create post' button. In next steps you can add text, location, media to your post.\n\n"
+            "Your post will be canceled if you will press 'Cancel creation' button. Bot'll redirect you to start page.\n\n"
+            'Bot can show current post version if you will press "Show".\n\n'
+            'Bot will save current post if you will press "Save".\n\n'
+            'After this action you can update your post.\n\n'
+            'Also you can save and publish post to connected channeld. Press "Publish&Save" button.',
+        'update_guide': 
+            "Press 'Show unpublished posts. You have to select post via creation date.\n\n"
+            "In next steps you can add(or remove) text, location, media.\n\n"
+            "Your post update will be canceled if you will press 'Cancel creation' button."
+            "Bot'll redirect you to start page.\n\n"
+            'Bot can show current post version if you will press "Show".\n\n'
+            'Bot will update current post if you will press "Update".\n\n'
+            'Also you can save and publish post to connected channeld. Press "Publish&Update" button.',
+        'channels_usage': 
+            "To add channel press 'Add channel' button.\n"
+            "To remove channel press 'Remove channel' button.\n"
+            "To view channels list press 'Channels list' button.\n\n"
+            "You should send channel name if you want to add channel. Example: your channel link 't.me  /  your_best_channel',\n"
+            "than send 'your_channel'(or @your_channel).\n"
+            "Also you have to add this Bot to the channel with admin rules.",
+        'text_usage': 'text_usage',
+        'location_usage': 'Location usage guide',
+        'media_usage': 'Media usage guide',
+        
+
     },
     'RU': {
         'START_PAGE': 'Перейти на начальную страницу',
@@ -93,8 +126,7 @@ translates = {
         'attachment_limit':"Слишком много вложений.\n"
                     "Вышлите номер вложения для удаления его.\n"
                     "Вышлите вложение, если есть свободный слот.",
-        'location_accepted': 'Локация принята.\n'
-                'Вышлите локацию, если хотите заменить её.',           
+        'location_accepted': 'Локация принята.\n',           
         'help_text': 'RU help text',
         'Tap email': 'Введите адрес своей электронной почты для получения кода подтверждения.',
         'email error': 'Вас нет в списке зарегестрированных пользователей',
@@ -116,9 +148,22 @@ translates = {
         'DELETE_TEXT': 'Удалить текст',
         'text_deleted': 'Техт был успешно удалён из поста',
         'DELETE_MEDIA': 'Удалить медиа \\TO DO',
-        'publish_and_update': 'Опубликовать и заапдейтить',
+        'publish_and_update': 'Обновить и опубликовать ',
         'update_post': 'Обновить пост',
         'updated': 'обновлено',
-        'welcome': 'You\'ve returned on the start page',
+        'welcome': 'Вы перешли на начальной странице',
+        'how_to_create': 'Инструкция по созданию поста',
+        'how_to_update': 'Инструкция по обновлению поста',
+        'text_guide': 'Работа с текстом',
+        'location_guide': 'Работа с локацией',
+        'media_guide': 'Работа с медиа файлами',
+        'work_with_channels': 'Работа с каналами',
+        ###
+        'create_guide': 'create_guide',
+        'update_guide': 'create_guide',
+        'text_usage': 'text_usage',
+        'location_usage': 'Location usage guide',
+        'media_usage': 'Media usage guide',
+        'channels_usage': 'channels_usage',
     }
 }

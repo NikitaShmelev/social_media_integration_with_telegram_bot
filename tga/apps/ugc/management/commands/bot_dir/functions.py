@@ -147,8 +147,15 @@ def add_user_to_database(settings, user, chat_id):
 
 
 def cancel_post(user):
+    user.event[0] = False
+    user.remove_channel = False
+    user.add_channel = False
     user.publish = False
-    user.media_id = ['',''] # First - photo, second - movie
+    user.save = False
+    user.show_unpublished_posts = False
+    user.current_channel = ''
+    user.help = False
+    user.media_id = ['', '']  # First - photo, second - movie
     user.check_list = []
     user.event = [False, False]
     user.text = [False, '']

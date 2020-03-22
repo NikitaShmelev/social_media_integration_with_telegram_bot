@@ -69,6 +69,7 @@ class User_params():
         self.language = ''
         self.language_change = False
         self.check_email = False
+        self.help = False
 
 
 class User():

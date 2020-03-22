@@ -23,7 +23,8 @@ from .bot_dir.functions import take_users, take_user_data, cancel_post,\
     find_post, take_emails
 from .bot_dir.keyboards import LANGUAGE_EN, LANGUAGE_RU, \
     start_keyboard, conifrm_keyboard, post_keyboard, language_keyboard, email_keyboard, \
-    regisration_keyboard, channels_keyboard, unpublished_keyboard, find_post_keyboard
+    regisration_keyboard, channels_keyboard, unpublished_keyboard, find_post_keyboard, \
+   	help_keyboard
 
 
 config = load_config()
@@ -162,31 +163,111 @@ def take_text(bot: Bot, update: Update, context=CallbackContext):
 					)		
 		if user.user[chat_id].user_registration:
 			if user.user[chat_id].data == translates[user.user[chat_id].language]['BUTTON3_BOT_HELP']:
-			    bot.send_message(
-			        chat_id=update.message.chat_id,
-			        text=translates[user.user[chat_id].language]['help_text'],
-			        reply_markup=start_keyboard(user.user[chat_id]),
-			    )
+				user.user[chat_id].help = True
+				bot.send_message(
+					chat_id=update.message.chat_id,
+					text=translates[user.user[chat_id].language]['help_text'],
+					reply_markup=help_keyboard(user.user[chat_id]),
+				)
+			elif user.user[chat_id].data == translates[user.user[chat_id].language]['how_to_create']:
+				if user.user[chat_id].help:
+						bot.send_message(
+						chat_id=update.message.chat_id,
+						text=translates[user.user[chat_id].language]['create_guide'],
+						reply_markup=help_keyboard(
+							user.user[chat_id]),
+                        )
+			elif user.user[chat_id].data == translates[user.user[chat_id].language]['how_to_update']:
+				if user.user[chat_id].help:
+						bot.send_message(
+						chat_id=update.message.chat_id,
+						text=translates[user.user[chat_id].language]['update_guide'],
+						reply_markup=help_keyboard(
+							user.user[chat_id]),
+                        )
+			elif user.user[chat_id].data == translates[user.user[chat_id].language]['text_guide']:
+				if user.user[chat_id].help:
+						bot.send_message(
+						chat_id=update.message.chat_id,
+						text=translates[user.user[chat_id].language]['text_usage'],
+						reply_markup=help_keyboard(
+							user.user[chat_id]),
+                        )
+			elif user.user[chat_id].data == translates[user.user[chat_id].language]['location_guide']:
+				if user.user[chat_id].help:
+						bot.send_message(
+						chat_id=update.message.chat_id,
+						text=translates[user.user[chat_id].language]['location_usage'],
+						reply_markup=help_keyboard(
+							user.user[chat_id]),
+                        )
+			elif user.user[chat_id].data == translates[user.user[chat_id].language]['media_guide']:
+				if user.user[chat_id].help:
+						bot.send_message(
+						chat_id=update.message.chat_id,
+                                                    text=translates[user.user[chat_id].language]['media_usage'],
+						reply_markup=help_keyboard(
+							user.user[chat_id]),
+                        )
+			elif user.user[chat_id].data == translates[user.user[chat_id].language]['media_guide']:
+				if user.user[chat_id].help:
+						bot.send_message(
+						chat_id=update.message.chat_id,
+                                                    text=translates[user.user[chat_id].language]['media_usage'],
+						reply_markup=help_keyboard(
+							user.user[chat_id]),
+                        )
+			elif user.user[chat_id].data == translates[user.user[chat_id].language]['work_with_channels']:
+				if user.user[chat_id].help:
+						bot.send_message(
+						chat_id=update.message.chat_id,
+                        text=translates[user.user[chat_id].language]['channels_usage'],
+						reply_markup=help_keyboard(
+							user.user[chat_id]),
+                        )
 			elif user.user[chat_id].data == translates[user.user[chat_id].language]['BUTTON4_CREATE_POST']:
-			    user.user[chat_id].add_channel = False
-			    user.user[chat_id].remove_channel = False
-			    return create_post_button(
-			    	user.user[chat_id], chat_id,
-			        bot=bot, update=update
-			        )
+				user.user[chat_id].add_channel = False
+				user.user[chat_id].remove_channel = False
+				user.user[chat_id].help = False
+				return create_post_button(
+					user.user[chat_id], chat_id,
+					bot=bot, update=update
+					)
 			elif user.user[chat_id].data == translates[user.user[chat_id].language]['START_PAGE']:
-			    user.user[chat_id].event[0] = False
-			    user.user[chat_id].remove_channel = False
-			    user.user[chat_id].add_channel = False
-			    user.user[chat_id].publish = False
-			    user.user[chat_id].save = False
-			    user.user[chat_id].show_unpublished_posts = False
-			    user.user[chat_id].current_channel = ''
-			    bot.send_message(
-			        chat_id=chat_id,
-			        text=translates[user.user[chat_id].language]['welcome'],
+				user.user[chat_id].event[0] = False
+				user.user[chat_id].remove_channel = False
+				user.user[chat_id].add_channel = False
+				user.user[chat_id].publish = False
+				user.user[chat_id].save = False
+				user.user[chat_id].show_unpublished_posts = False
+				user.user[chat_id].current_channel = ''
+				user.user[chat_id].help = False
+				user.user[chat_id].media_id = ['', '']  # First - photo, second - movie
+				user.user[chat_id].check_list = []
+				user.user[chat_id].event = [False, False]
+				user.user[chat_id].text = [False, '']
+				user.user[chat_id].location = [False, '', '']
+				user.user[chat_id].media = {
+					0: False,
+					1: '',
+					2: '',
+					3: '',
+					4: '',
+					5: '',
+					6: '',
+					7: '',
+					8: '',
+					9: '',
+				}
+				user.user[chat_id].unpublished_keyboard = False
+				user.user[chat_id].current_channel = ''
+				user.user[chat_id].current_post_id = None
+				user.user[chat_id].date = None
+				bot.send_message(
+					chat_id=chat_id,
+					text=translates[user.user[chat_id].language]['welcome'],
 					reply_markup=start_keyboard(user.user[chat_id]),
-			    )
+				)
 
 			elif user.user[chat_id].data == translates[user.user[chat_id].language]['list_of_channels']:
 			    bot.send_message(
