@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
-# from django.urls import reverse
+from django.urls import reverse
 from django.contrib import messages
 from .models import Post
 from .forms import PostForm
@@ -21,7 +21,6 @@ def leave_feedback(request):
         cur = conn.cursor()
         cur.execute('SELECT email FROM users')
         emails = tuple(i[0] for i in cur.fetchall())
-        messages.add_message(request, messages.INFO, 'Hello world.')
         if form['email'].value() in emails:
             p = Post(
                 name=form['name'].value(),
@@ -29,14 +28,14 @@ def leave_feedback(request):
                 message=request.POST.get('message'),
             )
             p.save_base()
-            # messages.add_message(
-            #     request, messages.success, 'Thanks for your feedback!!!')
+            messages.success(request, 'Thanks for your feedback!!!')
+            
         else:
-            pass
-            # messages.add_message(
-            #     request, messages.warning, 'Write correct email or register in the Bot before leaving feedback')
-                                
+            messages.warning(
+                request, 'Write correct email or register in the Bot before leaving feedback.')
+                      
         cur.close()
         conn.close()
-            
-    return HttpResponseRedirect('../home')
+    # return HttpResponseRedirect(reverse('home'))
+
+    return HttpResponseRedirect('../home/#contact')
