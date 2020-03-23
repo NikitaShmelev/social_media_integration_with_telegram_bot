@@ -28,7 +28,7 @@ SECRET_KEY = '*^kt**rvujyu-sz!p1&6sg0+*mbm5z^3x-o)c%=r)s_4pmvl_0'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['bumblebee322.pythonanywhere.com', '127.0.0.1']
 
 
 # Application definition
@@ -126,3 +126,4 @@ USE_TZ = True
 # PROXY_URL = 'https://telegg.ru/orig/bot'
 
 STATIC_URL = '/static/'
+STATIC_ROOT = '/home/Bumblebee322/social_media_integration_wtih_telegram_bot/static'

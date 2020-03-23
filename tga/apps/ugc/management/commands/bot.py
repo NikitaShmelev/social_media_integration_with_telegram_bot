@@ -38,8 +38,7 @@ def do_start(bot: Bot, update: Update, context=CallbackContext):
 	chat_id = update.message.chat_id
 	if len(settings.users) == 0 and settings.request_count == 0:
 		settings.request_count += 1
-		settings.users = take_users()
-		settings.emails = take_emails()
+		settings.users, settings.emails = take_users(), take_emails()
 	if chat_id not in user.user:
 		user.user[chat_id] = User_params()
 		if chat_id not in settings.users:

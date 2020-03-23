@@ -30,9 +30,10 @@ translates = {
         'Send location': 'Send location.',
         'Send media': 'Please attach media files to your post. You can attach 9 files max.',
         "Accepted attachment № ": "Accepted attachment № ",
-        'attachment_limit':"A lot of attachments.\n"
-                    "Send attachment number to remove this.\n"
-                    "Send attachment again if you have a slot for this.",
+        'attachment_limit':
+            "A lot of attachments.\n"
+            "Send attachment number to remove this.\n"
+            "Send attachment again if you have a slot for this.",
         'location_accepted': 'Location accepted.\n',
         'help_text': 'EN help text.',
         'Tap email': 'Tap your Email for send comfirm code.',
@@ -40,7 +41,7 @@ translates = {
         'BUTTON_SEND_CODE': 'Send code',
         'tap email again': 'Send email again',
         'REGISTER_ME': 'Sign up',
-        'DELETE_LOCATION': 'Remove location from post',
+        'DELETE_LOCATION': 'Remove location',
         'location_deleted': 'Location was successfully removed',
         'add_channel': 'Add channel',
         'remove_channel': 'Remove channel',
@@ -73,7 +74,7 @@ translates = {
             'After this action you can update your post.\n\n'
             'Also you can save and publish post to connected channeld. Press "Publish&Save" button.',
         'update_guide': 
-            "Press 'Show unpublished posts. You have to select post via creation date.\n\n"
+            "Press 'Show unpublished posts'. You have to select post via creation date.\n\n"
             "In next steps you can add(or remove) text, location, media.\n\n"
             "Your post update will be canceled if you will press 'Cancel creation' button."
             "Bot'll redirect you to start page.\n\n"
@@ -87,11 +88,21 @@ translates = {
             "You should send channel name if you want to add channel. Example: your channel link 't.me  /  your_best_channel',\n"
             "than send 'your_channel'(or @your_channel).\n"
             "Also you have to add this Bot to the channel with admin rules.",
-        'text_usage': 'text_usage',
-        'location_usage': 'Location usage guide',
-        'media_usage': 'Media usage guide',
-        
-
+        'text_usage': 
+            "To add text message to your post press 'Add add text' button.\n"
+            "You have to send some text message with max length 1024 symbols.\n"
+            "Press 'Remove text' button to remove text message from post.",
+        'location_usage': 
+            "To add location  to your post press 'Add location' button.\n"
+            "You have to select location and send it.\n"
+            "Press 'Remove location' button to remove location from post.",
+        'media_usage': 
+            "To add photo or video to your post press 'Add media' button.\n"
+            "You have to send media files with max count 9 items.\n"
+            "Bot will send to you item's number. Send this number to remove.\n"
+            "Send selected number to remove if you are still at adding media stage.\n"
+            "Press 'Add media' button if you are pressed another button except 'Show' button.\n"
+            "You can send item's number to remove it after this action.\n",
     },
     'RU': {
         'START_PAGE': 'Перейти на начальную страницу',
@@ -133,7 +144,7 @@ translates = {
         'BUTTON_SEND_CODE': 'Выслать код',
         'tap email again': 'Ввести адрес заново',
         'REGISTER_ME': 'Зарегестрироваться',
-        'continue_post': "Продолжим создфние поста",
+        'continue_post': "Продолжим создание поста",
         'DELETE_LOCATION': 'Убрать локацию из поста',
         'location_deleted': 'Локация была успешно удалена из поста',
         'add_channel': 'Добавить канал',
