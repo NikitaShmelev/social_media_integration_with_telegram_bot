@@ -1,5 +1,6 @@
 from telegram import Bot, Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
+from telegram import ReplyKeyboardRemove
 from telegram.utils.request import Request
 
 from django.core.management.base import BaseCommand
@@ -7,6 +8,8 @@ from django.conf import settings
 
 from ugc.models import Message
 from ugc.models import Profile
+
+from email_validator import validate_email, EmailNotValidError
 
 from logging import getLogger
 from random import randint
@@ -69,53 +72,63 @@ def take_text(bot: Bot, update: Update, context=CallbackContext):
 	if chat_id in user.user:
 		user.user[chat_id].data = update.message.text
 		if user.user[chat_id].check_email:
-			bot.send_message(
-				chat_id=chat_id,
-				text=translates[user.user[chat_id].language]['check_email'],
-				reply_markup=email_keyboard(user.user[chat_id]),
-				)
 			user.user[chat_id].email = user.user[chat_id].data
-			user.user[chat_id].check_email = False
-			user.user[chat_id].access = True
+			try:
+				validation = validate_email(user.user[chat_id].email)
+				bot.send_message(
+					chat_id=chat_id,
+					text=translates[user.user[chat_id].language]['check_email'],
+					reply_markup=email_keyboard(user.user[chat_id]),
+				)
+				user.user[chat_id].check_email = False
+				user.user[chat_id].access = True
+			except EmailNotValidError:
+				bot.send_message(
+				chat_id=chat_id,
+				text=translates[user.user[chat_id].language]['tap_correct_email'],
+				reply_markup=ReplyKeyboardRemove(),
+				)
 		if not user.user[chat_id].check_email and  user.user[chat_id].language != '' and user.user[chat_id].data == translates[user.user[chat_id].language]["tap email again"]:
 			user.user[chat_id].check_email = True
 			bot.send_message(
 				chat_id=chat_id,
 				text=translates[user.user[chat_id].language]['send_email_again'],
+				reply_markup=ReplyKeyboardRemove(),
 				)
 		if user.user[chat_id].data == LANGUAGE_EN:
 			if user.user[chat_id].language == '':
 				user.user[chat_id].language = 'EN'
 				bot.send_message(
 				    chat_id=update.message.chat_id,
-				    text='Language was successfully changed',
-					)
-				return do_start(bot=bot, update=update, context=context)
-			else:
-				change_language(user.user[chat_id], chat_id, 'EN')
-				user.user[chat_id].language = 'EN'
-				bot.send_message(
-				    chat_id=update.message.chat_id,
 				    text='Language was successfully selected',
-				    reply_markup=start_keyboard(user.user[chat_id])
+					reply_markup=ReplyKeyboardRemove(),
 					)
+			else:
+				if user.user[chat_id].user_registration:
+					user.user[chat_id] = change_language(user.user[chat_id], chat_id, 'EN')
+					user.user[chat_id].language = 'EN' 
+					bot.send_message(
+						chat_id=update.message.chat_id,
+						text='Language was successfully changed',
+						)
+			return do_start(bot=bot, update=update, context=context)
 		elif user.user[chat_id].data == LANGUAGE_RU:
 			if user.user[chat_id].language == '':
 				user.user[chat_id].language = 'RU'
 				bot.send_message(
 				    chat_id=update.message.chat_id,
 				    text='Язык успешно выбран',
-					)
-				return do_start(bot=bot, update=update, context=context)
+					reply_markup=ReplyKeyboardRemove(),
+					)		
 			else:
-				change_language(user.user[chat_id], chat_id, 'RU')
-				user.user[chat_id].language = 'RU'
-				bot.send_message(
-				    chat_id=update.message.chat_id,
-				    text='Язык успешно выбран',
-				    reply_markup=start_keyboard(user.user[chat_id])
-					)
-				
+				if user.user[chat_id].user_registration:
+					user.user[chat_id] = change_language(user.user[chat_id], chat_id, 'RU')
+					user.user[chat_id].language = 'RU'
+					bot.send_message(
+						chat_id=update.message.chat_id,
+						text='Язык успешно изменён',		
+						)
+			return do_start(bot=bot, update=update, context=context)
 		if user.user[chat_id].access:
 			if user.user[chat_id].data == translates[user.user[chat_id].language]["BUTTON_SEND_CODE"]:
 				user.user[chat_id].access = False
@@ -132,7 +145,7 @@ def take_text(bot: Bot, update: Update, context=CallbackContext):
 				user.user[chat_id].username = user.user[chat_id].data	
 				bot.send_message(
 					chat_id= chat_id,
-					text='I got your name.\n Send name again if you want to change this.',
+					text='I got your name.\nSend name again if you want to change this.',
 					reply_markup=regisration_keyboard(user.user[chat_id]),
 					)		
 			else:
@@ -140,7 +153,7 @@ def take_text(bot: Bot, update: Update, context=CallbackContext):
 					add_user_to_database(settings, user.user[chat_id], chat_id)
 					bot.send_message(
 						chat_id=chat_id,
-						text='Welcome' + user.user[chat_id].username,
+						text=f'Welcome {user.user[chat_id].username}',
 						reply_markup=start_keyboard(user.user[chat_id])
 						)
 		if user.user[chat_id].code[1]:

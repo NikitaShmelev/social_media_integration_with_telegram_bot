@@ -70,6 +70,7 @@ translates = {
         'wrong_code': "Wrong code",
         'button_add_document': "Add Document",
         'send_doc': 'Send Document',
+        'tap_correct_email': "Tap correct email",
         ###
         'create_guide': 
             "Press 'Create post' button. In next steps you can add text, location, media to your post.\n\n"
@@ -179,6 +180,7 @@ translates = {
         'wrong_code': "Неверный код",
         'button_add_document': "Добавить документ",
         'send_doc': 'Вышлите документ',
+        'tap_correct_email': "Введите корректный адрес",
         ###
         'create_guide': 'create_guide',
         'update_guide': 'create_guide',
