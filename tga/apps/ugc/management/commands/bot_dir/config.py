@@ -70,6 +70,7 @@ class User_params():
         self.language_change = False
         self.check_email = False
         self.help = False
+        self.document = [False, ''] # second - file.id
 
 
 class User():

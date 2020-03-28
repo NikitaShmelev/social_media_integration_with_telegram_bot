@@ -41,7 +41,7 @@ translates = {
         'BUTTON_SEND_CODE': 'Send code',
         'tap email again': 'Send email again',
         'REGISTER_ME': 'Sign up',
-        'DELETE_LOCATION': 'Remove location',
+        'DELETE_LOCATION': "Remove location",
         'location_deleted': 'Location was successfully removed',
         'add_channel': 'Add channel',
         'remove_channel': 'Remove channel',
@@ -65,6 +65,11 @@ translates = {
         'location_guide': 'Location usage guide',
         'media_guide': 'Media usage guide',
         'work_with_channels': 'Channels work guide',
+        'check_email': "Check writen EMAIL. Press 'Sign up' if all good.",
+        'send_email_again': "Send email again",
+        'wrong_code': "Wrong code",
+        'button_add_document': "Add Document",
+        'send_doc': 'Send Document',
         ###
         'create_guide': 
             "Press 'Create post' button. In next steps you can add text, location, media to your post.\n\n"
@@ -169,6 +174,11 @@ translates = {
         'location_guide': 'Работа с локацией',
         'media_guide': 'Работа с медиа файлами',
         'work_with_channels': 'Работа с каналами',
+        'check_email': "Проверьте введённый email. Нажмите 'Зарегестрироваться', если всё в порядке.",
+        'send_email_again': "Вышлите email ещё раз.",
+        'wrong_code': "Неверный код",
+        'button_add_document': "Добавить документ",
+        'send_doc': 'Вышлите документ',
         ###
         'create_guide': 'create_guide',
         'update_guide': 'create_guide',
@@ -176,5 +186,6 @@ translates = {
         'location_usage': 'Location usage guide',
         'media_usage': 'Media usage guide',
         'channels_usage': 'channels_usage',
+        
     }
 }

@@ -1,4 +1,3 @@
-
 from telegram import Bot, Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
 from telegram.utils.request import Request
@@ -72,9 +71,7 @@ def take_text(bot: Bot, update: Update, context=CallbackContext):
 		if user.user[chat_id].check_email:
 			bot.send_message(
 				chat_id=chat_id,
-				text='Проверьте введённый адрес, \nесли'
-				' всё верно, то нажмите на кнопку получить код.'
-				'\nВаш email → ' + update.message.text,
+				text=translates[user.user[chat_id].language]['check_email'],
 				reply_markup=email_keyboard(user.user[chat_id]),
 				)
 			user.user[chat_id].email = user.user[chat_id].data
@@ -84,7 +81,7 @@ def take_text(bot: Bot, update: Update, context=CallbackContext):
 			user.user[chat_id].check_email = True
 			bot.send_message(
 				chat_id=chat_id,
-				text='Send email again'
+				text=translates[user.user[chat_id].language]['send_email_again'],
 				)
 		if user.user[chat_id].data == LANGUAGE_EN:
 			if user.user[chat_id].language == '':
@@ -158,7 +155,7 @@ def take_text(bot: Bot, update: Update, context=CallbackContext):
 			else:
 				bot.send_message(
 					chat_id= chat_id,
-					text='Траблы с кодом',
+					text=translates[user.user[chat_id].language]['wrong_code'],
 					)		
 		if user.user[chat_id].user_registration:
 			if user.user[chat_id].data == translates[user.user[chat_id].language]['BUTTON3_BOT_HELP']:
@@ -245,6 +242,7 @@ def take_text(bot: Bot, update: Update, context=CallbackContext):
 				user.user[chat_id].check_list = []
 				user.user[chat_id].event = [False, False]
 				user.user[chat_id].text = [False, '']
+				user.user[chat_id].document = [False, '']
 				user.user[chat_id].location = [False, '', '']
 				user.user[chat_id].media = {
 					0: False,
@@ -374,13 +372,16 @@ def take_text(bot: Bot, update: Update, context=CallbackContext):
 					        )
 			elif user.user[chat_id].data == translates[user.user[chat_id].language]['BUTTON5_TEXT_FOR_POST']:
 				if user.user[chat_id].event[0]:
-					bot.send_message(
-                            chat_id=chat_id,
-                            text=translates[user.user[chat_id]
-                                            .language]['Tap text for post'],
-                            reply_markup=post_keyboard(user.user[chat_id]),
-                        )
-					return text_for_post(user.user[chat_id])
+					if any([user.user[chat_id].text[0], user.user[chat_id].document[0], user.user[chat_id].location[0]]):
+						print('send correct data')
+					else:
+						bot.send_message(
+								chat_id=chat_id,
+								text=translates[user.user[chat_id]
+												.language]['Tap text for post'],
+								reply_markup=post_keyboard(user.user[chat_id]),
+							)
+						return text_for_post(user.user[chat_id])
 			elif user.user[chat_id].data == translates[user.user[chat_id].language]['BUTTON6_ADD_LOCATION']:
 			    if user.user[chat_id].event[0]:
 			        bot.send_message(
@@ -397,6 +398,16 @@ def take_text(bot: Bot, update: Update, context=CallbackContext):
 			            reply_markup=post_keyboard(user.user[chat_id]),
 			            )
 			        return media_for_post(user.user[chat_id])
+			elif user.user[chat_id].data == translates[user.user[chat_id].language]['button_add_document']:
+				user.user[chat_id].document[0] = True
+				user.user[update.message.chat_id].text[0] = False 
+				user.user[update.message.chat_id].location[0] = False 
+				user.user[update.message.chat_id].media[0] = False 
+				bot.send_message(
+			            chat_id=chat_id,
+			            text=translates[user.user[chat_id].language]['send_doc'],
+			            reply_markup=post_keyboard(user.user[chat_id]),
+			            )
 			elif user.user[chat_id].data == translates[user.user[chat_id].language]['BUTTON8_SHOW_POST']:
 			    if user.user[chat_id].event[0]:
 			        if any(\
@@ -632,113 +643,139 @@ def take_text(bot: Bot, update: Update, context=CallbackContext):
 def get_media(bot: Bot, update: Update):
 	chat_id = update.message.chat_id
 	if chat_id in user.user:
-		if user.user[update.message.chat_id].media[0]:
-		    user.user[update.message.chat_id].check_list = []
-		    for i in range(1, 10):
-		        if user.user[update.message.chat_id].media[i] == '':
-		            user.user[update.message.chat_id].check_list.append(i)
-		    if len(user.user[update.message.chat_id].check_list) > 0:
-		        try:
-		            user.user[update.message.chat_id].media_id[0] = update.message.photo[-1].file_id
-		        except:
-		            pass
-		        try:
-		            user.user[update.message.chat_id].media_id[1] = update.message.video.file_id
-		        except:
-		            pass
-		        if user.user[update.message.chat_id].media_id[0] != '':
-		            for i in range(1, 11):
-		                if user.user[update.message.chat_id].media[i] == '':
-		                    user.user[update.message.chat_id].media[i] = 'p' + user.user[update.message.chat_id].media_id[0]
-		                    # 1st 'p' is photo detecter
-		                    bot.send_message(
-		                        chat_id=update.message.chat_id,
-		                        text=translates[user.user[update.message.chat_id].language]["Accepted attachment № "] + str(i),
-		                    )
-		                    break
-		        if user.user[update.message.chat_id].media_id[1] != '':
-		            for i in range(1, 11):
-		                if user.user[update.message.chat_id].media[i] == '':
-		                    user.user[update.message.chat_id].media[i] = 'v' + user.user[update.message.chat_id].media_id[1]
-		                    # 1st 'v' is video detecter
-		                    bot.send_message(
-		                        chat_id=update.message.chat_id,
-		                        text=translates[user.user[update.message.chat_id].language]["Accepted attachment № "] + str(i),
-		                    )
-		                    break
-		    else:
-		        bot.send_message(
-		            chat_id=update.message.chat_id,
-		            text=translates[user.user[update.message.chat_id].language]["attachment_limit"],
-		        )
+		if any([user.user[chat_id].text[0], user.user[chat_id].document[0], user.user[chat_id].location[0]]):
+			print('send correct data')
+		else:
+			if user.user[update.message.chat_id].media[0]:
+				user.user[update.message.chat_id].check_list = []
+				for i in range(1, 10):
+					if user.user[update.message.chat_id].media[i] == '':
+						user.user[update.message.chat_id].check_list.append(i)
+				if len(user.user[update.message.chat_id].check_list) > 0:
+					try:
+						user.user[update.message.chat_id].media_id[0] = update.message.photo[-1].file_id
+					except:
+						pass
+					try:
+						user.user[update.message.chat_id].media_id[1] = update.message.video.file_id
+					except:
+						pass
+					if user.user[update.message.chat_id].media_id[0] != '':
+						for i in range(1, 11):
+							if user.user[update.message.chat_id].media[i] == '':
+								user.user[update.message.chat_id].media[i] = 'p' + user.user[update.message.chat_id].media_id[0]
+								# 1st 'p' is photo detecter
+								bot.send_message(
+									chat_id=update.message.chat_id,
+									text=translates[user.user[update.message.chat_id].language]["Accepted attachment № "] + str(i),
+								)
+								break
+					if user.user[update.message.chat_id].media_id[1] != '':
+						for i in range(1, 11):
+							if user.user[update.message.chat_id].media[i] == '':
+								user.user[update.message.chat_id].media[i] = 'v' + user.user[update.message.chat_id].media_id[1]
+								# 1st 'v' is video detecter
+								bot.send_message(
+									chat_id=update.message.chat_id,
+									text=translates[user.user[update.message.chat_id].language]["Accepted attachment № "] + str(i),
+								)
+								break
+				else:
+					bot.send_message(
+						chat_id=update.message.chat_id,
+						text=translates[user.user[update.message.chat_id].language]["attachment_limit"],
+					)
 	else:
 		do_start(bot=bot, update=update, context=context)
 
 
 @debug_requests
 def get_location(bot: Bot, update: Update):
-    chat_id = update.message.chat_id
-    if chat_id in user.user:
-        if user.user[chat_id].location[0]:
-            user.user[chat_id].location.append(update.message.location)
-            user.user[chat_id].location[1] = user.user[chat_id].location[3].latitude
-            user.user[chat_id].location[2] = user.user[chat_id].location[3].longitude
-            bot.send_message(
-                chat_id=chat_id,
-                text=translates[user.user[chat_id].language]['location_accepted'],
-                reply_markup=post_keyboard(user.user[chat_id])
-                )
-    else:
-        do_start(bot=bot, update=update, context=context)
+	chat_id = update.message.chat_id
+	if chat_id in user.user:
+		if any([user.user[chat_id].text[0], user.user[chat_id].media[0], user.user[chat_id].document[0]]):
+			print('send correct data')
+		else:
+			if user.user[chat_id].location[0]:
+				user.user[chat_id].location.append(update.message.location)
+				user.user[chat_id].location[1] = user.user[chat_id].location[3].latitude
+				user.user[chat_id].location[2] = user.user[chat_id].location[3].longitude
+				bot.send_message(
+					chat_id=chat_id,
+					text=translates[user.user[chat_id].language]['location_accepted'],
+					reply_markup=post_keyboard(user.user[chat_id])
+					)
+	else:
+		do_start(bot=bot, update=update, context=context)
 
 
+def get_document(bot: Bot, update: Update):
+	chat_id = update.message.chat_id
+	if chat_id in user.user:
+		if any([user.user[chat_id].text[0], user.user[chat_id].media[0], user.user[chat_id].location[0]]):
+			print('send correct data')
+		else:
+			if user.user[update.message.chat_id].document[0]:
+				bot.send_document(
+					chat_id=update.message.chat_id,
+					document=update.message.document.file_id,
+				)
+	else:
+		do_start(bot=bot, update=update, context=context)
+	# print(update.message.document.file_id)
+	
 
 class Command(BaseCommand):
-    help = 'Telegram-bot'
+	help = 'Telegram-bot'
 
-    def handle(self, *args, **options):
+	def handle(self, *args, **options):
 		
-        request = Request(
-            connect_timeout=0.5,
-            read_timeout=1.0,
-        )
-        bot = Bot(
-            request=request,
-            token=settings.token,
-            base_url=getattr(settings, 'PROXY_URL', None),
-        )
-        print(bot.get_me())
+		request = Request(
+			connect_timeout=0.5,
+			read_timeout=1.0,
+		)
+		bot = Bot(
+			request=request,
+			token=settings.token,
+			base_url=getattr(settings, 'PROXY_URL', None),
+		)
+		print(bot.get_me())
 
-        updater = Updater(
-            bot=bot,
-        )
-        start_handler = CommandHandler(
-            "start",
-            do_start
-        )
-    # Message handlers
-        text_message_handler = MessageHandler(
-            Filters.text,
-            take_text
-        )
-        img_message_handler = MessageHandler(
-            Filters.photo,
-            get_media
-        )
-        video_message_handler = MessageHandler(
-            Filters.video,
-            get_media
-        )
-        location_message_handler = MessageHandler(
-            Filters.location,
-            get_location
-        )
+		updater = Updater(
+			bot=bot,
+		)
+		start_handler = CommandHandler(
+			"start",
+			do_start
+		)
+		# Message handlers
+		text_message_handler = MessageHandler(
+			Filters.text,
+			take_text
+		)
+		img_message_handler = MessageHandler(
+			Filters.photo,
+			get_media
+		)
+		video_message_handler = MessageHandler(
+			Filters.video,
+			get_media
+		)
+		location_message_handler = MessageHandler(
+			Filters.location,
+			get_location
+		)
+		document_message_handler = MessageHandler(
+			Filters.document,
+			get_document
+		)
 
-        updater.dispatcher.add_handler(start_handler)
-        updater.dispatcher.add_handler(text_message_handler)
-        updater.dispatcher.add_handler(img_message_handler)
-        updater.dispatcher.add_handler(location_message_handler)
-        updater.dispatcher.add_handler(video_message_handler)
-        updater.start_polling()
-        updater.idle()
+		updater.dispatcher.add_handler(start_handler)
+		updater.dispatcher.add_handler(text_message_handler)
+		updater.dispatcher.add_handler(img_message_handler)
+		updater.dispatcher.add_handler(location_message_handler)
+		updater.dispatcher.add_handler(video_message_handler)
+		updater.dispatcher.add_handler(document_message_handler)
+		updater.start_polling()
+		updater.idle()
    
