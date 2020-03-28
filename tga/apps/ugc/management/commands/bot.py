@@ -393,21 +393,13 @@ def take_text(bot: Bot, update: Update, context=CallbackContext):
 					        )
 			elif user.user[chat_id].data == translates[user.user[chat_id].language]['BUTTON5_TEXT_FOR_POST']:
 				if user.user[chat_id].event[0]:
-					if any([user.user[chat_id].text[0], user.user[chat_id].location[0]]):
-						bot.send_message(
-								chat_id=chat_id,
-								text=translates[user.user[chat_id]
-												.language]['send_correct_data'],
-								reply_markup=post_keyboard(user.user[chat_id]),
-							)
-					else:
-						bot.send_message(
-								chat_id=chat_id,
-								text=translates[user.user[chat_id]
-												.language]['Tap text for post'],
-								reply_markup=post_keyboard(user.user[chat_id]),
-							)
-						return text_for_post(user.user[chat_id])
+					bot.send_message(
+							chat_id=chat_id,
+							text=translates[user.user[chat_id]
+											.language]['Tap text for post'],
+							reply_markup=post_keyboard(user.user[chat_id]),
+						)
+					return text_for_post(user.user[chat_id])
 			elif user.user[chat_id].data == translates[user.user[chat_id].language]['BUTTON6_ADD_LOCATION']:
 			    if user.user[chat_id].event[0]:
 			        bot.send_message(
@@ -621,12 +613,20 @@ def take_text(bot: Bot, update: Update, context=CallbackContext):
 			if user.user[chat_id].text[0]:
 				user.user[chat_id].text[0] = False
 				if user.user[chat_id].event[0]:
-					user.user[chat_id].text[1] = user.user[chat_id].data
-					bot.send_message(
-			                chat_id=chat_id,
-			                text=translates[user.user[chat_id].language]['I got text'],
-			                reply_markup=post_keyboard(user.user[chat_id]),
-			        )
+					if any([user.user[chat_id].text[0], user.user[chat_id].location[0]]):
+						bot.send_message(
+								chat_id=chat_id,
+								text=translates[user.user[chat_id]
+												.language]['send_correct_data'],
+								reply_markup=post_keyboard(user.user[chat_id]),
+							)
+					else:
+						user.user[chat_id].text[1] = user.user[chat_id].data
+						bot.send_message(
+								chat_id=chat_id,
+								text=translates[user.user[chat_id].language]['I got text'],
+								reply_markup=post_keyboard(user.user[chat_id]),
+						)
 			if user.user[chat_id].media[0]:
 			    try:
 			        if type(int(user.user[chat_id].data.strip())) is int:
@@ -660,7 +660,12 @@ def get_media(bot: Bot, update: Update):
 	chat_id = update.message.chat_id
 	if chat_id in user.user:
 		if any([user.user[chat_id].text[0], user.user[chat_id].location[0]]):
-			print('send correct data')
+			bot.send_message(
+				chat_id=chat_id,
+				text=translates[user.user[chat_id]
+								.language]['send_correct_data'],
+				reply_markup=post_keyboard(user.user[chat_id]),
+			)
 		else:
 			if user.user[update.message.chat_id].media[0]:
 				user.user[update.message.chat_id].check_list = []
@@ -710,7 +715,12 @@ def get_location(bot: Bot, update: Update):
 	chat_id = update.message.chat_id
 	if chat_id in user.user:
 		if any([user.user[chat_id].text[0], user.user[chat_id].media[0]]):
-			print('send correct data')
+			bot.send_message(
+				chat_id=chat_id,
+				text=translates[user.user[chat_id]
+								.language]['send_correct_data'],
+				reply_markup=post_keyboard(user.user[chat_id]),
+			)
 		else:
 			if user.user[chat_id].location[0]:
 				user.user[chat_id].location.append(update.message.location)
@@ -729,10 +739,44 @@ def get_document(bot: Bot, update: Update):
 	chat_id = update.message.chat_id
 	if chat_id in user.user:
 		if any([user.user[chat_id].text[0], user.user[chat_id].media[0], user.user[chat_id].location[0]]):
-			print('send correct data')
+			bot.send_message(
+				chat_id=chat_id,
+				text=translates[user.user[chat_id]
+								.language]['send_correct_data'],
+				reply_markup=post_keyboard(user.user[chat_id]),
+			)
 	else:
 		do_start(bot=bot, update=update, context=context)
 	
+
+def get_audio(bot: Bot, update: Update):
+	chat_id = update.message.chat_id
+	if chat_id in user.user:
+		if any([user.user[chat_id].text[0], user.user[chat_id].media[0], user.user[chat_id].location[0]]):
+			bot.send_message(
+				chat_id=chat_id,
+				text=translates[user.user[chat_id]
+								.language]['send_correct_data'],
+				reply_markup=post_keyboard(user.user[chat_id]),
+			)
+	else:
+		do_start(bot=bot, update=update, context=context)
+
+
+
+def get_voice(bot: Bot, update: Update):
+	chat_id = update.message.chat_id
+	if chat_id in user.user:
+		if any([user.user[chat_id].text[0], user.user[chat_id].media[0], user.user[chat_id].location[0]]):
+			bot.send_message(
+				chat_id=chat_id,
+				text=translates[user.user[chat_id]
+								.language]['send_correct_data'],
+				reply_markup=post_keyboard(user.user[chat_id]),
+			)
+	else:
+		do_start(bot=bot, update=update, context=context)
+
 
 class Command(BaseCommand):
 	help = 'Telegram-bot'
@@ -778,13 +822,22 @@ class Command(BaseCommand):
 			Filters.document,
 			get_document
 		)
-
+		audio_handler = MessageHandler(
+			Filters.audio,
+			get_audio,
+		)
+		voice_handler = MessageHandler(
+			Filters.voice,
+			get_voice,
+		)
 		updater.dispatcher.add_handler(start_handler)
 		updater.dispatcher.add_handler(text_message_handler)
 		updater.dispatcher.add_handler(img_message_handler)
 		updater.dispatcher.add_handler(location_message_handler)
 		updater.dispatcher.add_handler(video_message_handler)
 		updater.dispatcher.add_handler(document_message_handler)
+		updater.dispatcher.add_handler(audio_handler)
+		updater.dispatcher.add_handler(voice_handler)
 		updater.start_polling()
 		updater.idle()
    
