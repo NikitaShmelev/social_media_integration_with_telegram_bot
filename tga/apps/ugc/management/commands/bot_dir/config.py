@@ -29,6 +29,7 @@ class User_params():
      def __init__(self):
         self.chat_id = None
         self.data = ''
+        self.email = None
         self.date = None
         self.add_channel = False
         self.remove_channel = False

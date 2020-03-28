@@ -67,10 +67,11 @@ def take_user_data(user, chat_id):
     user.chat_id = chat_id
     conn = sqlite3.connect(DATABASE_PATH)
     cur = conn.cursor()
-    cur.execute("SELECT USERNAME from users WHERE user_id=?",(chat_id, ))
-    user.username = cur.fetchone()[0]
-    cur.execute("SELECT LANGUAGE from USERS WHERE user_id=?",(chat_id, ))
-    user.language = cur.fetchone()[0]
+    cur.execute("SELECT * from users WHERE user_id=?",(chat_id, ))
+    data = cur.fetchall()[0]
+    user.username = data[1]
+    user.language = data[2]
+    user.email = data[3]
     cur.execute("SELECT channel_id from channels WHERE user_id=?",(chat_id, ))
     user.channels = [i[0] for i in cur.fetchall()]
     cur.execute("SELECT post_id from posts WHERE user_id=? and PUBLISHED=?",(chat_id, 0))
@@ -82,6 +83,10 @@ def take_user_data(user, chat_id):
         user.unpublished_posts_reverse[date[1][0]] = ids[date[0]][0]
     cur.close()
     conn.close()
+    print(
+        '\n\nUser was created\n'
+        f'Username: {user.username}\nID: {chat_id}\nEmail: {user.email}'
+        )
     return user
 
 

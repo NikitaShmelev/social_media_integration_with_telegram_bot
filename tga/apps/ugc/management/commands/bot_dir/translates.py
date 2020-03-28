@@ -69,6 +69,7 @@ translates = {
         'send_email_again': "Send email again",
         'wrong_code': "Wrong code",
         'tap_correct_email': "Tap correct email",
+        'send_correct_data': "Send correct data",
         ###
         'create_guide': 
             "Press 'Create post' button. In next steps you can add text, location, media to your post.\n\n"
@@ -177,6 +178,7 @@ translates = {
         'send_email_again': "Вышлите email ещё раз.",
         'wrong_code': "Неверный код",
         'tap_correct_email': "Введите корректный адрес",
+        'send_correct_data': "Вышлите корректные данные",
         ###
         'create_guide': 'create_guide',
         'update_guide': 'create_guide',

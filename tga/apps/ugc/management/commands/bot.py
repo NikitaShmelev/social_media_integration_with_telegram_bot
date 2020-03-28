@@ -110,6 +110,7 @@ def take_text(bot: Bot, update: Update, context=CallbackContext):
 					bot.send_message(
 						chat_id=update.message.chat_id,
 						text='Language was successfully changed',
+						reply_markup=start_keyboard(user.user[chat_id]),
 						)
 			return do_start(bot=bot, update=update, context=context)
 		elif user.user[chat_id].data == LANGUAGE_RU:
@@ -126,7 +127,8 @@ def take_text(bot: Bot, update: Update, context=CallbackContext):
 					user.user[chat_id].language = 'RU'
 					bot.send_message(
 						chat_id=update.message.chat_id,
-						text='Язык успешно изменён',		
+						text='Язык успешно изменён',
+						reply_markup=start_keyboard(user.user[chat_id]),
 						)
 			return do_start(bot=bot, update=update, context=context)
 		if user.user[chat_id].access:
@@ -138,6 +140,7 @@ def take_text(bot: Bot, update: Update, context=CallbackContext):
 					chat_id=update.message.chat_id,
 					text='Код выслан.\n'
 					'Вышлите код мне для получения доступа к функциям бота',
+					reply_markup=ReplyKeyboardRemove(),
 					)
 				return send_email(user.user[chat_id])
 		if user.user[chat_id].get_name:
@@ -157,15 +160,21 @@ def take_text(bot: Bot, update: Update, context=CallbackContext):
 						reply_markup=start_keyboard(user.user[chat_id])
 						)
 		if user.user[chat_id].code[1]:
-			if int(user.user[chat_id].data) == user.user[chat_id].code[0]:
-				bot.send_message(
-					chat_id= chat_id,
-					text='Well done.\n'+ 
-					translates[user.user[chat_id].language]['Name to sign up'],
+			try:
+				if int(user.user[chat_id].data) == user.user[chat_id].code[0]:
+					bot.send_message(
+						chat_id= chat_id,
+						text='Well done.\n'+ 
+						translates[user.user[chat_id].language]['Name to sign up'],
+						)
+					user.user[chat_id].get_name = True
+					user.user[chat_id].code[1] = False
+				else:
+					bot.send_message(
+						chat_id= chat_id,
+						text=translates[user.user[chat_id].language]['wrong_code'],
 					)
-				user.user[chat_id].get_name = True
-				user.user[chat_id].code[1] = False
-			else:
+			except ValueError:
 				bot.send_message(
 					chat_id= chat_id,
 					text=translates[user.user[chat_id].language]['wrong_code'],
@@ -385,7 +394,12 @@ def take_text(bot: Bot, update: Update, context=CallbackContext):
 			elif user.user[chat_id].data == translates[user.user[chat_id].language]['BUTTON5_TEXT_FOR_POST']:
 				if user.user[chat_id].event[0]:
 					if any([user.user[chat_id].text[0], user.user[chat_id].location[0]]):
-						print('send correct data')
+						bot.send_message(
+								chat_id=chat_id,
+								text=translates[user.user[chat_id]
+												.language]['send_correct_data'],
+								reply_markup=post_keyboard(user.user[chat_id]),
+							)
 					else:
 						bot.send_message(
 								chat_id=chat_id,
