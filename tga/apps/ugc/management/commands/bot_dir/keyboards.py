@@ -101,7 +101,6 @@ def post_keyboard(user):
                 KeyboardButton(translates[user.language]['BUTTON5_TEXT_FOR_POST']),
                 KeyboardButton(translates[user.language]['BUTTON6_ADD_LOCATION']),
                 KeyboardButton(translates[user.language]['BUTTON7_ADD_MEDIA']),
-                KeyboardButton(translates[user.language]['button_add_document']),
             ],
             [
                 KeyboardButton(translates[user.language]['BUTTON10_CANCEL_POST']),

@@ -68,8 +68,6 @@ translates = {
         'check_email': "Check writen EMAIL. Press 'Sign up' if all good.",
         'send_email_again': "Send email again",
         'wrong_code': "Wrong code",
-        'button_add_document': "Add Document",
-        'send_doc': 'Send Document',
         'tap_correct_email': "Tap correct email",
         ###
         'create_guide': 
@@ -178,8 +176,6 @@ translates = {
         'check_email': "Проверьте введённый email. Нажмите 'Зарегестрироваться', если всё в порядке.",
         'send_email_again': "Вышлите email ещё раз.",
         'wrong_code': "Неверный код",
-        'button_add_document': "Добавить документ",
-        'send_doc': 'Вышлите документ',
         'tap_correct_email': "Введите корректный адрес",
         ###
         'create_guide': 'create_guide',

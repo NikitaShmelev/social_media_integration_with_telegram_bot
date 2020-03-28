@@ -255,7 +255,6 @@ def take_text(bot: Bot, update: Update, context=CallbackContext):
 				user.user[chat_id].check_list = []
 				user.user[chat_id].event = [False, False]
 				user.user[chat_id].text = [False, '']
-				user.user[chat_id].document = [False, '']
 				user.user[chat_id].location = [False, '', '']
 				user.user[chat_id].media = {
 					0: False,
@@ -385,7 +384,7 @@ def take_text(bot: Bot, update: Update, context=CallbackContext):
 					        )
 			elif user.user[chat_id].data == translates[user.user[chat_id].language]['BUTTON5_TEXT_FOR_POST']:
 				if user.user[chat_id].event[0]:
-					if any([user.user[chat_id].text[0], user.user[chat_id].document[0], user.user[chat_id].location[0]]):
+					if any([user.user[chat_id].text[0], user.user[chat_id].location[0]]):
 						print('send correct data')
 					else:
 						bot.send_message(
@@ -411,16 +410,6 @@ def take_text(bot: Bot, update: Update, context=CallbackContext):
 			            reply_markup=post_keyboard(user.user[chat_id]),
 			            )
 			        return media_for_post(user.user[chat_id])
-			elif user.user[chat_id].data == translates[user.user[chat_id].language]['button_add_document']:
-				user.user[chat_id].document[0] = True
-				user.user[update.message.chat_id].text[0] = False 
-				user.user[update.message.chat_id].location[0] = False 
-				user.user[update.message.chat_id].media[0] = False 
-				bot.send_message(
-			            chat_id=chat_id,
-			            text=translates[user.user[chat_id].language]['send_doc'],
-			            reply_markup=post_keyboard(user.user[chat_id]),
-			            )
 			elif user.user[chat_id].data == translates[user.user[chat_id].language]['BUTTON8_SHOW_POST']:
 			    if user.user[chat_id].event[0]:
 			        if any(\
@@ -656,7 +645,7 @@ def take_text(bot: Bot, update: Update, context=CallbackContext):
 def get_media(bot: Bot, update: Update):
 	chat_id = update.message.chat_id
 	if chat_id in user.user:
-		if any([user.user[chat_id].text[0], user.user[chat_id].document[0], user.user[chat_id].location[0]]):
+		if any([user.user[chat_id].text[0], user.user[chat_id].location[0]]):
 			print('send correct data')
 		else:
 			if user.user[update.message.chat_id].media[0]:
@@ -706,7 +695,7 @@ def get_media(bot: Bot, update: Update):
 def get_location(bot: Bot, update: Update):
 	chat_id = update.message.chat_id
 	if chat_id in user.user:
-		if any([user.user[chat_id].text[0], user.user[chat_id].media[0], user.user[chat_id].document[0]]):
+		if any([user.user[chat_id].text[0], user.user[chat_id].media[0]]):
 			print('send correct data')
 		else:
 			if user.user[chat_id].location[0]:
@@ -727,15 +716,8 @@ def get_document(bot: Bot, update: Update):
 	if chat_id in user.user:
 		if any([user.user[chat_id].text[0], user.user[chat_id].media[0], user.user[chat_id].location[0]]):
 			print('send correct data')
-		else:
-			if user.user[update.message.chat_id].document[0]:
-				bot.send_document(
-					chat_id=update.message.chat_id,
-					document=update.message.document.file_id,
-				)
 	else:
 		do_start(bot=bot, update=update, context=context)
-	# print(update.message.document.file_id)
 	
 
 class Command(BaseCommand):

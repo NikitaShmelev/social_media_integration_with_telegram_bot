@@ -160,7 +160,6 @@ def cancel_post(user):
     user.event = [False, False]
     user.text = [False, '']
     user.location = [False, '', '']
-    user.document = [False, '']
     user.media = {
         0: False,
         1: '',
