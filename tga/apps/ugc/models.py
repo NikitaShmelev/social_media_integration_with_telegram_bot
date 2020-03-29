@@ -20,23 +20,23 @@ class Profile(models.Model):
         verbose_name_plural = 'Profiles'
 
 
-class Message(models.Model):
-    profile = models.ForeignKey(
-        to='ugc.Profile',
-        verbose_name='Profile',
-        on_delete=models.PROTECT,
-    )
-    text = models.TextField(
-        verbose_name='Text',
-    )
-    created_at = models.DateTimeField(
-        verbose_name='Receive time',
-        auto_now_add=True,
-    )
+# class Message(models.Model):
+#     profile = models.ForeignKey(
+#         to='ugc.Profile',
+#         verbose_name='Profile',
+#         on_delete=models.PROTECT,
+#     )
+#     text = models.TextField(
+#         verbose_name='Text',
+#     )
+#     created_at = models.DateTimeField(
+#         verbose_name='Receive time',
+#         auto_now_add=True,
+#     )
 
-    def __str__(self):
-        return f'Message {self.pk} от {self.profile}'
+#     def __str__(self):
+#         return f'Message {self.pk} от {self.profile}'
 
-    class Meta:
-        verbose_name = 'Message'
-        verbose_name_plural = 'Messages'
+#     class Meta:
+#         verbose_name = 'Message'
+#         verbose_name_plural = 'Messages'
