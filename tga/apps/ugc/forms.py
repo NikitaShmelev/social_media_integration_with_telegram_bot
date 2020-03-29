@@ -10,6 +10,7 @@ class ProfileForm(forms.ModelForm):
         fields = (
             'external_id',
             'name',
+            'email',
         )
         widgets = {
             'name': forms.TextInput,

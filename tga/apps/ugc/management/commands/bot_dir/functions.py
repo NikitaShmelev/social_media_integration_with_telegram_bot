@@ -14,6 +14,32 @@ settings = Settings()
 user = User()
 DATABASE_PATH = './tga/apps/ugc/management/commands/bot_dir/database.sqlite3'
 
+def init_database():
+    conn = sqlite3.connect(DATABASE_PATH)
+    cur = conn.cursor()
+    cur.execute(
+        "CREATE TABLE IF NOT EXISTS USERS ( user_id INTEGER NOT NULL UNIQUE, username TEXT NOT NULL, language TEXT NOT NULL, email TEXT NOT NULL )"
+        )
+    cur.execute(
+        "CREATE TABLE IF NOT EXISTS posts ( user_id INTEGER NOT NULL, created_at DATETIME NOT NULL, "
+        "post_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, post_text TEXT, location BOOLEAN NOT NULL,"
+        " media BOOLEAN NOT NULL, creator_name TEXT NOT NULL, published BOOLEAN NOT NULL )"
+        )
+    cur.execute(
+        "CREATE TABLE IF NOT EXISTS channels ( channel_id TEXT NOT NULL, user_id INTEGER NOT NULL )"
+        )
+    cur.execute(
+        "CREATE TABLE IF NOT EXISTS POST_LOCATION ( post_id INTEGER NOT NULL, latitude REAL, longitude REAL )"
+        )
+    cur.execute(
+        "CREATE TABLE IF NOT EXISTS post_media ("
+        " post_id INTEGER NOT NULL, media_1 TEXT, media_2 TEXT, media_3 TEXT, media_4 TEXT, "
+        "media_5 TEXT, media_6 TEXT, media_7 TEXT, media_8 TEXT, media_9 TEXT )"
+        )
+    cur.close()
+    conn.close()
+
+
 def create_post_button(user, chat_id, bot: Bot, update: Update):
     if user.event[0]:
         bot.send_message(
@@ -33,6 +59,7 @@ def create_post_button(user, chat_id, bot: Bot, update: Update):
 def take_users():
     conn = sqlite3.connect(DATABASE_PATH)
     cur = conn.cursor()
+    init_database()
     cur.execute("SELECT USER_ID from USERS")
     users = [i[0] for i in cur.fetchall()]
     cur.close()

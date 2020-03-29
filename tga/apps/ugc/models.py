@@ -9,6 +9,9 @@ class Profile(models.Model):
     name = models.TextField(
         verbose_name='Username',
     )
+    email = models.TextField(
+        verbose_name='Email',
+    )
 
 
     def __str__(self):
