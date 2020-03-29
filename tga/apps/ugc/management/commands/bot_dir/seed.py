@@ -3,7 +3,7 @@ from datetime import datetime
 from random import randint
 from time import sleep
 conn = sqlite3.connect(
-    './ugc/management/commands/bot_dir/database.sqlite3')
+    './tga/apps/ugc/management/commands/bot_dir/database.sqlite3')
 cur = conn.cursor()
 user_id = 465995986
 for i in range(1):

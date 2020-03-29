@@ -274,6 +274,7 @@ def show_created_post(user, chat_id, bot: Bot, update: Update, context = Callbac
         if user.all_channels:
             for i in user.channels:
                 send_post(i)
+                sleep(1)
             user.all_channels = False
         else:
             send_post(chat_id)
@@ -345,7 +346,6 @@ def save_post(user, chat_id, bot: Bot, update: Update, context = CallbackContext
             bot = bot, update = update,
             context = CallbackContext
             )
-        user = save(user)
         make_published()
     user.save_post = False
     return user

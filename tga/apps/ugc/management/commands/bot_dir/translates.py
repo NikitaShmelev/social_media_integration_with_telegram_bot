@@ -19,7 +19,7 @@ translates = {
         'continue_post': "Let's continue create post.",
         'already':'You are already creating a post.',
         'Post_creation': 'Post creation.',
-        'Done': 'DONE',
+        'Done': 'Done',
         'Name to sign up': 'Print your name.',
         'Hello': 'Hello ',
         'I got text': 'I got your text.',
@@ -57,7 +57,7 @@ translates = {
         'DELETE_MEDIA': 'Delete all media',
         'publish_and_update': 'Update&Publish',
         'update_post': 'Update post',
-        'updated': 'updated',
+        'updated': 'Updated',
         'welcome':'You were redirected to the start page.',
         'how_to_create': 'Post create guide',
         'how_to_update': 'Post update guide',
@@ -70,6 +70,8 @@ translates = {
         'wrong_code': "Wrong code",
         'tap_correct_email': "Tap correct email",
         'send_correct_data': "Send correct data",
+        'Code_has_been_sent':"Code has been sent. Please print this code here to continue.",
+        'i_got_name':"I got your name.\nSend another name, if you want to change the previous one.",
         ###
         'create_guide': 
             "Press 'Create post' button. In next steps you can add text, location, media to your post.\n\n"
@@ -179,6 +181,8 @@ translates = {
         'wrong_code': "Неверный код",
         'tap_correct_email': "Введите корректный адрес",
         'send_correct_data': "Вышлите корректные данные",
+        'Code_has_been_sent':"Код был отправлен. Пожалуйста, напишите этот код здесь, чтобы продолжить.",
+        'i_got_name':"Я получил ваше имя.\nВышлите имя ещё раз, если хотите изменить его.",
         ###
         'create_guide': 'create_guide',
         'update_guide': 'create_guide',

@@ -138,8 +138,7 @@ def take_text(bot: Bot, update: Update, context=CallbackContext):
 				user.user[chat_id].code[0] = randint(100000,1000000)
 				bot.send_message(
 					chat_id=update.message.chat_id,
-					text='Код выслан.\n'
-					'Вышлите код мне для получения доступа к функциям бота',
+					text=translates[user.user[chat_id].language]["Code_has_been_sent"],
 					reply_markup=ReplyKeyboardRemove(),
 					)
 				return send_email(user.user[chat_id])
@@ -148,7 +147,7 @@ def take_text(bot: Bot, update: Update, context=CallbackContext):
 				user.user[chat_id].username = user.user[chat_id].data	
 				bot.send_message(
 					chat_id= chat_id,
-					text='I got your name.\nSend name again if you want to change this.',
+					text=translates[user.user[chat_id].language]["i_got_name"],
 					reply_markup=regisration_keyboard(user.user[chat_id]),
 					)		
 			else:
@@ -736,6 +735,7 @@ def get_location(bot: Bot, update: Update):
 
 
 def get_document(bot: Bot, update: Update):
+	print('DOCUMENT')
 	chat_id = update.message.chat_id
 	if chat_id in user.user:
 		if any([user.user[chat_id].text[0], user.user[chat_id].media[0], user.user[chat_id].location[0]]):
