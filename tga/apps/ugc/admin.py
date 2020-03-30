@@ -6,7 +6,7 @@ from .models import Profile
 
 @admin.register(Profile )
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ('id', 'external_id', 'name')
+    list_display = ('id', 'external_id', 'name', 'email')
     form = ProfileForm
 
 

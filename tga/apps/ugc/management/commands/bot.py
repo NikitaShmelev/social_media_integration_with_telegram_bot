@@ -155,7 +155,7 @@ def take_text(bot: Bot, update: Update, context=CallbackContext):
 					p = Profile(
 						name=user.user[chat_id].username,
 						external_id=update.message.chat_id,
-						email=user.user[chat_id].email,
+						email=user.user[chat_id].email.lower(),
 					)
 					p.save_base()
 					bot.send_message(

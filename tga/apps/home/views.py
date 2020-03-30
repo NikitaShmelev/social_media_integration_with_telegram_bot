@@ -20,7 +20,7 @@ def leave_feedback(request):
         cur = conn.cursor()
         cur.execute('SELECT email FROM users')
         emails = tuple(i[0] for i in cur.fetchall())
-        if form['email'].value() in emails:
+        if form['email'].value().lower() in emails:
             p = Post(
                 name=form['name'].value(),
                 email=form['email'].value(),

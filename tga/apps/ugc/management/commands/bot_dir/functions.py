@@ -170,7 +170,7 @@ def add_user_to_database(settings, user, chat_id):
     cur = conn.cursor()
     cur.execute(
         'INSERT INTO USERS (USERNAME, USER_ID, LANGUAGE, EMAIL) VALUES(?,?,?,?)',
-        (user.username, chat_id, user.language, user.email)
+        (user.username, chat_id, user.language, user.email.lower())
         )
     conn.commit()
     cur.close()

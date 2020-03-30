@@ -65,7 +65,7 @@ translates = {
         'location_guide': 'Location usage guide',
         'media_guide': 'Media usage guide',
         'work_with_channels': 'Channels work guide',
-        'check_email': "Check writen EMAIL. Press 'Sign up' if all good.",
+        'check_email': "Check writen EMAIL. Press 'Send code' if all good.",
         'send_email_again': "Send email again",
         'wrong_code': "Wrong code",
         'tap_correct_email': "Tap correct email",
@@ -73,14 +73,14 @@ translates = {
         'Code_has_been_sent':"Code has been sent. Please print this code here to continue.",
         'i_got_name':"I got your name.\nSend another name, if you want to change the previous one.",
         ###
-        'create_guide': 
+        'create_guide':
             "Press 'Create post' button. In next steps you can add text, location, media to your post.\n\n"
             "Your post will be canceled if you will press 'Cancel creation' button. Bot'll redirect you to start page.\n\n"
             'Bot can show current post version if you will press "Show".\n\n'
             'Bot will save current post if you will press "Save".\n\n'
             'After this action you can update your post.\n\n'
             'Also you can save and publish post to connected channeld. Press "Publish&Save" button.',
-        'update_guide': 
+        'update_guide':
             "Press 'Show unpublished posts'. You have to select post via creation date.\n\n"
             "In next steps you can add(or remove) text, location, media.\n\n"
             "Your post update will be canceled if you will press 'Cancel creation' button."
@@ -88,22 +88,22 @@ translates = {
             'Bot can show current post version if you will press "Show".\n\n'
             'Bot will update current post if you will press "Update".\n\n'
             'Also you can save and publish post to connected channeld. Press "Publish&Update" button.',
-        'channels_usage': 
+        'channels_usage':
             "To add channel press 'Add channel' button.\n"
             "To remove channel press 'Remove channel' button.\n"
             "To view channels list press 'Channels list' button.\n\n"
             "You should send channel name if you want to add channel. Example: your channel link 't.me  /  your_best_channel',\n"
             "than send 'your_channel'(or @your_channel).\n"
             "Also you have to add this Bot to the channel with admin rules.",
-        'text_usage': 
+        'text_usage':
             "To add text message to your post press 'Add add text' button.\n"
             "You have to send some text message with max length 1024 symbols.\n"
             "Press 'Remove text' button to remove text message from post.",
-        'location_usage': 
+        'location_usage':
             "To add location  to your post press 'Add location' button.\n"
             "You have to select location and send it.\n"
             "Press 'Remove location' button to remove location from post.",
-        'media_usage': 
+        'media_usage':
             "To add photo or video to your post press 'Add media' button.\n"
             "You have to send media files with max count 9 items.\n"
             "Bot will send to you item's number. Send this number to remove.\n"
@@ -144,7 +144,7 @@ translates = {
         'attachment_limit':"Слишком много вложений.\n"
                     "Вышлите номер вложения для удаления его.\n"
                     "Вышлите вложение, если есть свободный слот.",
-        'location_accepted': 'Локация принята.\n',           
+        'location_accepted': 'Локация принята.\n',
         'help_text': 'RU help text',
         'Tap email': 'Введите адрес своей электронной почты для получения кода подтверждения.',
         'email error': 'Вас нет в списке зарегестрированных пользователей',
@@ -176,7 +176,7 @@ translates = {
         'location_guide': 'Работа с локацией',
         'media_guide': 'Работа с медиа файлами',
         'work_with_channels': 'Работа с каналами',
-        'check_email': "Проверьте введённый email. Нажмите 'Зарегестрироваться', если всё в порядке.",
+        'check_email': "Проверьте введённый email. Нажмите 'Выслать код', если всё в порядке.",
         'send_email_again': "Вышлите email ещё раз.",
         'wrong_code': "Неверный код",
         'tap_correct_email': "Введите корректный адрес",
@@ -190,6 +190,6 @@ translates = {
         'location_usage': 'Location usage guide',
         'media_usage': 'Media usage guide',
         'channels_usage': 'channels_usage',
-        
+
     }
 }
