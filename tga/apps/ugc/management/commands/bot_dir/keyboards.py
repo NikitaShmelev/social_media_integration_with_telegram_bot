@@ -201,7 +201,7 @@ def channels_keyboard(user):
     ]
     for i in user.channels:
         keyboard.append([KeyboardButton(str(i))])
-    if user.all_channels:
+    if user.channels:
         keyboard.append([KeyboardButton(translates[user.language]['ALL_CHANNELS'])])
     return ReplyKeyboardMarkup(
         keyboard=keyboard,

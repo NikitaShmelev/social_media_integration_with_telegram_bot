@@ -298,6 +298,8 @@ def show_created_post(user, chat_id, bot: Bot, update: Update, context = Callbac
                 text=text,
             )
     if len(user.channels) > 0:
+        print('CHANNELS')
+        print(user.all_channels)
         if user.all_channels:
             for i in user.channels:
                 send_post(i)
@@ -305,6 +307,7 @@ def show_created_post(user, chat_id, bot: Bot, update: Update, context = Callbac
             user.all_channels = False
         else:
             send_post(chat_id)
+        
             
     return user
     
@@ -466,11 +469,11 @@ def update_post(user, chat_id, bot: Bot, update: Update, context=CallbackContext
         
     if user.update_post and not user.publish:
         update()
+        make_published()
         user = cancel_post(user)
     elif user.update_post and user.publish:
-        # user.publish = True
         update()
-        
+        print(f'MAKE PUBLISHED {user.current_post_id}')
         user = show_created_post(
             user, user.chat_id,
             bot=bot, update=update,
@@ -481,8 +484,7 @@ def update_post(user, chat_id, bot: Bot, update: Update, context=CallbackContext
             del user.unpublished_posts_reverse[user.date]
         except:
             pass      
-        
         make_published()
-        # user = cancel_post(user)
+        user = cancel_post(user)
     user.update = False
     return user

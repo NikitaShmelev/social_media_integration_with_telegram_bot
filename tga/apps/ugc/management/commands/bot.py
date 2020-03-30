@@ -6,7 +6,6 @@ from telegram.utils.request import Request
 from django.core.management.base import BaseCommand
 from django.conf import settings
 
-# from ugc.models import Message
 from ugc.models import Profile
 
 from email_validator import validate_email, EmailNotValidError
@@ -257,35 +256,7 @@ def take_text(bot: Bot, update: Update, context=CallbackContext):
 					bot=bot, update=update
 					)
 			elif user.user[chat_id].data == translates[user.user[chat_id].language]['START_PAGE']:
-				user.user[chat_id].event[0] = False
-				user.user[chat_id].remove_channel = False
-				user.user[chat_id].add_channel = False
-				user.user[chat_id].publish = False
-				user.user[chat_id].save = False
-				user.user[chat_id].show_unpublished_posts = False
-				user.user[chat_id].current_channel = ''
-				user.user[chat_id].help = False
-				user.user[chat_id].media_id = ['', '']  # First - photo, second - movie
-				user.user[chat_id].check_list = []
-				user.user[chat_id].event = [False, False]
-				user.user[chat_id].text = [False, '']
-				user.user[chat_id].location = [False, '', '']
-				user.user[chat_id].media = {
-					0: False,
-					1: '',
-					2: '',
-					3: '',
-					4: '',
-					5: '',
-					6: '',
-					7: '',
-					8: '',
-					9: '',
-				}
-				user.user[chat_id].unpublished_keyboard = False
-				user.user[chat_id].current_channel = ''
-				user.user[chat_id].current_post_id = None
-				user.user[chat_id].date = None
+				user.user[chat_id] = cancel_post(user.user[chat_id])
 				bot.send_message(
 					chat_id=chat_id,
 					text=translates[user.user[chat_id].language]['welcome'],
@@ -491,10 +462,6 @@ def take_text(bot: Bot, update: Update, context=CallbackContext):
 						user.user[update.message.chat_id].text[0] = False 
 						user.user[update.message.chat_id].update_post = True
 						user.user[chat_id].publish = True
-						update_post(
-							user.user[update.message.chat_id], update.message.chat_id,
-							bot=bot, update=update, context=context
-							)
 						bot.send_message(
 							chat_id=update.message.chat_id,
 							text=translates[user.user[update.message.chat_id].language]['Done'],
@@ -507,14 +474,18 @@ def take_text(bot: Bot, update: Update, context=CallbackContext):
 					bot=bot, update=update,
 					context=context
 					)
-			elif user.user[chat_id].publish and user.user[chat_id].data == translates[user.user[chat_id].language]['ALL_CHANNELS']:
+			if user.user[chat_id].publish and user.user[chat_id].data == translates[user.user[chat_id].language]['ALL_CHANNELS']:
 				user.user[chat_id].all_channels = True
-				user.user[chat_id].publish = True
 				if user.user[chat_id].update_post:
 					user.user[chat_id] = update_post(
 						user.user[chat_id], chat_id,
 						bot=bot, update=update,
 						context=context
+					)
+					bot.send_message(
+						chat_id=chat_id,
+						text='Starting to post in all your accesseble channels',
+						reply_markup=start_keyboard(user.user[chat_id])
 					)
 					user.user[chat_id] = cancel_post(user.user[chat_id])
 				else:
