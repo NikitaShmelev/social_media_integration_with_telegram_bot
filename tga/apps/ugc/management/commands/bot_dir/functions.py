@@ -3,10 +3,9 @@ from datetime import datetime
 from .config import Settings, User
 from telegram import Bot, Update, Location, InputMediaPhoto, InputMediaVideo
 from telegram.ext import CallbackContext
-from .keyboards import start_keyboard, post_keyboard
+from .keyboards import post_keyboard
 from .translates import translates
 import smtplib
-from platform import system
 from time import sleep
 from home.models import UserProfile #, Channel, Post, PostMedia, PostLocation 
 
@@ -86,7 +85,7 @@ def take_user_data(user, chat_id):
     cur.close()
     conn.close()
     print(
-        '\n\nUser was created\n'
+        '\n\nUser loged in\n'
         f'Username: {user.username}\nID: {chat_id}\nEmail: {user.email}'
         )
     return user
@@ -141,8 +140,6 @@ def add_user_to_database(settings, user, chat_id):
     user.check_email = False
     user.access = False
     settings.users.append(chat_id)
-    conn = sqlite3.connect(DATABASE_PATH)
-    cur = conn.cursor()
     bot_user = UserProfile(
         username=user.username,
         email=user.email.lower(),
@@ -150,13 +147,10 @@ def add_user_to_database(settings, user, chat_id):
         user_id=chat_id,
     )
     bot_user.save_base()
-    cur.execute(
-        'INSERT INTO home_userprofile (USERNAME, USER_ID, LANGUAGE, EMAIL) VALUES(?,?,?,?)',
-        (user.username, chat_id, user.language, user.email.lower())
+    print(
+        '\n\nUser loged in\n'
+        f'Username: {user.username}\nID: {chat_id}\nEmail: {user.email}'
         )
-    conn.commit()
-    cur.close()
-    conn.close()
     return settings, user
 
 
@@ -295,8 +289,8 @@ def show_created_post(user, chat_id, bot: Bot, update: Update, context = Callbac
     
 
 def save_post(user, chat_id, bot: Bot, update: Update, context = CallbackContext):
-    
     def save(user):
+        print('save')
         if user.location[1] != '':
             location = True
         else:
@@ -353,11 +347,18 @@ def save_post(user, chat_id, bot: Bot, update: Update, context = CallbackContext
     if user.save_post and not user.publish:
         user = save(user)
     elif not user.save_post and user.publish:
-        show_created_post(
-            user, user.current_channel,
-            bot = bot, update = update,
-            context = CallbackContext
-            )
+        try:
+            show_created_post(
+                user, user.current_channel,
+                bot = bot, update = update,
+                context = CallbackContext
+                )
+        except:
+            show_created_post(
+                user, update.message.chat_id,
+                bot = bot, update = update,
+                context = CallbackContext
+                )
         make_published()
     user.save_post = False
     return user
@@ -446,11 +447,9 @@ def update_post(user, chat_id, bot: Bot, update: Update, context=CallbackContext
         
     if user.update_post and not user.publish:
         update()
-        make_published()
         user = cancel_post(user)
     elif user.update_post and user.publish:
         update()
-        print(f'MAKE PUBLISHED {user.current_post_id}')
         user = show_created_post(
             user, user.chat_id,
             bot=bot, update=update,

@@ -152,12 +152,6 @@ def take_text(bot: Bot, update: Update, context=CallbackContext):
 			else:
 				if user.user[chat_id].username != False:
 					add_user_to_database(settings, user.user[chat_id], chat_id)
-					# p = Profile(
-					# 	name=user.user[chat_id].username,
-					# 	external_id=update.message.chat_id,
-					# 	email=user.user[chat_id].email.lower(),
-					# )
-					# p.save_base()
 					bot.send_message(
 						chat_id=chat_id,
 						text=f'Welcome {user.user[chat_id].username}',
@@ -435,7 +429,6 @@ def take_text(bot: Bot, update: Update, context=CallbackContext):
 			        		) 
 			    	elif any([user.user[update.message.chat_id].text[1], user.user[update.message.chat_id].media[1], user.user[update.message.chat_id].location[1]]):
 				        user.user[update.message.chat_id].text[0] = False 
-				        user.user[update.message.chat_id].save_post = True
 				        user.user[chat_id].publish = True
 				        save_post(
 				            user.user[chat_id], update.message.chat_id,
@@ -448,21 +441,14 @@ def take_text(bot: Bot, update: Update, context=CallbackContext):
 					        )
 			elif user.user[chat_id].data == translates[user.user[chat_id].language]['publish_and_update']:
 				if user.user[chat_id].event[0]:
-					if not any([user.user[update.message.chat_id].text[1], user.user[update.message.chat_id].media[1], user.user[update.message.chat_id].location[1]]):
-						bot.send_message(
-			        		chat_id=chat_id,
-			        		text='Nothing to update',
-			        		reply_markup=post_keyboard(user.user[chat_id])
-			        		)
-					elif any([user.user[update.message.chat_id].text[1], user.user[update.message.chat_id].media[1], user.user[update.message.chat_id].location[1]]):
-						user.user[update.message.chat_id].text[0] = False 
-						user.user[update.message.chat_id].update_post = True
-						user.user[chat_id].publish = True
-						bot.send_message(
-							chat_id=update.message.chat_id,
-							text=translates[user.user[update.message.chat_id].language]['Done'],
-							reply_markup=channels_keyboard(user.user[update.message.chat_id]),
-							)
+					user.user[update.message.chat_id].text[0] = False 
+					user.user[update.message.chat_id].update_post = True
+					user.user[chat_id].publish = True
+					bot.send_message(
+						chat_id=update.message.chat_id,
+						text=translates[user.user[update.message.chat_id].language]['Done'],
+						reply_markup=channels_keyboard(user.user[update.message.chat_id]),
+						)
 			if user.user[chat_id].publish and user.user[chat_id].data in user.user[chat_id].channels:
 				user.user[chat_id].current_channel = user.user[chat_id].data
 				return save_post(
