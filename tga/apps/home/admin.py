@@ -20,32 +20,51 @@ from .models import PostLocation
 
 @admin.register(Feedback)
 class FeedbackAdmin(admin.ModelAdmin):
-    list_display = ('name', 'email', 'message', 'created_at')
+    list_display = (
+        'name', 
+        'email', 
+        'message', 
+        'created_at'
+        )
     form = FeedbackForm
 
 
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ('user_id', 'username', 'email', 'language')
+    list_display = (
+        'user_id', 
+        'username', 
+        'email', 
+        'language'
+        )
     form = UserProfileForm
 
 
 @admin.register(Channel)
 class ChannelAdmin(admin.ModelAdmin):
-    list_display = ('user_id', 'channel_id')
+    list_display = (
+        'user_id', 
+        'channel_id'
+        )
     form = ChannelForm
 
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ('user', 'creator_name', 'created_at')
+    list_display = (
+        'user_id', 
+        'creator_name', 
+        'post_text',
+        'created_at',
+
+        )
     form = PostForm
 
 
 @admin.register(PostMedia)
 class PostMediaAdmin(admin.ModelAdmin):
     list_display = (
-        'post', 
+        'post_id', 
         'media_1', 'media_2', 'media_3', 
         'media_4', 'media_5', 'media_6', 
         'media_7', 'media_8', 'media_9', 
@@ -55,5 +74,9 @@ class PostMediaAdmin(admin.ModelAdmin):
 
 @admin.register(PostLocation)
 class PostLocationAdmin(admin.ModelAdmin):
-    list_display = ('post', 'latitude', 'longitude',)
+    list_display = (
+        'post_id', 
+        'latitude', 
+        'longitude',
+        )
     form = PostLocationForm

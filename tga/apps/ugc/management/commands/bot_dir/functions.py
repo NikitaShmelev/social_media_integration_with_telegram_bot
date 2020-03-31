@@ -8,37 +8,12 @@ from .translates import translates
 import smtplib
 from platform import system
 from time import sleep
-from home.models import UserProfile
+from home.models import UserProfile #, Channel, Post, PostMedia, PostLocation 
 
 
 settings = Settings()
 user = User()
-DATABASE_PATH = './tga/apps/ugc/management/commands/bot_dir/database.sqlite3'
-
-def init_database():
-    conn = sqlite3.connect(DATABASE_PATH)
-    cur = conn.cursor()
-    cur.execute(
-        "CREATE TABLE IF NOT EXISTS USERS ( user_id INTEGER NOT NULL UNIQUE, username TEXT NOT NULL, language TEXT NOT NULL, email TEXT NOT NULL )"
-        )
-    cur.execute(
-        "CREATE TABLE IF NOT EXISTS posts ( user_id INTEGER NOT NULL, created_at DATETIME NOT NULL, "
-        "post_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, post_text TEXT, location BOOLEAN NOT NULL,"
-        " media BOOLEAN NOT NULL, creator_name TEXT NOT NULL, published BOOLEAN NOT NULL )"
-        )
-    cur.execute(
-        "CREATE TABLE IF NOT EXISTS channels ( channel_id TEXT NOT NULL, user_id INTEGER NOT NULL )"
-        )
-    cur.execute(
-        "CREATE TABLE IF NOT EXISTS POST_LOCATION ( post_id INTEGER NOT NULL, latitude REAL, longitude REAL )"
-        )
-    cur.execute(
-        "CREATE TABLE IF NOT EXISTS post_media ("
-        " post_id INTEGER NOT NULL, media_1 TEXT, media_2 TEXT, media_3 TEXT, media_4 TEXT, "
-        "media_5 TEXT, media_6 TEXT, media_7 TEXT, media_8 TEXT, media_9 TEXT )"
-        )
-    cur.close()
-    conn.close()
+DATABASE_PATH = './db.sqlite3'
 
 
 def create_post_button(user, chat_id, bot: Bot, update: Update):
@@ -60,8 +35,7 @@ def create_post_button(user, chat_id, bot: Bot, update: Update):
 def take_users():
     conn = sqlite3.connect(DATABASE_PATH)
     cur = conn.cursor()
-    init_database()
-    cur.execute("SELECT USER_ID from USERS")
+    cur.execute("SELECT USER_ID from home_userprofile")
     users = [i[0] for i in cur.fetchall()]
     cur.close()
     conn.close()
@@ -71,7 +45,7 @@ def take_users():
 def take_emails():
     conn = sqlite3.connect(DATABASE_PATH)
     cur = conn.cursor()
-    cur.execute("SELECT email from USERS")
+    cur.execute("SELECT email from home_userprofile")
     emails = [i[0] for i in cur.fetchall()]
     cur.close()
     conn.close()
@@ -95,16 +69,16 @@ def take_user_data(user, chat_id):
     user.chat_id = chat_id
     conn = sqlite3.connect(DATABASE_PATH)
     cur = conn.cursor()
-    cur.execute("SELECT * from users WHERE user_id=?",(chat_id, ))
+    cur.execute("SELECT * from home_userprofile WHERE user_id=?",(chat_id, ))
     data = cur.fetchall()[0]
-    user.username = data[1]
-    user.language = data[2]
-    user.email = data[3]
-    cur.execute("SELECT channel_id from channels WHERE user_id=?",(chat_id, ))
+    user.username = data[2]
+    user.language = data[3]
+    user.email = data[4]
+    cur.execute("SELECT channel_id from home_channel WHERE user_id=?",(chat_id, ))
     user.channels = [i[0] for i in cur.fetchall()]
-    cur.execute("SELECT post_id from posts WHERE user_id=? and PUBLISHED=?",(chat_id, 0))
+    cur.execute("SELECT id from home_post WHERE user_id=? and PUBLISHED=?",(chat_id, 0))
     ids = cur.fetchall()
-    cur.execute("SELECT created_at from posts WHERE user_id=? and PUBLISHED=?",(chat_id, 0))
+    cur.execute("SELECT created_at from home_post WHERE user_id=? and PUBLISHED=?",(chat_id, 0))
     posts = cur.fetchall()
     for date in enumerate(posts):
         user.unpublished_posts[ids[date[0]][0]] = date[1][0]
@@ -121,7 +95,7 @@ def take_user_data(user, chat_id):
 def change_language(user, chat_id, language):
     conn = sqlite3.connect(DATABASE_PATH)
     cur = conn.cursor()
-    cur.execute("UPDATE users SET LANGUAGE = ? WHERE USER_ID= ? ", (language ,chat_id))
+    cur.execute("UPDATE home_userprofile SET LANGUAGE = ? WHERE USER_ID= ? ", (language ,chat_id))
     conn.commit()
     cur.close()
     conn.close()
@@ -134,7 +108,7 @@ def add_channel(user, chat_id):
     conn = sqlite3.connect(DATABASE_PATH)
     cur = conn.cursor()
     cur.execute(
-        'INSERT INTO CHANNELS (channel_id, USER_ID) VALUES(?,?)',
+        'INSERT INTO home_channel (channel_id, USER_ID) VALUES(?,?)',
         (user.current_channel, chat_id)
         )
     conn.commit()
@@ -149,7 +123,7 @@ def remove_channel(user, chat_id):
     conn = sqlite3.connect(DATABASE_PATH)
     cur = conn.cursor()
     cur.execute(
-        "DELETE FROM CHANNELS WHERE channel_id=? and user_id=?",
+        "DELETE FROM home_channel WHERE channel_id=? and user_id=?",
         (user.current_channel, chat_id)
         )
     conn.commit()
@@ -177,7 +151,7 @@ def add_user_to_database(settings, user, chat_id):
     )
     bot_user.save_base()
     cur.execute(
-        'INSERT INTO USERS (USERNAME, USER_ID, LANGUAGE, EMAIL) VALUES(?,?,?,?)',
+        'INSERT INTO home_userprofile (USERNAME, USER_ID, LANGUAGE, EMAIL) VALUES(?,?,?,?)',
         (user.username, chat_id, user.language, user.email.lower())
         )
     conn.commit()
@@ -241,9 +215,10 @@ def media_for_post(user):
 
 
 def show_created_post(user, chat_id, bot: Bot, update: Update, context = CallbackContext):
-    text = user.text[1] + f'\nPost was created by {user.username}'
+
 
     def send_post(chat_id):
+        text = user.text[1] + f'\nPost was created by {user.username}'
         if user.location[1] != '':
             latitude = user.location[1]
             longitude = user.location[2]
@@ -306,8 +281,6 @@ def show_created_post(user, chat_id, bot: Bot, update: Update, context = Callbac
                 text=text,
             )
     if len(user.channels) > 0:
-        print('CHANNELS')
-        print(user.all_channels)
         if user.all_channels:
             for i in user.channels:
                 send_post(i)
@@ -315,7 +288,8 @@ def show_created_post(user, chat_id, bot: Bot, update: Update, context = Callbac
             user.all_channels = False
         else:
             send_post(chat_id)
-        
+    else:
+        send_post(chat_id)
             
     return user
     
@@ -334,17 +308,17 @@ def save_post(user, chat_id, bot: Bot, update: Update, context = CallbackContext
         conn = sqlite3.connect(DATABASE_PATH)
         cur = conn.cursor()
         post_date = datetime.today().strftime('"%A, %d. %B %Y %H:%M:%S"')
-        cur.execute('INSERT INTO POSTS (USER_ID,CREATED_AT,POST_TEXT,LOCATION,MEDIA,CREATOR_NAME,PUBLISHED) VALUES(?,?,?,?,?,?,?)',
+        cur.execute('INSERT INTO home_post (USER_ID,CREATED_AT,POST_TEXT,LOCATION,MEDIA,CREATOR_NAME,PUBLISHED) VALUES(?,?,?,?,?,?,?)',
          (
              chat_id, post_date, user.text[1],
             location, media, user.username, False
             )
         )
         conn.commit()
-        cur.execute('SELECT POST_ID FROM POSTS WHERE user_id=?',(chat_id, ))
+        cur.execute('SELECT id FROM home_post WHERE user_id=?',(chat_id, ))
         user.current_post_id = cur.fetchone()[0]
         if media:
-            cur.execute('INSERT INTO POST_MEDIA (POST_ID,MEDIA_1,MEDIA_2,MEDIA_3,MEDIA_4,MEDIA_5,MEDIA_6,MEDIA_7,MEDIA_8,MEDIA_9)'
+            cur.execute('INSERT INTO home_postmedia (POST_ID,MEDIA_1,MEDIA_2,MEDIA_3,MEDIA_4,MEDIA_5,MEDIA_6,MEDIA_7,MEDIA_8,MEDIA_9)'
                 ' VALUES(?,?,?,?,?,?,?,?,?,?)',(
                     user.current_post_id, user.media[1], user.media[2], user.media[3], user.media[4],
                     user.media[5], user.media[6], user.media[7], user.media[8], user.media[9],
@@ -353,7 +327,7 @@ def save_post(user, chat_id, bot: Bot, update: Update, context = CallbackContext
             conn.commit()
         elif location:
 
-            cur.execute('INSERT INTO POST_LOCATION (POST_ID,LATITUDE,LONGITUDE)'
+            cur.execute('INSERT INTO home_postlocation (POST_ID,LATITUDE,LONGITUDE)'
                 ' VALUES(?,?,?)',
             (
                 user.current_post_id, user.location[1], user.location[2],
@@ -371,7 +345,7 @@ def save_post(user, chat_id, bot: Bot, update: Update, context = CallbackContext
     def make_published():
         conn = sqlite3.connect(DATABASE_PATH)
         cur = conn.cursor()
-        cur.execute("UPDATE posts SET PUBLISHED = ? WHERE POST_ID= ? ", (True, user.current_post_id, ))
+        cur.execute("UPDATE home_post SET PUBLISHED = ? WHERE id= ? ", (True, user.current_post_id, ))
         conn.commit()
         cur.close()
         conn.close() 
@@ -396,25 +370,14 @@ def find_post(user, post_date):
     user.current_post_id = user.unpublished_posts_reverse[post_date]
     conn = sqlite3.connect(DATABASE_PATH)
     cur = conn.cursor()
-    cur.execute("SELECT * from posts WHERE post_id=?",
+    cur.execute("SELECT * from home_post WHERE id=?",
                 (user.current_post_id, ))
-
     post_data = cur.fetchall()[0]
-    user.text[1] = post_data[3]
+    user.text[1] = post_data[2]
+
     if post_data[4]:
-        # location
-        cur.execute("SELECT * from post_location WHERE post_id=?",
-                    (user.current_post_id, ))
-        try:
-            location = cur.fetchall()[0]
-            user.location[1] = location[1]  # latitude
-            user.location[2] = location[2]  # longitude
-        except:
-            pass
-        
-    if post_data[5]:
         # media
-        cur.execute("SELECT * from post_media WHERE post_id=?",
+        cur.execute("SELECT * from home_postmedia WHERE post_id=?",
                     (user.current_post_id, ))
         try:
             media = cur.fetchall()[0]
@@ -422,8 +385,16 @@ def find_post(user, post_date):
                 user.media[i[0] + 1] = i[1]
         except:
             pass
-        
-        
+    if post_data[5]:
+        # location
+        cur.execute("SELECT * from home_postlocation WHERE post_id=?",
+                    (user.current_post_id, ))
+        try:
+            location = cur.fetchall()[0]
+            user.location[1] = location[1]  # latitude
+            user.location[2] = location[2]  # longitude
+        except:
+            pass
     return user
 
 
@@ -433,19 +404,18 @@ def update_post(user, chat_id, bot: Bot, update: Update, context=CallbackContext
     def update():
         conn = sqlite3.connect(DATABASE_PATH)
         cur = conn.cursor()
-        
-        cur.execute('UPDATE POSTS set POST_TEXT=?, LOCATION=?, MEDIA=? WHERE POST_ID= ?',(user.text[1], True, True, user.current_post_id))
+        cur.execute('UPDATE home_post set POST_TEXT=?, LOCATION=?, MEDIA=? WHERE ID= ?',(user.text[1], True, True, user.current_post_id))
         conn.commit()
         
-        if not cur.execute("SELECT * from POST_MEDIA WHERE post_id=?", (user.current_post_id, )).fetchall():
-            cur.execute('INSERT INTO POST_MEDIA (POST_ID,MEDIA_1,MEDIA_2,MEDIA_3,MEDIA_4,MEDIA_5,MEDIA_6,MEDIA_7,MEDIA_8,MEDIA_9)'
+        if not cur.execute("SELECT * from home_postmedia WHERE post_id=?", (user.current_post_id, )).fetchall():
+            cur.execute('INSERT INTO home_postmedia (POST_ID,MEDIA_1,MEDIA_2,MEDIA_3,MEDIA_4,MEDIA_5,MEDIA_6,MEDIA_7,MEDIA_8,MEDIA_9)'
                         ' VALUES(?,?,?,?,?,?,?,?,?,?)', (
                             user.current_post_id, user.media[1], user.media[2], user.media[3], user.media[4],
                             user.media[5], user.media[6], user.media[7], user.media[8], user.media[9],
                         )
                         )
         else:
-            cur.execute('UPDATE  POST_MEDIA set MEDIA_1=?,MEDIA_2=?,MEDIA_3=?,MEDIA_4=?,MEDIA_5=?,MEDIA_6=?,MEDIA_7=?,MEDIA_8=?,MEDIA_9=?'
+            cur.execute('UPDATE  home_postmedia set MEDIA_1=?,MEDIA_2=?,MEDIA_3=?,MEDIA_4=?,MEDIA_5=?,MEDIA_6=?,MEDIA_7=?,MEDIA_8=?,MEDIA_9=?'
                         ' where post_id=?', (
                             user.media[1], user.media[2], user.media[3], user.media[4],
                             user.media[5], user.media[6], user.media[7], user.media[8], 
@@ -454,11 +424,11 @@ def update_post(user, chat_id, bot: Bot, update: Update, context=CallbackContext
                         )
         conn.commit()
     
-        if not cur.execute("SELECT * from post_location WHERE post_id=?",(user.current_post_id, )).fetchall():
+        if not cur.execute("SELECT * from home_postlocation WHERE post_id=?",(user.current_post_id, )).fetchall():
             cur.execute(
-                'INSERT INTO POST_LOCATION (POST_ID,LATITUDE,LONGITUDE) VALUES(?,?,?)', (user.current_post_id, user.location[1], user.location[2]))
+                'INSERT INTO home_postlocation (POST_ID,LATITUDE,LONGITUDE) VALUES(?,?,?)', (user.current_post_id, user.location[1], user.location[2]))
         else:
-            cur.execute('UPDATE  POST_LOCATION set LATITUDE=?,LONGITUDE=?'
+            cur.execute('UPDATE  home_postlocation set LATITUDE=?,LONGITUDE=?'
                         ' where post_id=?', (user.location[1], user.location[2], user.current_post_id))
             conn.commit()
         cur.close()
@@ -468,12 +438,11 @@ def update_post(user, chat_id, bot: Bot, update: Update, context=CallbackContext
     def make_published():
         conn = sqlite3.connect(DATABASE_PATH)
         cur = conn.cursor()
-        cur.execute("UPDATE posts SET PUBLISHED = ? WHERE POST_ID= ? ",
+        cur.execute("UPDATE home_post SET PUBLISHED = ? WHERE id= ? ",
                     (True, user.current_post_id, ))
         conn.commit()
         cur.close()
         conn.close()
-        return user
         
     if user.update_post and not user.publish:
         update()

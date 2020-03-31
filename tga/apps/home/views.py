@@ -5,8 +5,8 @@ from .models import Feedback
 from .forms import FeedbackForm
 import sqlite3
 
-DATABASE_PATH = './tga/apps/ugc/management/commands/bot_dir/database.sqlite3' # development
-# DATABASE_PATH = './social_media_integration_wtih_telegram_bot/tga/apps/ugc/management/commands/bot_dir/database.sqlite3' # deploy
+DATABASE_PATH = './db.sqlite3' # development
+# DATABASE_PATH = './social_media_integration_wtih_telegram_bot/db.sqlite3' # deploy
 
 
 def index(request):
@@ -18,7 +18,7 @@ def leave_feedback(request):
         form = FeedbackForm(request.POST)
         conn = sqlite3.connect(DATABASE_PATH)
         cur = conn.cursor()
-        cur.execute('SELECT email FROM users')
+        cur.execute('SELECT email FROM home_userprofile')
         emails = tuple(i[0] for i in cur.fetchall())
         if form['email'].value().lower() in emails:
             feedback = Feedback(

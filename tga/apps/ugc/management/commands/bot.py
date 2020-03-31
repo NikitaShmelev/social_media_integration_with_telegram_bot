@@ -393,22 +393,18 @@ def take_text(bot: Bot, update: Update, context=CallbackContext):
 			            )
 			        return media_for_post(user.user[chat_id])
 			elif user.user[chat_id].data == translates[user.user[chat_id].language]['BUTTON8_SHOW_POST']:
-			    if user.user[chat_id].event[0]:
-			        if any(\
-			        	[user.user[update.message.chat_id].text[1],\
-			        	user.user[update.message.chat_id].media[1],\
-			        	user.user[update.message.chat_id].location[1]]\
-			        	):
-			            return show_created_post(
-			                user.user[chat_id], chat_id,
-			                bot=bot, update=update, context=context
-			                )
-			        else:
-			            bot.send_message(
-			                chat_id=chat_id,
-			                text=translates[user.user[chat_id].language]['nothing_to_show'],
-			                reply_markup=post_keyboard(user.user[chat_id])
-			                )
+				if user.user[chat_id].event[0]:
+					if any([user.user[update.message.chat_id].text[1],user.user[update.message.chat_id].media[1],user.user[update.message.chat_id].location[1]]):
+						return show_created_post(
+							user.user[chat_id], chat_id,
+							bot=bot, update=update, context=context
+							)
+					else:
+						bot.send_message(
+							chat_id=chat_id,
+							text=translates[user.user[chat_id].language]['nothing_to_show'],
+							reply_markup=post_keyboard(user.user[chat_id])
+							)
 			
 			elif user.user[chat_id].data == translates[user.user[chat_id].language]['BUTTON9_SAVE_POST']:
 			    if user.user[chat_id].event[0]:
@@ -525,6 +521,7 @@ def take_text(bot: Bot, update: Update, context=CallbackContext):
 			if user.user[chat_id].show_unpublished_posts:
 				user.user[chat_id] = find_post(user.user[chat_id], user.user[chat_id].data)
 				user.user[chat_id].unpublished_keyboard = True
+				# user.user[chat_id].event[0] = True
 				bot.send_message(
 					chat_id=chat_id,
 					text='You can edit your post',
@@ -712,7 +709,6 @@ def get_location(bot: Bot, update: Update):
 
 
 def get_document(bot: Bot, update: Update):
-	print('DOCUMENT')
 	chat_id = update.message.chat_id
 	if chat_id in user.user:
 		if any([user.user[chat_id].text[0], user.user[chat_id].media[0], user.user[chat_id].location[0]]):
