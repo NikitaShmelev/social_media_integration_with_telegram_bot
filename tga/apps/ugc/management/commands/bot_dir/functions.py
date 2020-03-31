@@ -17,18 +17,19 @@ DATABASE_PATH = './db.sqlite3'
 
 def create_post_button(user, chat_id, bot: Bot, update: Update):
     if user.event[0]:
-        bot.send_message(
-            chat_id=chat_id,
-            text=translates[user.language]['already'],
-        )
-    else:
-        user.event[0] = True
-        bot.send_message(
-            chat_id=update.message.chat_id,
-            text=translates[user.language]['Post_creation'],
-            reply_markup=post_keyboard(user),
-        )
-        return user
+        # bot.send_message(
+        #     chat_id=chat_id,
+        #     text=translates[user.language]['already'],
+        # )
+        user = cancel_post(user)
+    
+    user.event[0] = True
+    bot.send_message(
+        chat_id=update.message.chat_id,
+        text=translates[user.language]['Post_creation'],
+        reply_markup=post_keyboard(user),
+    )
+    return user
 
 
 def take_users():
@@ -289,8 +290,8 @@ def show_created_post(user, chat_id, bot: Bot, update: Update, context = Callbac
     
 
 def save_post(user, chat_id, bot: Bot, update: Update, context = CallbackContext):
+    print('try')
     def save(user):
-        print('save')
         if user.location[1] != '':
             location = True
         else:
@@ -332,7 +333,6 @@ def save_post(user, chat_id, bot: Bot, update: Update, context = CallbackContext
         conn.close()
         user.unpublished_posts[user.current_post_id] = post_date
         user.unpublished_posts_reverse[post_date] = user.current_post_id
-        user = cancel_post(user)
         return user
     
 
@@ -346,6 +346,7 @@ def save_post(user, chat_id, bot: Bot, update: Update, context = CallbackContext
     
     if user.save_post and not user.publish:
         user = save(user)
+        user = cancel_post(user)
     elif not user.save_post and user.publish:
         try:
             show_created_post(
@@ -354,12 +355,16 @@ def save_post(user, chat_id, bot: Bot, update: Update, context = CallbackContext
                 context = CallbackContext
                 )
         except:
+            print('exception')
             show_created_post(
                 user, update.message.chat_id,
                 bot = bot, update = update,
                 context = CallbackContext
                 )
-        make_published()
+            make_published()
+            user = save(user)
+            
+            
     user.save_post = False
     return user
 
