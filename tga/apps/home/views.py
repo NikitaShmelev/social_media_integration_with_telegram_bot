@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.contrib import messages
-from .models import Post
-from .forms import PostForm
+from .models import Feedback
+from .forms import FeedbackForm
 import sqlite3
 
 DATABASE_PATH = './tga/apps/ugc/management/commands/bot_dir/database.sqlite3' # development
@@ -15,18 +15,18 @@ def index(request):
 
 def leave_feedback(request):
     if request.method == 'POST':
-        form = PostForm(request.POST)
+        form = FeedbackForm(request.POST)
         conn = sqlite3.connect(DATABASE_PATH)
         cur = conn.cursor()
         cur.execute('SELECT email FROM users')
         emails = tuple(i[0] for i in cur.fetchall())
         if form['email'].value().lower() in emails:
-            p = Post(
+            feedback = Feedback(
                 name=form['name'].value(),
                 email=form['email'].value(),
                 message=request.POST.get('message'),
             )
-            p.save_base()
+            feedback.save_base()
             messages.success(request, 'Thanks for your feedback!!!')
             
         else:

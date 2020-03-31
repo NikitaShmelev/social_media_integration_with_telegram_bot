@@ -3,7 +3,7 @@ from django.db import models
 # Create your models here.
 
 
-class Post(models.Model):
+class Feedback(models.Model):
     email = models.CharField(
         verbose_name='email',
         max_length=50,
@@ -23,4 +23,21 @@ class Post(models.Model):
 
     def __str__(self):
         return self.name
-    
+
+
+class UserProfile(models.Model):
+    user_id = models.PositiveIntegerField(
+        verbose_name='User ID',
+    )
+    username = models.TextField(
+        verbose_name='Usename',
+    )
+    language = models.TextField(
+        verbose_name='Selected language',
+    )
+    email = models.TextField(
+        verbose_name='Email',
+    )
+
+    def __str__(self):
+        return f'#{self.external_id} {self.name}'

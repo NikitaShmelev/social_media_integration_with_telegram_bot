@@ -8,6 +8,7 @@ from .translates import translates
 import smtplib
 from platform import system
 from time import sleep
+from home.models import UserProfile
 
 
 settings = Settings()
@@ -168,6 +169,13 @@ def add_user_to_database(settings, user, chat_id):
     settings.users.append(chat_id)
     conn = sqlite3.connect(DATABASE_PATH)
     cur = conn.cursor()
+    bot_user = UserProfile(
+        username=user.username,
+        email=user.email.lower(),
+        language=user.language,
+        user_id=chat_id,
+    )
+    bot_user.save_base()
     cur.execute(
         'INSERT INTO USERS (USERNAME, USER_ID, LANGUAGE, EMAIL) VALUES(?,?,?,?)',
         (user.username, chat_id, user.language, user.email.lower())

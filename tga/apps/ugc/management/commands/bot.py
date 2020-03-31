@@ -6,7 +6,7 @@ from telegram.utils.request import Request
 from django.core.management.base import BaseCommand
 from django.conf import settings
 
-from ugc.models import Profile
+# from ugc.models import Profile
 
 from email_validator import validate_email, EmailNotValidError
 
@@ -152,12 +152,12 @@ def take_text(bot: Bot, update: Update, context=CallbackContext):
 			else:
 				if user.user[chat_id].username != False:
 					add_user_to_database(settings, user.user[chat_id], chat_id)
-					p = Profile(
-						name=user.user[chat_id].username,
-						external_id=update.message.chat_id,
-						email=user.user[chat_id].email.lower(),
-					)
-					p.save_base()
+					# p = Profile(
+					# 	name=user.user[chat_id].username,
+					# 	external_id=update.message.chat_id,
+					# 	email=user.user[chat_id].email.lower(),
+					# )
+					# p.save_base()
 					bot.send_message(
 						chat_id=chat_id,
 						text=f'Welcome {user.user[chat_id].username}',
@@ -766,7 +766,8 @@ class Command(BaseCommand):
 		)
 		bot = Bot(
 			request=request,
-			token=settings.token,
+			# token=settings.token, # production
+			token='1086886864:AAH4iytj0B5KvpdFcf-N6akkuuAEOym7iG4', # development
 			base_url=getattr(settings, 'PROXY_URL', None),
 		)
 		print(bot.get_me())

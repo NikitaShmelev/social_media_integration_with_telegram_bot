@@ -1,11 +1,11 @@
 from django import forms
-from .models import Post
+from .models import Feedback
+from .models import UserProfile
 
-
-class PostForm(forms.ModelForm):
+class FeedbackForm(forms.ModelForm):
 
     class Meta:
-        model = Post
+        model = Feedback
         
         fields = (
             'name',
@@ -17,3 +17,20 @@ class PostForm(forms.ModelForm):
             'email': forms.TextInput,
         }
     
+
+class UserProfileForm(forms.ModelForm):
+
+    class Meta:
+        model = UserProfile
+        
+        fields = (
+            'user_id',
+            'username',
+            'email',
+            'language'
+        )
+        widgets = {
+            'name': forms.TextInput,
+            'email': forms.TextInput,
+            'language': forms.TextInput,
+        }
