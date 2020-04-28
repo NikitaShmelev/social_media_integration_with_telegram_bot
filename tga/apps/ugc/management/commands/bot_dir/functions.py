@@ -290,7 +290,6 @@ def show_created_post(user, chat_id, bot: Bot, update: Update, context = Callbac
     
 
 def save_post(user, chat_id, bot: Bot, update: Update, context = CallbackContext):
-    print('try')
     def save(user):
         if user.location[1] != '':
             location = True
@@ -355,7 +354,6 @@ def save_post(user, chat_id, bot: Bot, update: Update, context = CallbackContext
                 context = CallbackContext
                 )
         except:
-            print('exception')
             show_created_post(
                 user, update.message.chat_id,
                 bot = bot, update = update,
