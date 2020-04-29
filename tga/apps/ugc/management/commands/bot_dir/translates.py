@@ -1,5 +1,8 @@
 translates = {
     'EN': {
+        'language_selected':'Language has been successfully selected.',
+
+
         'BUTTON3_BOT_HELP': 'How to use this Bot?',
         'BUTTON4_CREATE_POST': 'Create post',
         'CONFIRM_NO': "Don't do it",
@@ -112,6 +115,9 @@ translates = {
             "You can send item's number to remove it after this action.\n",
     },
     'RU': {
+        'language_selected':'Язык был успешно выбран.',
+
+
         'START_PAGE': 'Перейти на начальную страницу',
         'BUTTON3_BOT_HELP': 'Как использовать этого бота?',
         'BUTTON4_CREATE_POST': 'Создать пост',
