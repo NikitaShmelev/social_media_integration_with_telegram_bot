@@ -1,8 +1,19 @@
 translates = {
-    'EN': {
+    'English': {
         'language_selected':'Language has been successfully selected.',
+        'select_correct_language': 'Select correct language',
+        'tap_email': 'Send me your Email for comfirmation.',
+        'check_email': "Check writen email. Press 'Send code' to sign up.",
+        'tap_correct_email': "Tap correct email!",
+        'check_email_for_code':'Check your email box and print access code here.',
+        'name_to_sign_up': 'Good code.\nPrint your name.',
+        'wrong_code': "Wrong code. Try to print code again.",
+        'exists_email': 'This email address already exists.',
 
 
+        # BUTTONS
+        'resend_email':'Send email.',
+        'send_email_again': "Change email",
         'BUTTON3_BOT_HELP': 'How to use this Bot?',
         'BUTTON4_CREATE_POST': 'Create post',
         'CONFIRM_NO': "Don't do it",
@@ -15,6 +26,13 @@ translates = {
         'BUTTON8_SHOW_POST': 'Show',
         'START_PAGE': 'Go to the start page',
         'CHANGE_LANGUAGE': 'Change language',
+        'BUTTON_SEND_CODE': 'Send code',
+        'REGISTER_ME': 'Sign up',
+        'DELETE_LOCATION': "Remove location",
+
+
+
+
         'nothing_to_cancel': 'Nothing to cancel.',
         'nothing_to_show': 'Nothing to show.',
         'Need confirmation': 'Need confirmation.',
@@ -23,7 +41,6 @@ translates = {
         'already':'You are already creating a post.',
         'Post_creation': 'Post creation.',
         'Done': 'Done',
-        'Name to sign up': 'Print your name.',
         'Hello': 'Hello ',
         'I got text': 'I got your text.',
         'Item removed': 'Attachment has been removed.',
@@ -39,15 +56,15 @@ translates = {
             "Send attachment again if you have a slot for this.",
         'location_accepted': 'Location accepted.\n',
         'help_text': 'EN help text.',
-        'Tap email': 'Tap your Email for send comfirm code.',
         'email error': 'You are not in a registred users list',
-        'BUTTON_SEND_CODE': 'Send code',
-        'tap email again': 'Send email again',
-        'REGISTER_ME': 'Sign up',
-        'DELETE_LOCATION': "Remove location",
+        
         'location_deleted': 'Location was successfully removed',
         'add_channel': 'Add channel',
         'remove_channel': 'Remove channel',
+
+
+
+
         'channel_added': 'Channel successfully added',
         'action_canсeled': 'Action canceled',
         'channel_removed': 'Channel was removed.',
@@ -68,10 +85,10 @@ translates = {
         'location_guide': 'Location usage guide',
         'media_guide': 'Media usage guide',
         'work_with_channels': 'Channels work guide',
-        'check_email': "Check writen EMAIL. Press 'Send code' if all good.",
-        'send_email_again': "Send email again",
-        'wrong_code': "Wrong code",
-        'tap_correct_email': "Tap correct email",
+
+        
+
+
         'send_correct_data': "Send correct data",
         'Code_has_been_sent':"Code has been sent. Please print this code here to continue.",
         'i_got_name':"I got your name.\nSend another name, if you want to change the previous one.",
@@ -114,10 +131,22 @@ translates = {
             "Press 'Add media' button if you are pressed another button except 'Show' button.\n"
             "You can send item's number to remove it after this action.\n",
     },
-    'RU': {
+    'Русский': {
         'language_selected':'Язык был успешно выбран.',
+        'tap_email': 'Отправьте мне свой email для верификации Вас.',
+        'select_correct_language': 'Выберите другой язык.',
+        'tap_email_again': "Изменить email.",
+        'tap_correct_email': "Введите корректный адрес!",
+        'check_email_for_code':'Проверьте ваш email и вышлите мне код доступа.',
+        'name_to_sign_up': 'Верный код.\nВведите своё имя.',
+        'wrong_code': "Вы ввели неверный код, попробуйте ещё раз",
+        'exists_email': 'Пользователь с таким email уже существует.',
 
 
+
+        # BUTTONS
+        'resend_email':'Вышлите мне свой email.',
+        'send_email_again': "Вышлите email ещё раз.",
         'START_PAGE': 'Перейти на начальную страницу',
         'BUTTON3_BOT_HELP': 'Как использовать этого бота?',
         'BUTTON4_CREATE_POST': 'Создать пост',
@@ -130,8 +159,10 @@ translates = {
         'BUTTON9_SAVE_POST': 'Сохранить пост',
         'CHANGE_LANGUAGE': 'Изменить язык',
         'BUTTON8_SHOW_POST': 'Показать пост',
+
+
+
         'nothing_to_cancel': 'Нечего отменять',
-        'Name to sign up': 'Введите своё имя',
         'nothing_to_show': 'Нечего показать',
         'Need confirmation': 'Необходимо подтверждение.',
         'already': 'Вы уже создаёте пост.',
@@ -155,7 +186,6 @@ translates = {
         'Tap email': 'Введите адрес своей электронной почты для получения кода подтверждения.',
         'email error': 'Вас нет в списке зарегестрированных пользователей',
         'BUTTON_SEND_CODE': 'Выслать код',
-        'tap email again': 'Ввести адрес заново',
         'REGISTER_ME': 'Зарегестрироваться',
         'continue_post': "Продолжим создание поста",
         'DELETE_LOCATION': 'Убрать локацию из поста',
@@ -183,9 +213,6 @@ translates = {
         'media_guide': 'Работа с медиа файлами',
         'work_with_channels': 'Работа с каналами',
         'check_email': "Проверьте введённый email. Нажмите 'Выслать код', если всё в порядке.",
-        'send_email_again': "Вышлите email ещё раз.",
-        'wrong_code': "Неверный код",
-        'tap_correct_email': "Введите корректный адрес",
         'send_correct_data': "Вышлите корректные данные",
         'Code_has_been_sent':"Код был отправлен. Пожалуйста, напишите этот код здесь, чтобы продолжить.",
         'i_got_name':"Я получил ваше имя.\nВышлите имя ещё раз, если хотите изменить его.",

@@ -157,7 +157,7 @@ def find_post_keyboard(user):
 def email_keyboard(user):
     keyboard = [
         [
-            KeyboardButton(translates[user.language]['tap email again']),
+            KeyboardButton(translates[user.language]['send_email_again']),
         ],
         [
             KeyboardButton(translates[user.language]['BUTTON_SEND_CODE']),
@@ -170,7 +170,7 @@ def email_keyboard(user):
 
 def regisration_keyboard(user):
     keyboard = [
-        [
+        [   
             KeyboardButton(translates[user.language]['REGISTER_ME']),
         ],
     ]
@@ -206,4 +206,4 @@ def channels_keyboard(user):
     return ReplyKeyboardMarkup(
         keyboard=keyboard,
         resize_keyboard=True,
-        )
+    )

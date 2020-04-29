@@ -5,7 +5,6 @@ from telegram import Bot, Update, Location, InputMediaPhoto, InputMediaVideo
 from telegram.ext import CallbackContext
 from .keyboards import post_keyboard
 from .translates import translates
-import smtplib
 from time import sleep
 from home.models import UserProfile #, Channel, Post, PostMedia, PostLocation 
 
