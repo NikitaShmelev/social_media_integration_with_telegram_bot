@@ -106,14 +106,54 @@ def take_text(update: Update, context=CallbackContext):
 							)
 		else:
 			if bot.users[chat_id].data == translates[bot.users[chat_id].language]['BUTTON3_BOT_HELP']:
-				bot.users[chat_id].help = True
 				update.effective_chat.send_message(
 					text=translates[bot.users[chat_id].language]['help_text'],
 					reply_markup=help_keyboard(bot.users[chat_id]),
 				)
+			elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['how_to_create']:
+				update.effective_chat.send_message(
+						text=translates[bot.users[chat_id].language]['create_guide'],
+						reply_markup=help_keyboard(
+							bot.users[chat_id]),
+                        )
+			elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['how_to_update']:
+				update.effective_chat.send_message(
+						text=translates[bot.users[chat_id].language]['update_guide'],
+						reply_markup=help_keyboard(
+							bot.users[chat_id]),
+                        )
+			elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['text_guide']:
+				update.effective_chat.send_message(
+						text=translates[bot.users[chat_id].language]['text_usage'],
+						reply_markup=help_keyboard(
+							bot.users[chat_id]),
+                        )
+			elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['location_guide']:
+				update.effective_chat.send_message(
+						text=translates[bot.users[chat_id].language]['location_usage'],
+						reply_markup=help_keyboard(
+							bot.users[chat_id]),
+                        )
+			elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['media_guide']:
+				update.effective_chat.send_message(
+						text=translates[bot.users[chat_id].language]['media_usage'],
+						reply_markup=help_keyboard(
+							bot.users[chat_id]),
+                        )
+			elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['media_guide']:
+				update.effective_chat.send_message(
+                        text=translates[bot.users[chat_id].language]['media_usage'],
+						reply_markup=help_keyboard(
+							bot.users[chat_id]),
+                        )
+			elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['work_with_channels']:
+				update.effective_chat.send_message(
+                        text=translates[bot.users[chat_id].language]['channels_usage'],
+						reply_markup=help_keyboard(
+							bot.users[chat_id]),
+                        )
 			elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['CHANGE_LANGUAGE']:
-				bot.users[chat_id].select_language = True
-				bot.users[chat_id].change_language = True
+				bot.users[chat_id].select_language, bot.users[chat_id].change_language = True, True
 				bot.users[chat_id].pick_language(update)
 				update.effective_chat.send_message(
 					text='Select language / Выберите язык',
@@ -124,66 +164,38 @@ def take_text(update: Update, context=CallbackContext):
 					text=translates[bot.users[chat_id].language]['welcome'],
 					reply_markup=start_keyboard(bot.users[chat_id]),
 				)
+			# elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['add_channel']:
+				# pass
+# 	# 				if '@' in bot.users[chat_id].data:
+# 	# 					bot.users[chat_id].current_channel = bot.users[chat_id].data
+# 	# 				else:
+# 	# 					bot.users[chat_id].current_channel = '@' + bot.users[chat_id].data
+# 	# 				bot.users[chat_id].add_channel = True
+# 	# 				bot.users[chat_id].remove_channel = False
+# 	# 				bot.send_message(
+# 	# 					chat_id=chat_id,
+# 	# 					text='Send channel id\n(You can send without @)',
+# 	# 					)
+# 	# 			elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['remove_channel'] and bot.users[chat_id].add_channel is False:
+# 	# 				if len(bot.users[chat_id].channels) > 0:
+# 	# 					bot.users[chat_id].remove_channel = True
+# 	# 					bot.users[chat_id].add_channel = False
+# 	# 					bot.send_message(
+# 	# 						chat_id=chat_id,
+# 	# 						text='Select channel',
+# 	# 						reply_markup=channels_keyboard(bot.users[chat_id]),
+# 	# 						)
+# 	# 				else:
+# 	# 					bot.send_message(
+# 	# 						chat_id=chat_id,
+# 	# 						text='You have no channels',
+# 	# 						reply_markup=start_keyboard(bot.users[chat_id]),
+# 	# 						)
  	
 				
 # 	# 	if bot.users[chat_id].user_registration:
 # 	# 		
-# 	# 		elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['how_to_create']:
-# 	# 			if bot.users[chat_id].help:
-# 	# 					bot.send_message(
-# 	# 					chat_id=update.message.chat_id,
-# 	# 					text=translates[bot.users[chat_id].language]['create_guide'],
-# 	# 					reply_markup=help_keyboard(
-# 	# 						bot.users[chat_id]),
-#     #                     )
-# 	# 		elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['how_to_update']:
-# 	# 			if bot.users[chat_id].help:
-# 	# 					bot.send_message(
-# 	# 					chat_id=update.message.chat_id,
-# 	# 					text=translates[bot.users[chat_id].language]['update_guide'],
-# 	# 					reply_markup=help_keyboard(
-# 	# 						bot.users[chat_id]),
-#     #                     )
-# 	# 		elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['text_guide']:
-# 	# 			if bot.users[chat_id].help:
-# 	# 					bot.send_message(
-# 	# 					chat_id=update.message.chat_id,
-# 	# 					text=translates[bot.users[chat_id].language]['text_usage'],
-# 	# 					reply_markup=help_keyboard(
-# 	# 						bot.users[chat_id]),
-#     #                     )
-# 	# 		elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['location_guide']:
-# 	# 			if bot.users[chat_id].help:
-# 	# 					bot.send_message(
-# 	# 					chat_id=update.message.chat_id,
-# 	# 					text=translates[bot.users[chat_id].language]['location_usage'],
-# 	# 					reply_markup=help_keyboard(
-# 	# 						bot.users[chat_id]),
-#     #                     )
-# 	# 		elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['media_guide']:
-# 	# 			if bot.users[chat_id].help:
-# 	# 					bot.send_message(
-# 	# 					chat_id=update.message.chat_id,
-#     #                                                 text=translates[bot.users[chat_id].language]['media_usage'],
-# 	# 					reply_markup=help_keyboard(
-# 	# 						bot.users[chat_id]),
-#     #                     )
-# 	# 		elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['media_guide']:
-# 	# 			if bot.users[chat_id].help:
-# 	# 					bot.send_message(
-# 	# 					chat_id=update.message.chat_id,
-#     #                                                 text=translates[bot.users[chat_id].language]['media_usage'],
-# 	# 					reply_markup=help_keyboard(
-# 	# 						bot.users[chat_id]),
-#     #                     )
-# 	# 		elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['work_with_channels']:
-# 	# 			if bot.users[chat_id].help:
-# 	# 					bot.send_message(
-# 	# 					chat_id=update.message.chat_id,
-#     #                     text=translates[bot.users[chat_id].language]['channels_usage'],
-# 	# 					reply_markup=help_keyboard(
-# 	# 						bot.users[chat_id]),
-#     #                     )
+# 	# 		
 # 	# 		elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['BUTTON4_CREATE_POST']:
 # 	# 			bot.users[chat_id].add_channel = False
 # 	# 			bot.users[chat_id].remove_channel = False
@@ -479,33 +491,6 @@ def take_text(update: Update, context=CallbackContext):
 # 	# 					reply_markup=channels_keyboard(bot.users[chat_id]),
 # 	# 					)
 # 	# 				return True
-# 	# 		if not bot.users[chat_id].event[0]:
-# 	# 			if bot.users[chat_id].data == translates[bot.users[chat_id].language]['add_channel']:
-# 	# 				if '@' in bot.users[chat_id].data:
-# 	# 					bot.users[chat_id].current_channel = bot.users[chat_id].data
-# 	# 				else:
-# 	# 					bot.users[chat_id].current_channel = '@' + bot.users[chat_id].data
-# 	# 				bot.users[chat_id].add_channel = True
-# 	# 				bot.users[chat_id].remove_channel = False
-# 	# 				bot.send_message(
-# 	# 					chat_id=chat_id,
-# 	# 					text='Send channel id\n(You can send without @)',
-# 	# 					)
-# 	# 			elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['remove_channel'] and bot.users[chat_id].add_channel is False:
-# 	# 				if len(bot.users[chat_id].channels) > 0:
-# 	# 					bot.users[chat_id].remove_channel = True
-# 	# 					bot.users[chat_id].add_channel = False
-# 	# 					bot.send_message(
-# 	# 						chat_id=chat_id,
-# 	# 						text='Select channel',
-# 	# 						reply_markup=channels_keyboard(bot.users[chat_id]),
-# 	# 						)
-# 	# 				else:
-# 	# 					bot.send_message(
-# 	# 						chat_id=chat_id,
-# 	# 						text='You have no channels',
-# 	# 						reply_markup=start_keyboard(bot.users[chat_id]),
-# 	# 						)
 # 	# 		if bot.users[chat_id].text[0]:
 # 	# 			bot.users[chat_id].text[0] = False
 # 	# 			if bot.users[chat_id].event[0]:
@@ -553,16 +538,15 @@ def take_text(update: Update, context=CallbackContext):
 
 @debug_requests
 def get_media(bot: Bot, update: Update):
-	pass
-	# chat_id = update.message.chat_id
-	# if chat_id in user.user:
-	# 	if any([bot.users[chat_id].text[0], bot.users[chat_id].location[0]]):
-	# 		bot.send_message(
-	# 			chat_id=chat_id,
-	# 			text=translates[bot.users[chat_id]
-	# 							.language]['send_correct_data'],
-	# 			reply_markup=post_keyboard(bot.users[chat_id]),
-	# 		)
+	
+	chat_id = update.message.chat_id
+	if chat_id in bot.users:
+		if any([bot.users[chat_id].add_text, bot.users[chat_id].add_media]):
+			update.effective_chat.send_message(
+				text=translates[bot.users[chat_id]
+								.language]['send_correct_data'],
+				reply_markup=post_keyboard(bot.users[chat_id]),
+			)
 	# 	else:
 	# 		if user.user[update.message.chat_id].media[0]:
 	# 			user.user[update.message.chat_id].check_list = []
@@ -605,7 +589,7 @@ def get_media(bot: Bot, update: Update):
 	# 				)
 	# else:
 	# 	do_start(bot=bot, update=update, context=context)
-	# pass
+	
 
 
 @debug_requests

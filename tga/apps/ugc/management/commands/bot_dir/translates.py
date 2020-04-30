@@ -92,7 +92,7 @@ translates = {
         
 
 
-        'send_correct_data': "Send correct data",
+        'send_correct_data': "Send correct data format.",
         'Code_has_been_sent':"Code has been sent. Please print this code here to continue.",
         'i_got_name':"I got your name.\nSend another name, if you want to change the previous one.",
         ###
@@ -221,7 +221,7 @@ translates = {
         'media_guide': 'Работа с медиа файлами',
         'work_with_channels': 'Работа с каналами',
         'check_email': "Проверьте введённый email. Нажмите 'Выслать код', если всё в порядке.",
-        'send_correct_data': "Вышлите корректные данные",
+        'send_correct_data': "Вышлите формат данных, с которыми сейчас работаете.",
         'Code_has_been_sent':"Код был отправлен. Пожалуйста, напишите этот код здесь, чтобы продолжить.",
         'i_got_name':"Я получил ваше имя.\nВышлите имя ещё раз, если хотите изменить его.",
         ###

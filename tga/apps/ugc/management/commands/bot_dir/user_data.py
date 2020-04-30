@@ -31,14 +31,18 @@ class UserObject():
         self.username = False
         self.get_name = False
         self.language_change = False
-        self.help = False
+        # self.help = False
         self.current_channel = None
         self.channels = []
         self.unpublished_posts = {} # key - created_at (DATETIME)
 
         self.unpublished_posts_reverse = {} # switch key with value
         
-        
+
+        self.add_location = False
+        self.add_media = False
+        self.add_text = False
+
         self.current_post_id = None
 
         self.event = [False, False]
