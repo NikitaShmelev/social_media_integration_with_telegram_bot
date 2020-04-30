@@ -2,8 +2,12 @@ import os
 import sys 
 import sqlite3
 from logging import getLogger
-from home.models import UserProfile #, Channel, Post, PostMedia, PostLocation 
-from .user_data import User_Object
+from datetime import datetime
+
+from home.models import UserProfile, Channel, Post, PostMedia, PostLocation 
+
+from .user_data import UserObject
+from .post_data import Post
 try:
 	from .keyboards import LANGUAGE_EN, LANGUAGE_RU, \
 		start_keyboard, conifrm_keyboard, post_keyboard, language_keyboard, email_keyboard, \
@@ -38,13 +42,13 @@ class BotState():
         self.DATABASE_PATH = './db.sqlite3'
 
 
-    def open_db_connection(self, db_path, user=None):
+    def open_db_connection(self, db_path):
         conn = sqlite3.connect(db_path)
         cur = conn.cursor()
         return conn, cur
 
 
-    def close_db_connection(self, conn, cur, user=None):
+    def close_db_connection(self, conn, cur):
         cur.close()
         conn.close()
         del conn, cur
@@ -85,18 +89,42 @@ class BotState():
         user.username, user.language, user.email = data[2], data[3], data[4]
         cur.execute("SELECT channel_id from home_channel WHERE user_id=?",(user.chat_id, ))
         user.channels = [i[0] for i in cur.fetchall()]
-        cur.execute("SELECT id from home_post WHERE user_id=? and PUBLISHED=?",(user.chat_id, 0))
-        ids = cur.fetchall()
-        cur.execute("SELECT created_at from home_post WHERE user_id=? and PUBLISHED=?",(user.chat_id, 0))
+        cur.execute("SELECT * from home_post WHERE user_id=? and PUBLISHED=?",(user.chat_id, 0))
         posts = cur.fetchall()
-        for date in enumerate(posts):
-            user.unpublished_posts[ids[date[0]][0]] = date[1][0]
-            user.unpublished_posts_reverse[date[1][0]] = ids[date[0]][0]
+        for post in posts:
+            user.unpublished_posts[post[1]] = Post(
+                post_id=post[0],
+                created_at=post[1],
+                text=[False, post[2]],
+            )
+            if post[4]:
+                '''MEDIA'''
+                cur.execute("SELECT * from home_postmedia WHERE post_id=?",(post[0],))
+                media_data = cur.fetchall()[0]
+                user.unpublished_posts[post[1]].media = {
+                    0:True,
+                    1:media_data[1],
+                    2:media_data[2],
+                    3:media_data[3],
+                    4:media_data[4],
+                    5:media_data[5],
+                    6:media_data[6],
+                    7:media_data[7],
+                    8:media_data[8],
+                    9:media_data[9],
+                }
+                del media_data
+            if post[5]:
+                '''location'''
+                cur.execute("SELECT * from home_postlocation WHERE post_id=?",(post[0],))
+                location_data = cur.fetchall()[0]
+                user.unpublished_posts[post[0]].location = [True, location_data[1], location_data[2]]
+                del location_data
         print(
             '\n\nUser loged in\n'
             f'Username: {user.username}\nID: {user.chat_id}\nEmail: {user.email}\n\n\n'
             )
         self.close_db_connection(conn, cur)
-        del conn, cur, posts, ids, data
+        del conn, cur, posts, data
         return user
 

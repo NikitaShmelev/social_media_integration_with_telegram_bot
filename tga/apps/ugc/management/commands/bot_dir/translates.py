@@ -9,6 +9,8 @@ translates = {
         'name_to_sign_up': 'Good code.\nPrint your name.',
         'wrong_code': "Wrong code. Try to print code again.",
         'exists_email': 'This email address already exists.',
+        'help_text': 'Choose bot part you need and press necessary button.',
+
 
 
         # BUTTONS
@@ -55,7 +57,6 @@ translates = {
             "Send attachment number to remove this.\n"
             "Send attachment again if you have a slot for this.",
         'location_accepted': 'Location accepted.\n',
-        'help_text': 'EN help text.',
         'email error': 'You are not in a registred users list',
         
         'location_deleted': 'Location was successfully removed',
@@ -78,7 +79,9 @@ translates = {
         'publish_and_update': 'Update&Publish',
         'update_post': 'Update post',
         'updated': 'Updated',
-        'welcome':'You were redirected to the start page.',
+        'welcome':'You were redirected to the start page. All posts changes have been stored in my memory.'
+                    '\nYou can find started post in unpublished posts. You have to save post anyway.'
+                    'Unsaved posts will be lost after my reboot.',
         'how_to_create': 'Post create guide',
         'how_to_update': 'Post update guide',
         'text_guide': 'Text usage guide',
@@ -141,14 +144,17 @@ translates = {
         'name_to_sign_up': 'Верный код.\nВведите своё имя.',
         'wrong_code': "Вы ввели неверный код, попробуйте ещё раз",
         'exists_email': 'Пользователь с таким email уже существует.',
+        'help_text': 'Выберите интересующий Вас раздел и нажните на соответствующую кнопку.',
 
 
 
         # BUTTONS
+        
         'resend_email':'Вышлите мне свой email.',
         'send_email_again': "Вышлите email ещё раз.",
-        'START_PAGE': 'Перейти на начальную страницу',
         'BUTTON3_BOT_HELP': 'Как использовать этого бота?',
+
+        'START_PAGE': 'Перейти на начальную страницу',
         'BUTTON4_CREATE_POST': 'Создать пост',
         'CONFIRM_NO': "Не делать этого",
         'CONFIRM_YES': "Сделать это",
@@ -182,7 +188,7 @@ translates = {
                     "Вышлите номер вложения для удаления его.\n"
                     "Вышлите вложение, если есть свободный слот.",
         'location_accepted': 'Локация принята.\n',
-        'help_text': 'RU help text',
+
         'Tap email': 'Введите адрес своей электронной почты для получения кода подтверждения.',
         'email error': 'Вас нет в списке зарегестрированных пользователей',
         'BUTTON_SEND_CODE': 'Выслать код',
@@ -205,7 +211,9 @@ translates = {
         'publish_and_update': 'Обновить и опубликовать ',
         'update_post': 'Обновить пост',
         'updated': 'обновлено',
-        'welcome': 'Вы перешли на начальной странице',
+        'welcome':'You were redirected to the start page. All posts changes have been stored in my memory.'
+                    '\nYou can find started post in unpublished posts. You have to save post anyway.'
+                    'Unsaved posts will be lost after my reboot.',
         'how_to_create': 'Инструкция по созданию поста',
         'how_to_update': 'Инструкция по обновлению поста',
         'text_guide': 'Работа с текстом',

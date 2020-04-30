@@ -4,6 +4,7 @@ from random import randint
 import smtplib
 
 from .translates import translates
+from home.models import UserProfile
 try:
 	from .keyboards import LANGUAGE_EN, LANGUAGE_RU, \
 		start_keyboard, conifrm_keyboard, post_keyboard, language_keyboard, email_keyboard, \
@@ -13,7 +14,7 @@ except ImportError:
 	pass
 
 
-class User_Object():
+class UserObject():
 
 
     def __init__(self, chat_id):
@@ -33,41 +34,19 @@ class User_Object():
         self.help = False
         self.current_channel = None
         self.channels = []
-        self.unpublished_posts = {}
+        self.unpublished_posts = {} # key - created_at (DATETIME)
+
         self.unpublished_posts_reverse = {} # switch key with value
+        
+        
         self.current_post_id = None
 
-
+        self.event = [False, False]
         self.add_channel = False
         self.remove_channel = False
 
 
-        self.date = None
-        
-        self.media_id = ['', ''] # First - photo, second - movie
-        self.check_list = []
-        self.event = [False, False]
-        self.text = [False, '']
-        self.location = [False, '', '']
-        self.publish = False
-        self.save_post = False
-        self.update_post = False
-        self.unpublished_keyboard = False
-        self.show_unpublished_posts = False
-        self.media = {
-            0: False,
-            1: '',
-            2: '',
-            3: '',
-            4: '',
-            5: '',
-            6: '',
-            7: '',
-            8: '',
-            9: '',
-        }
-        
-        self.all_channels = False
+       
 
 
     
@@ -97,18 +76,26 @@ class User_Object():
 
     
     def pick_language(self, update):
-        if self.data in ['English', 'Русский']:
-            self.select_language = False
-            self.check_email = True
-            self.language = self.data
-            update.effective_chat.send_message(
-                text=translates[self.language]['language_selected'],
-                )
-            update.effective_chat.send_message(
-                text=translates[self.language]['tap_email'],
-                reply_markup=ReplyKeyboardRemove(),
-                )
-            
+        if self.data in ['English', 'Русский'] or self.change_language:
+            if self.data != translates[self.language]['CHANGE_LANGUAGE']:
+                self.language = self.data
+                if not self.email:
+                    self.check_email = True
+                    update.effective_chat.send_message(
+                        text=translates[self.language]['language_selected'],
+                    )
+                    update.effective_chat.send_message(
+                        text=translates[self.language]['tap_email'],
+                        reply_markup=ReplyKeyboardRemove(),
+                        )
+                if self.change_language:
+                    UserProfile.objects.filter(user_id=self.chat_id).update(language=self.language)
+                    update.effective_chat.send_message(
+                        text=translates[self.language]['language_selected'],
+                        reply_markup=start_keyboard(self)
+                    )
+                self.select_language = False
+                self.change_language = False
         else:
             update.effective_chat.send_message(
                 text=(

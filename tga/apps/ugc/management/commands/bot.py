@@ -12,7 +12,7 @@ from random import randint
 
 from .bot_dir.utils import debug_requests
 from .bot_dir.bot_data import BotState, load_config
-from .bot_dir.user_data import User_Object
+from .bot_dir.user_data import UserObject
 from .bot_dir.post_data import Post
 from .bot_dir.translates import translates
 try:
@@ -32,6 +32,7 @@ try:
 except ImportError:
 	pass
 
+
 config = load_config()
 logger = getLogger(__name__)
 bot = BotState()
@@ -46,7 +47,7 @@ def do_start(update: Update, context=CallbackContext):
 		bot.take_users()
 		bot.take_emails()
 	if chat_id not in bot.users:
-		bot.users[chat_id] = User_Object(chat_id)
+		bot.users[chat_id] = UserObject(chat_id)
 		if chat_id not in bot.users_ids:
 			bot.users[chat_id].select_language = True
 			update.effective_chat.send_message(
@@ -60,13 +61,6 @@ def do_start(update: Update, context=CallbackContext):
 					bot.users[chat_id].username,
 				reply_markup=start_keyboard(bot.users[chat_id]),
 				)
-# 	# else:
-# 	# 	if chat_id not in bot.users and not bot.users[chat_id].check_email:
-# 	# 		bot.users[chat_id].check_email = True
-# 	# 		bot.send_message(
-# 	# 			chat_id=update.message.chat_id,
-# 	# 			text=translates[bot.users[chat_id].language]['Tap email'],
-# 	# 			)
 
 
 @debug_requests
@@ -111,54 +105,29 @@ def take_text(update: Update, context=CallbackContext):
 							reply_markup=start_keyboard(bot.users[chat_id])
 							)
 		else:
-			pass
-# 	# 	if bot.users[chat_id].data == LANGUAGE_EN:
-# 	# 		if bot.users[chat_id].language == '':
-# 	# 			bot.users[chat_id].language = 'EN'
-# 	# 			bot.send_message(
-# 	# 			    chat_id=update.message.chat_id,
-# 	# 			    text='Language was successfully selected',
-# 	# 				reply_markup=ReplyKeyboardRemove(),
-# 	# 				)
-# 	# 		else:
-# 	# 			if bot.users[chat_id].user_registration:
-# 	# 				bot.users[chat_id] = change_language(bot.users[chat_id], chat_id, 'EN')
-# 	# 				bot.users[chat_id].language = 'EN' 
-# 	# 				bot.send_message(
-# 	# 					chat_id=update.message.chat_id,
-# 	# 					text='Language was successfully changed',
-# 	# 					reply_markup=start_keyboard(bot.users[chat_id]),
-# 	# 					)
-# 	# 		return do_start(bot=bot, update=update, context=context)
-# 	# 	elif bot.users[chat_id].data == LANGUAGE_RU:
-# 	# 		if bot.users[chat_id].language == '':
-# 	# 			bot.users[chat_id].language = 'RU'
-# 	# 			bot.send_message(
-# 	# 			    chat_id=update.message.chat_id,
-# 	# 			    text='Язык успешно выбран',
-# 	# 				reply_markup=ReplyKeyboardRemove(),
-# 	# 				)		
-# 	# 		else:
-# 	# 			if bot.users[chat_id].user_registration:
-# 	# 				bot.users[chat_id] = change_language(bot.users[chat_id], chat_id, 'RU')
-# 	# 				bot.users[chat_id].language = 'RU'
-# 	# 				bot.send_message(
-# 	# 					chat_id=update.message.chat_id,
-# 	# 					text='Язык успешно изменён',
-# 	# 					reply_markup=start_keyboard(bot.users[chat_id]),
-# 	# 					)
-# 	# 		return do_start(bot=bot, update=update, context=context)
-		
-# 	# 	
+			if bot.users[chat_id].data == translates[bot.users[chat_id].language]['BUTTON3_BOT_HELP']:
+				bot.users[chat_id].help = True
+				update.effective_chat.send_message(
+					text=translates[bot.users[chat_id].language]['help_text'],
+					reply_markup=help_keyboard(bot.users[chat_id]),
+				)
+			elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['CHANGE_LANGUAGE']:
+				bot.users[chat_id].select_language = True
+				bot.users[chat_id].change_language = True
+				bot.users[chat_id].pick_language(update)
+				update.effective_chat.send_message(
+					text='Select language / Выберите язык',
+					reply_markup=language_keyboard(bot.users[chat_id]),
+				)
+			elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['START_PAGE']:
+				update.effective_chat.send_message(
+					text=translates[bot.users[chat_id].language]['welcome'],
+					reply_markup=start_keyboard(bot.users[chat_id]),
+				)
+ 	
 				
 # 	# 	if bot.users[chat_id].user_registration:
-# 	# 		if bot.users[chat_id].data == translates[bot.users[chat_id].language]['BUTTON3_BOT_HELP']:
-# 	# 			bot.users[chat_id].help = True
-# 	# 			bot.send_message(
-# 	# 				chat_id=update.message.chat_id,
-# 	# 				text=translates[bot.users[chat_id].language]['help_text'],
-# 	# 				reply_markup=help_keyboard(bot.users[chat_id]),
-# 	# 			)
+# 	# 		
 # 	# 		elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['how_to_create']:
 # 	# 			if bot.users[chat_id].help:
 # 	# 					bot.send_message(
@@ -237,13 +206,7 @@ def take_text(update: Update, context=CallbackContext):
 # 	# 		        text='Your channels list',
 # 	# 		        reply_markup=channels_keyboard(bot.users[chat_id]),
 # 	# 		    )
-# 	# 		elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['CHANGE_LANGUAGE']:
-# 	# 		    bot.users[chat_id].change_language = True
-# 	# 		    bot.send_message(
-# 	# 		        chat_id=chat_id,
-# 	# 		        text='Select language / Выберите язык',
-# 	# 		        reply_markup=language_keyboard(bot.users[chat_id]),
-# 	# 		    )
+# 	# 		
 # 	# 		elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['BUTTON10_CANCEL_POST']:
 # 	# 		    if bot.users[chat_id].event[0]:
 # 	# 			    bot.users[chat_id].text[0] = False
@@ -588,8 +551,9 @@ def take_text(update: Update, context=CallbackContext):
 		# take_text(update=update, context=context)
 
 
-# @debug_requests
-# def get_media(bot: Bot, update: Update):
+@debug_requests
+def get_media(bot: Bot, update: Update):
+	pass
 	# chat_id = update.message.chat_id
 	# if chat_id in user.user:
 	# 	if any([bot.users[chat_id].text[0], bot.users[chat_id].location[0]]):
@@ -644,9 +608,9 @@ def take_text(update: Update, context=CallbackContext):
 	# pass
 
 
-# @debug_requests
-# def get_location(bot: Bot, update: Update):
-# 	pass
+@debug_requests
+def get_location(bot: Bot, update: Update):
+	pass
 	# chat_id = update.message.chat_id
 	# if chat_id in user.user:
 	# 	if any([bot.users[chat_id].text[0], bot.users[chat_id].media[0]]):
@@ -669,9 +633,9 @@ def take_text(update: Update, context=CallbackContext):
 	# else:
 	# 	do_start(bot=bot, update=update, context=context)
 
-
-# def get_document(bot: Bot, update: Update):
-# 	pass
+@debug_requests
+def get_document(bot: Bot, update: Update):
+	pass
 	# chat_id = update.message.chat_id
 	# if chat_id in user.user:
 	# 	if any([bot.users[chat_id].text[0], bot.users[chat_id].media[0], bot.users[chat_id].location[0]]):
@@ -685,8 +649,9 @@ def take_text(update: Update, context=CallbackContext):
 	# 	do_start(bot=bot, update=update, context=context)
 	
 
-# def get_audio(bot: Bot, update: Update):
-# 	pass
+@debug_requests
+def get_audio(bot: Bot, update: Update):
+	pass
 	# chat_id = update.message.chat_id
 	# if chat_id in user.user:
 	# 	if any([bot.users[chat_id].text[0], bot.users[chat_id].media[0], bot.users[chat_id].location[0]]):
@@ -700,9 +665,9 @@ def take_text(update: Update, context=CallbackContext):
 	# 	do_start(bot=bot, update=update, context=context)
 
 
-
-# def get_voice(bot: Bot, update: Update):
-# 	pass
+@debug_requests
+def get_voice(bot: Bot, update: Update):
+	pass
 	# chat_id = update.message.chat_id
 	# if chat_id in user.user:
 	# 	if any([bot.users[chat_id].text[0], bot.users[chat_id].media[0], bot.users[chat_id].location[0]]):
@@ -750,38 +715,38 @@ class Command(BaseCommand):
 			Filters.text,
 			take_text
 		)
-		# img_message_handler = MessageHandler(
-		# 	Filters.photo,
-		# 	get_media
-		# )
-		# video_message_handler = MessageHandler(
-		# 	Filters.video,
-		# 	get_media
-		# )
-		# location_message_handler = MessageHandler(
-		# 	Filters.location,
-		# 	get_location
-		# )
-		# document_message_handler = MessageHandler(
-		# 	Filters.document,
-		# 	get_document
-		# )
-		# audio_handler = MessageHandler(
-		# 	Filters.audio,
-		# 	get_audio,
-		# )
-		# voice_handler = MessageHandler(
-		# 	Filters.voice,
-		# 	get_voice,
-		# )
+		img_message_handler = MessageHandler(
+			Filters.photo,
+			get_media
+		)
+		video_message_handler = MessageHandler(
+			Filters.video,
+			get_media
+		)
+		location_message_handler = MessageHandler(
+			Filters.location,
+			get_location
+		)
+		document_message_handler = MessageHandler(
+			Filters.document,
+			get_document
+		)
+		audio_handler = MessageHandler(
+			Filters.audio,
+			get_audio,
+		)
+		voice_handler = MessageHandler(
+			Filters.voice,
+			get_voice,
+		)
 		updater.dispatcher.add_handler(start_handler)
 		updater.dispatcher.add_handler(text_message_handler)
-		# updater.dispatcher.add_handler(img_message_handler)
-		# updater.dispatcher.add_handler(location_message_handler)
-		# updater.dispatcher.add_handler(video_message_handler)
-		# updater.dispatcher.add_handler(document_message_handler)
-		# updater.dispatcher.add_handler(audio_handler)
-		# updater.dispatcher.add_handler(voice_handler)
+		updater.dispatcher.add_handler(img_message_handler)
+		updater.dispatcher.add_handler(location_message_handler)
+		updater.dispatcher.add_handler(video_message_handler)
+		updater.dispatcher.add_handler(document_message_handler)
+		updater.dispatcher.add_handler(audio_handler)
+		updater.dispatcher.add_handler(voice_handler)
 
 		updater.start_polling()
 		updater.idle()
