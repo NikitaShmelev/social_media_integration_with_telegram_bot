@@ -31,7 +31,9 @@ translates = {
         'BUTTON_SEND_CODE': 'Send code',
         'REGISTER_ME': 'Sign up',
         'DELETE_LOCATION': "Remove location",
-
+        'list_of_channels': 'Channels list',
+        'add_channel': 'Add channel',
+        'remove_channel': 'Remove channel',
 
 
 
@@ -60,8 +62,7 @@ translates = {
         'email error': 'You are not in a registred users list',
         
         'location_deleted': 'Location was successfully removed',
-        'add_channel': 'Add channel',
-        'remove_channel': 'Remove channel',
+        'select_channel_to_remove': 'Select channel to remove',
 
 
 
@@ -72,7 +73,6 @@ translates = {
         'publish_and_save':'Publish&Save',
         'show_posts':'Show unpublished posts',
         'ALL_CHANNELS': 'Select all channels',
-        'list_of_channels': 'Channels list',
         'DELETE_TEXT': 'Remove text',
         'text_deleted': 'Text was successfully removed',
         'DELETE_MEDIA': 'Delete all media',
@@ -88,10 +88,11 @@ translates = {
         'location_guide': 'Location usage guide',
         'media_guide': 'Media usage guide',
         'work_with_channels': 'Channels work guide',
-
+        'cant_add_bot': 'Can\'t add bot to this chat. Print correct chat or add bot to this chat.'
+                        'You have to add bot to chat and send this chat.',
         
 
-
+        'bot_added':'Bot has been successfully added to current channel',
         'send_correct_data': "Send correct data format.",
         'Code_has_been_sent':"Code has been sent. Please print this code here to continue.",
         'i_got_name':"I got your name.\nSend another name, if you want to change the previous one.",
@@ -165,9 +166,14 @@ translates = {
         'BUTTON9_SAVE_POST': 'Сохранить пост',
         'CHANGE_LANGUAGE': 'Изменить язык',
         'BUTTON8_SHOW_POST': 'Показать пост',
+        'list_of_channels': 'Список каналов',
+        'add_channel': 'Добавить канал',
+        'remove_channel': 'Удалить канал',
 
 
-
+        
+        'bot_added':'Бот был успешно добавлен в текущий канал',
+        
         'nothing_to_cancel': 'Нечего отменять',
         'nothing_to_show': 'Нечего показать',
         'Need confirmation': 'Необходимо подтверждение.',
@@ -196,15 +202,14 @@ translates = {
         'continue_post': "Продолжим создание поста",
         'DELETE_LOCATION': 'Убрать локацию из поста',
         'location_deleted': 'Локация была успешно удалена из поста',
-        'add_channel': 'Добавить канал',
-        'remove_channel': 'Удалить канал',
+        'select_channel_to_remove': 'Выберите канал, который хотите удалить',
+        
         'channel_added': 'Канал успешно добавлен',
         'action_canсeled': 'Действие отменено',
         'channel_removed': 'Канал удалён',
         'publish_and_save': 'Опубликовать и сохранить пост',
         'show_posts':'Показать неопубликованные посты',
         'ALL_CHANNELS': 'Выбрать все каналы',
-        'list_of_channels': 'Список каналов',
         'DELETE_TEXT': 'Удалить текст',
         'text_deleted': 'Техт был успешно удалён из поста',
         'DELETE_MEDIA': 'Удалить медиа \\TO DO',

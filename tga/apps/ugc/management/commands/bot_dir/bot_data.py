@@ -6,7 +6,6 @@ from datetime import datetime
 
 from home.models import UserProfile, Channel, Post, PostMedia, PostLocation 
 
-from .user_data import UserObject
 from .post_data import Post
 try:
 	from .keyboards import LANGUAGE_EN, LANGUAGE_RU, \
@@ -42,8 +41,8 @@ class BotState():
         self.DATABASE_PATH = './db.sqlite3'
 
 
-    def open_db_connection(self, db_path):
-        conn = sqlite3.connect(db_path)
+    def open_db_connection(self):
+        conn = sqlite3.connect(self.DATABASE_PATH)
         cur = conn.cursor()
         return conn, cur
 
@@ -55,7 +54,7 @@ class BotState():
 
 
     def take_users(self):
-        conn, cur = self.open_db_connection(self.DATABASE_PATH)
+        conn, cur = self.open_db_connection()
         cur.execute("SELECT USER_ID from home_userprofile")
         self.users_ids = tuple(i[0] for i in cur.fetchall())
         self.close_db_connection(conn, cur)
@@ -63,7 +62,7 @@ class BotState():
 
 
     def take_emails(self):
-        conn, cur = self.open_db_connection(self.DATABASE_PATH)
+        conn, cur = self.open_db_connection()
         cur.execute("SELECT email from home_userprofile")
         self.users_emails = [i[0] for i in cur.fetchall()]
         self.close_db_connection(conn, cur)
@@ -82,13 +81,13 @@ class BotState():
   
 
     def take_user_data(self, user):
-        conn, cur = self.open_db_connection(self.DATABASE_PATH)
+        conn, cur = self.open_db_connection()
         user.user_registration = True
         cur.execute("SELECT * from home_userprofile WHERE user_id=?",(user.chat_id, ))
         data = cur.fetchall()[0]
         user.username, user.language, user.email = data[2], data[3], data[4]
         cur.execute("SELECT channel_id from home_channel WHERE user_id=?",(user.chat_id, ))
-        user.channels = [i[0] for i in cur.fetchall()]
+        user.channels += [i[0] for i in cur.fetchall()]
         cur.execute("SELECT * from home_post WHERE user_id=? and PUBLISHED=?",(user.chat_id, 0))
         posts = cur.fetchall()
         for post in posts:

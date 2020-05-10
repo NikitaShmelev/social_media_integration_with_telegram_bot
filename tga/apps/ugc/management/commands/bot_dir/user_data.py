@@ -1,20 +1,22 @@
 from email_validator import validate_email, EmailNotValidError
 from telegram import ReplyKeyboardRemove
+# from telegram import Chat
+from telegram.error import BadRequest
 from random import randint
 import smtplib
-
+from .bot_data import BotState
 from .translates import translates
 from home.models import UserProfile
 try:
 	from .keyboards import LANGUAGE_EN, LANGUAGE_RU, \
 		start_keyboard, conifrm_keyboard, post_keyboard, language_keyboard, email_keyboard, \
 		regisration_keyboard, channels_keyboard, unpublished_keyboard, find_post_keyboard, \
-		help_keyboard
+		help_keyboard, start_page_keyboard
 except ImportError:
 	pass
 
 
-class UserObject():
+class UserObject(BotState):
 
 
     def __init__(self, chat_id):
@@ -31,24 +33,28 @@ class UserObject():
         self.username = False
         self.get_name = False
         self.language_change = False
-        # self.help = False
-        self.current_channel = None
-        self.channels = []
+
         self.unpublished_posts = {} # key - created_at (DATETIME)
-
-        self.unpublished_posts_reverse = {} # switch key with value
-        
-
+        self.channels = [False, ]
         self.add_location = False
         self.add_media = False
         self.add_text = False
 
+        # self.help = False
+        self.current_channel = None
+        self.append_channel = False
+        self.remove_channel = False
+
+
+        self.unpublished_posts_reverse = {} # switch key with value
+        
+
+        
+
         self.current_post_id = None
 
         self.event = [False, False]
-        self.add_channel = False
-        self.remove_channel = False
-
+        
 
        
 
@@ -157,4 +163,109 @@ class UserObject():
                 )
     
 
-    
+    def add_channel(self, update, context):
+        if self.data != translates[self.language]['add_channel'] and self.append_channel:
+            if 'https://t.me/' in self.data:
+                self.current_channel = f'@{self.data[13:]}'
+            elif '@' in self.data:
+                self.current_channel = self.data
+            else:
+                self.current_channel = f'@{self.data}'
+            if self.current_channel not in self.channels:
+                try:
+                    context.bot.send_message(                        
+                        chat_id=self.current_channel,
+                        text=translates[self.language]['bot_added'],
+                    )
+                    conn, cur =  BotState().open_db_connection()
+                    cur.execute(
+                        'INSERT INTO home_channel (channel_id, USER_ID) VALUES(?,?)',
+                        (self.current_channel, self.chat_id)
+                        )
+                    conn.commit()
+                    BotState().close_db_connection(conn, cur)
+                    update.effective_chat.send_message(
+                        text=translates[self.language]['channel_added'],
+                        reply_markup=start_keyboard(self),
+                    )
+                    self.channels.append(self.current_channel)
+                    self.clear_variables()
+                    del conn, cur
+                except:
+                    update.effective_chat.send_message(
+                        text=translates[self.language]['cant_add_bot'],
+                        reply_markup=start_page_keyboard(self),    
+                    )
+            else:
+                update.effective_chat.send_message(
+                    text='This channel in already exists. Send another channel.',
+                    reply_markup=start_page_keyboard(self),
+                )
+        else:
+            update.effective_chat.send_message(
+                text='Send channel id\n(You can send without @) or send channel link',
+                reply_markup=start_page_keyboard(self),
+                )
+
+    def delete_channel(self, update):
+        if self.remove_channel:
+            if self.data not in [translates[self.language]['CONFIRM_NO'], translates[self.language]['CONFIRM_YES']]:
+                if 'https://t.me/' in self.data:
+                    self.current_channel = f'@{self.data[13:]}'
+                elif '@' in self.data:
+                    self.current_channel = self.data
+                else:
+                    self.current_channel = f'@{self.data}'
+            else:
+                if self.data == translates[self.language]['CONFIRM_YES']:
+                    conn, cur =  BotState().open_db_connection()
+                    cur.execute(
+                        "DELETE FROM home_channel WHERE channel_id=? and user_id=?",
+                        (self.current_channel, self.chat_id)
+                        )
+                    conn.commit()
+                    BotState().close_db_connection(conn, cur)
+                    self.clear_variables()
+                    update.effective_chat.send_message(
+                        text='channel_removed',
+                        reply_markup=start_keyboard(self),
+
+                    )
+                    del conn, cur
+                    return True
+                else:
+                    self.clear_variables()
+                    update.effective_chat.send_message(
+                        text='Post removing was successfully canceled.',
+                        reply_markup=start_keyboard(self),
+                    )
+                    return False
+            if self.current_channel in self.channels and self.data != translates[self.language]['remove_channel']:
+                update.effective_chat.send_message(
+                    text='confirm_action',
+                    reply_markup=conifrm_keyboard(self),
+                )
+                
+            else:
+                if len(self.channels) > 1:
+                    update.effective_chat.send_message(
+                        text='Send correct channel id(You can send without @) or send channel link.\n'
+                            'Also you can select ypur channel fron channels list',
+                        reply_markup=channels_keyboard(self)
+                    )
+                else:
+                    self.clear_variables()
+                    update.effective_chat.send_message(
+                        text='You have no channels to remove',
+                        reply_markup=start_keyboard(self)
+                    )
+        else:
+            update.effective_chat.send_message(
+					text=translates[self.language]['list_of_channels'],
+					reply_markup=channels_keyboard(self),
+				)
+    def clear_variables(self):
+        self.current_channel = None
+        self.append_channel = False
+        self.remove_channel = False
+        self.language_change = False

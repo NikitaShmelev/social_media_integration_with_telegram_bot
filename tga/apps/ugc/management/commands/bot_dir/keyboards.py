@@ -6,6 +6,19 @@ LANGUAGE_RU = 'Русский'
 LANGUAGE_EN  = 'English'
 
 
+
+def start_page_keyboard(user):
+    keyboard = [
+        [
+            KeyboardButton(translates[user.language]['START_PAGE']),
+        ],
+    ]
+    return ReplyKeyboardMarkup(
+        keyboard=keyboard,
+        resize_keyboard=True,
+    )
+    
+
 def help_keyboard(user):
     keyboard = [
         [
@@ -199,9 +212,9 @@ def channels_keyboard(user):
             KeyboardButton(translates[user.language]['START_PAGE']),
         ],
     ]
-    for i in user.channels:
+    for i in user.channels[1:]:
         keyboard.append([KeyboardButton(str(i))])
-    if user.channels:
+    if user.channels[0]:
         keyboard.append([KeyboardButton(translates[user.language]['ALL_CHANNELS'])])
     return ReplyKeyboardMarkup(
         keyboard=keyboard,
