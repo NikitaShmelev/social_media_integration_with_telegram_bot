@@ -74,38 +74,7 @@ def take_text(update: Update, context=CallbackContext):
 			bot.users[chat_id].pick_language(update)
 			
 
-		if not bot.users[chat_id].user_registration:
-			if bot.users[chat_id].check_email:
-				bot.users[chat_id].email = bot.users[chat_id].data
-				bot.users[chat_id].validate_user_email(update, bot.emails)
-			elif bot.users[chat_id].language and bot.users[chat_id].data == translates[bot.users[chat_id].language]["send_email_again"]:
-				bot.users[chat_id].check_email = True
-				update.effective_chat.send_message(
-					text=translates[bot.users[chat_id].language]['resend_email'],
-					reply_markup=ReplyKeyboardRemove()
-				)
-			elif bot.users[chat_id].access:
-				if bot.users[chat_id].data == translates[bot.users[chat_id].language]["BUTTON_SEND_CODE"]:
-					bot.users[chat_id].create_code()
-					bot.users[chat_id].send_email_with_code(update)
-			elif bot.users[chat_id].code[1]:
-				bot.users[chat_id].check_written_code(update)
-			elif bot.users[chat_id].get_name:
-				if bot.users[chat_id].data != translates[bot.users[chat_id].language]["REGISTER_ME"]:
-					bot.users[chat_id].username = bot.users[chat_id].data
-					update.effective_chat.send_message(
-						text=translates[bot.users[chat_id].language]["i_got_name"],
-						reply_markup=regisration_keyboard(bot.users[chat_id]),
-					)
-				else:
-					if bot.users[chat_id].username != False:
-						bot.users[chat_id].get_name = False
-						bot.add_user_to_database(bot.users[chat_id])
-						update.effective_chat.send_message(
-							text=f'Welcome {bot.users[chat_id].username}',
-							reply_markup=start_keyboard(bot.users[chat_id])
-							)
-		else:
+		if bot.users[chat_id].user_registration:
 			if bot.users[chat_id].data == translates[bot.users[chat_id].language]['BUTTON3_BOT_HELP']:
 				bot.users[chat_id].clear_variables()
 				update.effective_chat.send_message(
@@ -188,6 +157,38 @@ def take_text(update: Update, context=CallbackContext):
 			elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['remove_channel'] or bot.users[chat_id].remove_channel:
 				bot.users[chat_id].remove_channel = True
 				bot.users[chat_id].delete_channel(update)
+		else:
+			if bot.users[chat_id].check_email:
+				bot.users[chat_id].email = bot.users[chat_id].data
+				bot.users[chat_id].validate_user_email(update, bot.emails)
+			elif bot.users[chat_id].language and bot.users[chat_id].data == translates[bot.users[chat_id].language]["send_email_again"]:
+				bot.users[chat_id].check_email = True
+				update.effective_chat.send_message(
+					text=translates[bot.users[chat_id].language]['resend_email'],
+					reply_markup=ReplyKeyboardRemove()
+				)
+			elif bot.users[chat_id].access:
+				if bot.users[chat_id].data == translates[bot.users[chat_id].language]["BUTTON_SEND_CODE"]:
+					bot.users[chat_id].create_code()
+					bot.users[chat_id].send_email_with_code(update)
+			elif bot.users[chat_id].code[1]:
+				bot.users[chat_id].check_written_code(update)
+			elif bot.users[chat_id].get_name:
+				if bot.users[chat_id].data != translates[bot.users[chat_id].language]["REGISTER_ME"]:
+					bot.users[chat_id].username = bot.users[chat_id].data
+					update.effective_chat.send_message(
+						text=translates[bot.users[chat_id].language]["i_got_name"],
+						reply_markup=regisration_keyboard(bot.users[chat_id]),
+					)
+				else:
+					if bot.users[chat_id].username != False:
+						bot.users[chat_id].get_name = False
+						bot.add_user_to_database(bot.users[chat_id])
+						update.effective_chat.send_message(
+							text=f'Welcome {bot.users[chat_id].username}',
+							reply_markup=start_keyboard(bot.users[chat_id])
+							)
+			
 				
 # 	# 	if bot.users[chat_id].user_registration:
 # 	# 		
