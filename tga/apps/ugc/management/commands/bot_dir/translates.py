@@ -79,9 +79,7 @@ translates = {
         'publish_and_update': 'Update&Publish',
         'update_post': 'Update post',
         'updated': 'Updated',
-        'welcome':'You were redirected to the start page. All posts changes have been stored in my memory.'
-                    '\nYou can find started post in unpublished posts. You have to save post anyway.'
-                    'Unsaved posts will be lost after my reboot.',
+        'welcome':'You were redirected to the start page.',
         'how_to_create': 'Post create guide',
         'how_to_update': 'Post update guide',
         'text_guide': 'Text usage guide',

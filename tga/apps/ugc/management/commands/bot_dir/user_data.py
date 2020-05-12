@@ -5,6 +5,7 @@ from telegram.error import BadRequest
 from random import randint
 import smtplib
 from .bot_data import BotState
+from .post_data import Post
 from .translates import translates
 from home.models import UserProfile
 try:
@@ -16,7 +17,7 @@ except ImportError:
 	pass
 
 
-class UserObject(BotState):
+class UserObject():
 
 
     def __init__(self, chat_id):
@@ -33,19 +34,28 @@ class UserObject(BotState):
         self.username = False
         self.get_name = False
         self.language_change = False
-
-        self.unpublished_posts = {} # key - created_at (DATETIME)
-        self.channels = [False, ]
-        self.add_location = False
-        self.add_media = False
-        self.add_text = False
-
-        # self.help = False
         self.current_channel = None
         self.append_channel = False
         self.remove_channel = False
-
-
+        self.unpublished_posts = {} # key - created_at (DATETIME)
+        self.channels = [False, ]
+        self.post = None
+        self.unpublished_keyboard = False
+        
+        
+        self.add_location = False
+        self.add_media = False
+        
+        self.event = [False, False]
+        
+        
+        # self.add_text = False
+        
+        # self.help = False
+        
+        self.save_and_publish = False
+        self.update_and_publish = False
+        
         self.unpublished_posts_reverse = {} # switch key with value
         
 
@@ -53,7 +63,6 @@ class UserObject(BotState):
 
         self.current_post_id = None
 
-        self.event = [False, False]
         
 
        
@@ -264,8 +273,37 @@ class UserObject(BotState):
 					text=translates[self.language]['list_of_channels'],
 					reply_markup=channels_keyboard(self),
 				)
+            
+    def create_post_button(self, update):
+        if self.event[0]:
+            update.effective_chat.send_message(
+                    text=translates[self.language]['already'],
+					reply_markup=post_keyboard(self),
+				)
+            # add show post
+        else:
+            self.event[0] = True
+            self.post = Post('some_id', 'some_date')
+            update.effective_chat.send_message(
+                text=translates[self.language]['Post_creation'],
+                reply_markup=post_keyboard(self),
+            )
+
+        
+        
     def clear_variables(self):
         self.current_channel = None
         self.append_channel = False
         self.remove_channel = False
         self.language_change = False
+        if self.post:
+            self.post.text[0] = False
+            self.post.location[0] = False
+            self.post.media[0] = False
+    
+    
+    def check_post_creation(self):
+        if self.event[0]:
+            pass
+        else:
+            pass

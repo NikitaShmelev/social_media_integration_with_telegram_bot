@@ -124,9 +124,9 @@ def post_keyboard(user):
                 KeyboardButton(translates[user.language]['publish_and_save']),
             ],
         ]
-        if user.location[1]:
+        if user.post.location[1]:
             keyboard[1][1] = KeyboardButton(translates[user.language]['DELETE_LOCATION'])
-        if user.text[1] != '':
+        if user.post.text[1] != '':
             keyboard[1][0] = KeyboardButton(translates[user.language]['DELETE_TEXT'])
         return ReplyKeyboardMarkup(
             keyboard=keyboard,
