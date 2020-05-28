@@ -101,16 +101,17 @@ class BotState():
                 cur.execute("SELECT * from home_postmedia WHERE post_id=?",(post[0],))
                 media_data = cur.fetchall()[0]
                 user.unpublished_posts[post[1]].media = {
-                    0:True,
-                    1:media_data[1],
-                    2:media_data[2],
-                    3:media_data[3],
-                    4:media_data[4],
-                    5:media_data[5],
-                    6:media_data[6],
-                    7:media_data[7],
-                    8:media_data[8],
-                    9:media_data[9],
+                    0: True,
+                    1: media_data[1],
+                    2: media_data[2],
+                    3: media_data[3],
+                    4: media_data[4],
+                    5: media_data[5],
+                    6: media_data[6],
+                    7: media_data[7],
+                    8: media_data[8],
+                    9: media_data[9],
+                    10: media_data[10],
                 }
                 del media_data
             if post[5]:

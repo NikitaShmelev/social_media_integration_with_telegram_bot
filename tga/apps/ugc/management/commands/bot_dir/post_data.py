@@ -26,6 +26,7 @@ class Post:
                 7: '',
                 8: '',
                 9: '',
+                10: '',
                 }):
         self.post_id = post_id # мб не надо
         self.created_at = created_at

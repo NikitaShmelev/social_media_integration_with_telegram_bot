@@ -93,6 +93,9 @@ class PostMedia(models.Model):
     media_9 = models.TextField(
         verbose_name='media_9',
     )
+    media_10 = models.TextField(
+        verbose_name='media_10',
+    )
 
     class Meta:
         verbose_name = 'Post Media'

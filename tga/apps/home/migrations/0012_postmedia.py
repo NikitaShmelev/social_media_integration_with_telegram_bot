@@ -24,6 +24,7 @@ class Migration(migrations.Migration):
                 ('media_7', models.TextField(verbose_name='media_7')),
                 ('media_8', models.TextField(verbose_name='media_8')),
                 ('media_9', models.TextField(verbose_name='media_9')),
+                ('media_10', models.TextField(verbose_name='media_10')),
                 ('post', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='home.Post', verbose_name='Post')),
             ],
         ),

@@ -85,4 +85,5 @@ class PostMediaForm(forms.ModelForm):
             'media_7',
             'media_8',
             'media_9',
+            'media_10',
         )
