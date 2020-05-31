@@ -36,7 +36,7 @@ class Post:
         self.media_id = ['', ''] # First - photo, second - movie
         self.check_list = []
         self.publish = False
-        
+        self.add_text = False
         self.save_post = False
         self.update_post = False
         
@@ -46,6 +46,7 @@ class Post:
     
     def add_text(self, update, user):
         user.post.text[0] = False
+        # self.add_text = True
         user.post.text[1] = user.data
         update.effective_chat.send_message(
                 text=translates[user.language]['I got text'],

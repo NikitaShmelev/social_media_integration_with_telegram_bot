@@ -52,7 +52,7 @@ translates = {
         'Tap text for post': 'Tap text for post.',
         'Send correct message': 'Send correct message.',
         'Send location': 'Send location.',
-        'Send media': 'Please attach media files to your post. You can attach 9 files max.',
+        'Send media': 'Please attach media files to your post. You can attach 10 files max.',
         "Accepted attachment № ": "Accepted attachment № ",
         'attachment_limit':
             "A lot of attachments.\n"

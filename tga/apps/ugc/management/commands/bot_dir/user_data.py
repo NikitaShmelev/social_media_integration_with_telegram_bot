@@ -41,7 +41,7 @@ class UserObject():
         self.channels = [False, ]
         self.post = None
         self.unpublished_keyboard = False
-        
+        self.change_language = False
         
         self.add_location = False
         self.add_media = False
@@ -49,7 +49,6 @@ class UserObject():
         self.event = [False, False]
         
         
-        # self.add_text = False
         
         # self.help = False
         
@@ -96,7 +95,7 @@ class UserObject():
     
     def pick_language(self, update):
         if self.data in ['English', 'Русский'] or self.change_language:
-            if self.data != translates[self.language]['CHANGE_LANGUAGE']:
+            if self.data not in [translates['English']['CHANGE_LANGUAGE'], translates['Русский']['CHANGE_LANGUAGE']]:
                 self.language = self.data
                 if not self.email:
                     self.check_email = True

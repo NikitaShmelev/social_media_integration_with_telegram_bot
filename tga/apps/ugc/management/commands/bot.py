@@ -72,6 +72,7 @@ def take_text(update: Update, context: CallbackContext):
 
 		if bot.users[chat_id].select_language:
 			bot.users[chat_id].pick_language(update)
+			return True
 			
 
 		if not bot.users[chat_id].user_registration:
@@ -331,7 +332,7 @@ def take_text(update: Update, context: CallbackContext):
 # 	# 				)
 # 	# 		elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['update_post']:
 # 	# 			if bot.users[chat_id].event[0]:					
-# 	# 				user.user[update.message.chat_id].update_post = True
+# 	# 				bot.users[chat_id].update_post = True
 # 	# 				update_post(
 # 	# 					bot.users[chat_id], chat_id,
 # 	# 					bot=bot, update=update, context=context,
@@ -345,14 +346,14 @@ def take_text(update: Update, context: CallbackContext):
 			
 # 	# 		elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['BUTTON9_SAVE_POST']:
 # 	# 		    if bot.users[chat_id].event[0]:
-# 	# 		    	if not any([user.user[update.message.chat_id].text[1], user.user[update.message.chat_id].media[1], user.user[update.message.chat_id].location[1]]):
+# 	# 		    	if not any([bot.users[chat_id].text[1], bot.users[chat_id].media[1], bot.users[chat_id].location[1]]):
 # 	# 		        	bot.send_message(
 # 	# 		        		chat_id=chat_id,
 # 	# 		        		text='Nothing to save',
 # 	# 		        		reply_markup=post_keyboard(bot.users[chat_id])
 # 	# 		        		) 
-# 	# 		    	elif any([user.user[update.message.chat_id].text[1], user.user[update.message.chat_id].media[1], user.user[update.message.chat_id].location[1]]):
-# 	# 			        user.user[update.message.chat_id].save_post = True
+# 	# 		    	elif any([bot.users[chat_id].text[1], bot.users[chat_id].media[1], bot.users[chat_id].location[1]]):
+# 	# 			        bot.users[chat_id].save_post = True
 # 	# 			        save_post(
 # 	# 			            bot.users[chat_id], chat_id,
 # 	# 			            bot=bot, update=update, context=context
@@ -364,14 +365,14 @@ def take_text(update: Update, context: CallbackContext):
 # 	# 				        )
 # 	# 		elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['publish_and_save']:
 # 	# 		    if bot.users[chat_id].event[0]:
-# 	# 		    	if not any([user.user[update.message.chat_id].text[1], user.user[update.message.chat_id].media[1], user.user[update.message.chat_id].location[1]]):
+# 	# 		    	if not any([bot.users[chat_id].text[1], bot.users[chat_id].media[1], bot.users[chat_id].location[1]]):
 # 	# 		        	bot.send_message(
 # 	# 		        		chat_id=chat_id,
 # 	# 		        		text='Nothing to save',
 # 	# 		        		reply_markup=post_keyboard(bot.users[chat_id])
 # 	# 		        		) 
-# 	# 		    	elif any([user.user[update.message.chat_id].text[1], user.user[update.message.chat_id].media[1], user.user[update.message.chat_id].location[1]]):
-# 	# 			        user.user[update.message.chat_id].text[0] = False 
+# 	# 		    	elif any([bot.users[chat_id].text[1], bot.users[chat_id].media[1], bot.users[chat_id].location[1]]):
+# 	# 			        bot.users[chat_id].text[0] = False 
 # 	# 			        bot.users[chat_id].publish = True
 # 	# 			        save_post(
 # 	# 			            bot.users[chat_id], update.message.chat_id,
@@ -384,13 +385,13 @@ def take_text(update: Update, context: CallbackContext):
 # 	# 				        )
 # 	# 		elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['publish_and_update']:
 # 	# 			if bot.users[chat_id].event[0]:
-# 	# 				user.user[update.message.chat_id].text[0] = False 
-# 	# 				user.user[update.message.chat_id].update_post = True
+# 	# 				bot.users[chat_id].text[0] = False 
+# 	# 				bot.users[chat_id].update_post = True
 # 	# 				bot.users[chat_id].publish = True
 # 	# 				bot.send_message(
 # 	# 					chat_id=update.message.chat_id,
-# 	# 					text=translates[user.user[update.message.chat_id].language]['Done'],
-# 	# 					reply_markup=channels_keyboard(user.user[update.message.chat_id]),
+# 	# 					text=translates[bot.users[chat_id].language]['Done'],
+# 	# 					reply_markup=channels_keyboard(bot.users[chat_id]),
 # 	# 					)
 # 	# 		if bot.users[chat_id].publish and bot.users[chat_id].data in bot.users[chat_id].channels:
 # 	# 			bot.users[chat_id].current_channel = bot.users[chat_id].data
@@ -532,57 +533,55 @@ def take_text(update: Update, context: CallbackContext):
 
 @debug_requests
 def get_media(update: Update, context: CallbackContext):
-	
 	chat_id = update.message.chat_id
-	# if chat_id in bot.users:
-	# 	if any([bot.users[chat_id].add_text, bot.users[chat_id].add_media]):
-	# 		update.effective_chat.send_message(
-	# 			text=translates[bot.users[chat_id]
-	# 							.language]['send_correct_data'],
-	# 			reply_markup=post_keyboard(bot.users[chat_id]),
-	# 		)
-	# 	else:
-	# 		if user.user[update.message.chat_id].media[0]:
-	# 			user.user[update.message.chat_id].check_list = []
-	# 			for i in range(1, 10):
-	# 				if user.user[update.message.chat_id].media[i] == '':
-	# 					user.user[update.message.chat_id].check_list.append(i)
-	# 			if len(user.user[update.message.chat_id].check_list) > 0:
-	# 				try:
-	# 					user.user[update.message.chat_id].media_id[0] = update.message.photo[-1].file_id
-	# 				except:
-	# 					pass
-	# 				try:
-	# 					user.user[update.message.chat_id].media_id[1] = update.message.video.file_id
-	# 				except:
-	# 					pass
-	# 				if user.user[update.message.chat_id].media_id[0] != '':
-	# 					for i in range(1, 11):
-	# 						if user.user[update.message.chat_id].media[i] == '':
-	# 							user.user[update.message.chat_id].media[i] = 'p' + user.user[update.message.chat_id].media_id[0]
-	# 							# 1st 'p' is photo detecter
-	# 							bot.send_message(
-	# 								chat_id=update.message.chat_id,
-	# 								text=translates[user.user[update.message.chat_id].language]["Accepted attachment № "] + str(i),
-	# 							)
-	# 							break
-	# 				if user.user[update.message.chat_id].media_id[1] != '':
-	# 					for i in range(1, 11):
-	# 						if user.user[update.message.chat_id].media[i] == '':
-	# 							user.user[update.message.chat_id].media[i] = 'v' + user.user[update.message.chat_id].media_id[1]
-	# 							# 1st 'v' is video detecter
-	# 							bot.send_message(
-	# 								chat_id=update.message.chat_id,
-	# 								text=translates[user.user[update.message.chat_id].language]["Accepted attachment № "] + str(i),
-	# 							)
-	# 							break
-	# 			else:
-	# 				bot.send_message(
-	# 					chat_id=update.message.chat_id,
-	# 					text=translates[user.user[update.message.chat_id].language]["attachment_limit"],
-	# 				)
-	# else:
-	# 	do_start(bot=bot, update=update, context=context)
+	if chat_id in bot.users:
+		if any([bot.users[chat_id].post.text[0], bot.users[chat_id].add_location]):
+			update.effective_chat.send_message(
+				text=translates[bot.users[chat_id]
+								.language]['send_correct_data'],
+				reply_markup=post_keyboard(bot.users[chat_id]),
+			)
+		else:
+			if bot.users[chat_id].add_media:
+				bot.users[chat_id].check_list = []
+				for i in range(1, 11):
+					if bot.users[chat_id].post.media[i] == '':
+						bot.users[chat_id].check_list.append(i)
+				if len(bot.users[chat_id].check_list) > 0:
+					try:
+						bot.users[chat_id].post.media_id[0] = update.message.photo[-1].file_id
+					except:
+						pass
+					try:
+						bot.users[chat_id].post.media_id[1] = update.message.video.file_id
+					except:
+						pass
+					if bot.users[chat_id].post.media_id[0] != '':
+						for i in range(1, 11):
+							if bot.users[chat_id].post.media[i] == '':
+								bot.users[chat_id].post.media[i] = 'p' + bot.users[chat_id].post.media_id[0]
+								# 1st 'p' is photo detecter
+								update.effective_chat.send_message(
+									text=translates[bot.users[chat_id].language]["Accepted attachment № "] + str(i),
+								)
+								break
+					if bot.users[chat_id].post.media_id[1] != '':
+						for i in range(1, 11):
+							if bot.users[chat_id].post.media[i] == '':
+								bot.users[chat_id].post.media[i] = 'v' + bot.users[chat_id].post.media_id[1]
+								# 1st 'v' is video detecter
+								update.effective_chat.send_message(
+									text=translates[bot.users[chat_id].language]["Accepted attachment № "] + str(i),
+								)
+								break
+					
+				else:
+					update.effective_chat.send_message(
+						text=translates[bot.users[chat_id].language]["attachment_limit"],
+					)
+				
+	else:
+		do_start(bot=bot, update=update, context=context)
 	
 
 
