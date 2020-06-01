@@ -16,6 +16,7 @@ try:
 except ImportError:
 	pass
 
+DATABASE_PATH = './db.sqlite3'
 
 class UserObject():
 
@@ -57,9 +58,7 @@ class UserObject():
         
         self.unpublished_posts_reverse = {} # switch key with value
         
-
-        
-
+        self.cancel_post = False
         self.current_post_id = None
 
         
@@ -282,7 +281,10 @@ class UserObject():
             # add show post
         else:
             self.event[0] = True
-            self.post = Post('some_id', 'some_date')
+            try:
+                self.post.clear_post()
+            except:
+                self.post = Post('some_id', 'some_date')
             update.effective_chat.send_message(
                 text=translates[self.language]['Post_creation'],
                 reply_markup=post_keyboard(self),
@@ -295,14 +297,15 @@ class UserObject():
         self.append_channel = False
         self.remove_channel = False
         self.language_change = False
+        self.cancel_post = False
         if self.post:
             self.post.text[0] = False
             self.post.location[0] = False
             self.post.media[0] = False
     
     
-    def check_post_creation(self):
-        if self.event[0]:
-            pass
-        else:
-            pass
+    # def check_post_creation(self):
+    #     if self.event[0]:
+    #         pass
+    #     else:
+    #         pass
