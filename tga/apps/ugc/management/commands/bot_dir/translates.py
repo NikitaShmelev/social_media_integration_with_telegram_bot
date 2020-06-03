@@ -150,7 +150,7 @@ translates = {
         # BUTTONS
         
         'resend_email':'Вышлите мне свой email.',
-        'send_email_again': "Вышлите email ещё раз.",
+        'send_email_again': "Изменить email.",
         'BUTTON3_BOT_HELP': 'Как использовать этого бота?',
 
         'START_PAGE': 'Перейти на начальную страницу',

@@ -81,6 +81,17 @@ class BotState():
   
 
     def take_user_data(self, user):
+        """This method takes all user's data from database
+
+        Arguments:
+            new_user_object -- [
+                This object must have chat_id atribute.
+                This function will be called at sign in stage of user.
+                ]
+
+        Returns:
+            user_object -- [user with all data from database]
+        """
         conn, cur = self.open_db_connection()
         user.user_registration = True
         cur.execute("SELECT * from home_userprofile WHERE user_id=?",(user.chat_id, ))

@@ -41,7 +41,7 @@ class Post:
         self.media_id = ['', ''] # First - photo, second - movie
         self.check_list = []
         self.publish = False
-        
+        self.saved = False 
         
         
         # self.save_post = False
@@ -62,6 +62,9 @@ class Post:
     
     
     def send_post(self, update, user, context, chat_id):
+        print(chat_id, )
+        if user.save_and_publish:
+            chat_id = user.data
         text = self.text[1]
         if user.post.location[1] != '':
             latitude = user.post.location[1]
@@ -138,14 +141,36 @@ class Post:
     
     
     def show_post(self, update, user, context):
+        """[summary]
+
+        Arguments:
+            update {class 'telegram.update.Update'} -- [description]
+            user {[type]} -- [description]
+            context {class 'telegram.ext.callbackcontext.CallbackContext'} -- [description]
+        """
+        print(user.save_and_publish)
         if user.update_and_publish:
             pass
         elif user.save_and_publish:
-            pass
+            print(self.saved, 'saved')
+            if not self.saved:
+                print('BEFORE SAVE')
+                self.saved = True
+                self.save(user)
+            self.send_post(
+                update, user, context, user.data
+            )
         else:
-            self.send_post(update, user, context, user.chat_id)
+            self.send_post(
+                update, user, context, user.chat_id
+                )
+    
     
     def clear_post(self):
+        """
+            Clear all atributes. This is prepair 
+            for next post creation
+        """
         self.post_id=None
         self.created_at=None
         self.text=[False, '']
@@ -168,7 +193,8 @@ class Post:
         self.publish = False
         self.show_unpublished_posts = False
         self.all_channels = False
-       
+        self.saved = False
+
 
         
         
@@ -190,15 +216,23 @@ class Post:
         conn = sqlite3.connect(DATABASE_PATH)
         cur = conn.cursor()
         post_date = datetime.today().strftime('"%A, %d. %B %Y %H:%M:%S"')
-        cur.execute('INSERT INTO home_post (USER_ID,CREATED_AT,POST_TEXT,LOCATION,MEDIA,CREATOR_NAME,PUBLISHED) VALUES(?,?,?,?,?,?,?)',
+        print('user.chat_id', user.chat_id)
+        
+        cur.execute('INSERT INTO home_post ('
+                    'USER_ID,CREATED_AT,POST_TEXT,LOCATION,MEDIA,CREATOR_NAME,PUBLISHED) '
+                    'VALUES(?,?,?,?,?,?,?)',
          (
-             self.post_id, post_date, self.text[1],
+            user.chat_id, post_date, self.text[1],
             location, media, user.username, publish
             )
         )
         conn.commit()
-        cur.execute('SELECT id FROM home_post WHERE user_id=?',(self.post_id, ))
-        user.current_post_id = cur.fetchone()[0]
+        cur.execute('SELECT id FROM home_post WHERE user_id=?',(user.chat_id, ))
+        
+        print(user)
+        res = cur.fetchone()
+        print(res)
+        user.current_post_id = res[0]
         if media:
             cur.execute('INSERT INTO home_postmedia (POST_ID,MEDIA_1,MEDIA_2,MEDIA_3,MEDIA_4,MEDIA_5,MEDIA_6,MEDIA_7,MEDIA_8,MEDIA_9, MEDIA_10)'
                 ' VALUES(?,?,?,?,?,?,?,?,?,?,?)',(
@@ -220,5 +254,10 @@ class Post:
         conn.close()
         user.unpublished_posts_reverse[user.current_post_id] = post_date
         user.unpublished_posts[post_date] = user.current_post_id
-        self.clear_post()
+        if not self.saved:
+            self.clear_post()
+            user.event = [False, False]
+        print(
+            'post has been saved'
+        )
         return user

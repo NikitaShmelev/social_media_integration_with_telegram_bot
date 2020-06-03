@@ -272,6 +272,7 @@ class UserObject():
 					reply_markup=channels_keyboard(self),
 				)
             
+            
     def create_post_button(self, update):
         if self.event[0]:
             update.effective_chat.send_message(
@@ -280,11 +281,13 @@ class UserObject():
 				)
             # add show post
         else:
-            self.event[0] = True
             try:
                 self.post.clear_post()
+                self.event = [False, False]
             except:
                 self.post = Post('some_id', 'some_date')
+                # self.event[0] = True
+            self.event[0] = True
             update.effective_chat.send_message(
                 text=translates[self.language]['Post_creation'],
                 reply_markup=post_keyboard(self),
@@ -298,11 +301,13 @@ class UserObject():
         self.remove_channel = False
         self.language_change = False
         self.cancel_post = False
+        self.save_and_publish = False
+        self.update_and_publish = False
         if self.post:
             self.post.text[0] = False
             self.post.location[0] = False
             self.post.media[0] = False
-    
+            
     
     # def check_post_creation(self):
     #     if self.event[0]:
