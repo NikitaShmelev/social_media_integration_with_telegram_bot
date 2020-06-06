@@ -214,7 +214,7 @@ def channels_keyboard(user):
     ]
     for i in user.channels[1:]:
         keyboard.append([KeyboardButton(str(i))])
-    if user.channels[0] or user.post.publish:
+    if user.channels[0] or user.save_and_publish:
         keyboard.append([KeyboardButton(translates[user.language]['ALL_CHANNELS'])])
     return ReplyKeyboardMarkup(
         keyboard=keyboard,

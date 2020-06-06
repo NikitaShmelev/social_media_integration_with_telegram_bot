@@ -55,7 +55,7 @@ class UserObject():
         
         self.save_and_publish = False
         self.update_and_publish = False
-        
+        self.all_channels = False
         self.unpublished_posts_reverse = {} # switch key with value
         
         self.cancel_post = False
@@ -303,6 +303,7 @@ class UserObject():
         self.cancel_post = False
         self.save_and_publish = False
         self.update_and_publish = False
+        self.all_channels = False
         if self.post:
             self.post.text[0] = False
             self.post.location[0] = False

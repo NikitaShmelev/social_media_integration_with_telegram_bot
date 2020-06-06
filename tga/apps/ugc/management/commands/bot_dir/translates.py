@@ -215,7 +215,7 @@ translates = {
         'update_post': 'Обновить пост',
         'updated': 'обновлено',
         'welcome':'You were redirected to the start page. All posts changes have been stored in my memory.'
-                    '\nYou can find started post in unpublished posts. You have to save post anyway.'
+                    '\nTo see started post press \'Create post\' button. You have to save post anyway.'
                     'Unsaved posts will be lost after my reboot.',
         'how_to_create': 'Инструкция по созданию поста',
         'how_to_update': 'Инструкция по обновлению поста',
@@ -228,6 +228,8 @@ translates = {
         'Code_has_been_sent':"Код был отправлен. Пожалуйста, напишите этот код здесь, чтобы продолжить.",
         'i_got_name':"Я получил ваше имя.\nВышлите имя ещё раз, если хотите изменить его.",
         ###
+        'cant_add_bot': 'Can\'t add bot to this chat. Print correct chat or add bot to this chat.'
+                        'You have to add bot to chat and send this chat.',
         'create_guide': 'create_guide',
         'update_guide': 'create_guide',
         'text_usage': 'text_usage',

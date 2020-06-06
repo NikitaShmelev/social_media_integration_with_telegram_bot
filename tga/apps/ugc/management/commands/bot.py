@@ -49,6 +49,7 @@ def do_start(update: Update, context=CallbackContext):
 		bot.take_emails()
 	if chat_id not in bot.users:
 		bot.users[chat_id] = UserObject(chat_id)
+		bot.users[chat_id].post = Post('some_id', 'some_date')
 		if chat_id not in bot.users_ids:
 			bot.users[chat_id].select_language = True
 			update.effective_chat.send_message(
@@ -57,6 +58,7 @@ def do_start(update: Update, context=CallbackContext):
 			)
 		else:
 			bot.users[chat_id] = bot.take_user_data(bot.users[chat_id])
+			bot.users[chat_id].post = Post('some_id', 'some_date')
 			update.effective_chat.send_message(
 				text=translates[bot.users[chat_id].language]['Hello'] +
 					bot.users[chat_id].username,
@@ -310,6 +312,7 @@ def take_text(update: Update, context: CallbackContext):
 					)
 				if bot.users[chat_id].post.saved:
 					bot.users[chat_id].post.clear_post()
+					bot.users[chat_id].event = [False, False]
 					update.effective_chat.send_message(
 						text='Post creation was finished. You were redirected on the start page.',
 						reply_markup=start_keyboard(bot.users[chat_id]),
@@ -391,8 +394,11 @@ def take_text(update: Update, context: CallbackContext):
 # 	# 				bot=bot, update=update,
 # 	# 				context=context
 # 	# 				)
-# 	# 		if bot.users[chat_id].publish and bot.users[chat_id].data == translates[bot.users[chat_id].language]['ALL_CHANNELS']:
-# 	# 			bot.users[chat_id].all_channels = True
+			if bot.users[chat_id].data == translates[bot.users[chat_id].language]['ALL_CHANNELS']:
+				bot.users[chat_id].all_channels = True
+				if bot.users[chat_id].save_and_publish:
+					bot.users[chat_id].post.show_post(update, bot.users[chat_id], context)
+					bot.users[chat_id].all_channels = False
 # 	# 			if bot.users[chat_id].update_post:
 # 	# 				bot.users[chat_id] = update_post(
 # 	# 					bot.users[chat_id], chat_id,
