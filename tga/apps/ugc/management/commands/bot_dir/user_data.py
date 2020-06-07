@@ -38,24 +38,24 @@ class UserObject():
         self.current_channel = None
         self.append_channel = False
         self.remove_channel = False
-        self.unpublished_posts = {} # key - created_at (DATETIME)
         self.channels = [False, ]
         self.post = None
         self.unpublished_keyboard = False
         self.change_language = False
         
+        self.update_post = False
         self.add_location = False
         self.add_media = False
         
         self.event = [False, False]
         
         
-        
-        # self.help = False
-        
         self.save_and_publish = False
         self.update_and_publish = False
         self.all_channels = False
+        self.show_unpublished_posts = False
+        
+        self.unpublished_posts = {} # key - created_at (DATETIME)
         self.unpublished_posts_reverse = {} # switch key with value
         
         self.cancel_post = False
@@ -304,6 +304,8 @@ class UserObject():
         self.save_and_publish = False
         self.update_and_publish = False
         self.all_channels = False
+        self.show_unpublished_posts = False
+        self.unpublished_keyboard = False
         if self.post:
             self.post.text[0] = False
             self.post.location[0] = False

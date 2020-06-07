@@ -294,8 +294,7 @@ def take_text(update: Update, context: CallbackContext):
 # 	# 					bot.users[chat_id], chat_id,
 # 	# 					bot=bot, update=update, context=context,
 # 	# 					)
-# 	# 				bot.send_message(
-# 	# 					chat_id=chat_id,
+# 	# 				update.effective_chat.send_message(
 # 	# 					text=translates[bot.users[chat_id].language]['updated'],
 # 	# 					reply_markup=start_keyboard(bot.users[chat_id]),
 # 	# 				        )
@@ -405,8 +404,7 @@ def take_text(update: Update, context: CallbackContext):
 # 	# 					bot=bot, update=update,
 # 	# 					context=context
 # 	# 				)
-# 	# 				bot.send_message(
-# 	# 					chat_id=chat_id,
+# 	# 				update.effective_chat.send_message(
 # 	# 					text='Starting to post in all your accesseble channels',
 # 	# 					reply_markup=start_keyboard(bot.users[chat_id])
 # 	# 				)
@@ -417,37 +415,37 @@ def take_text(update: Update, context: CallbackContext):
 # 	# 					bot=bot, update=update,
 # 	# 					context=context
 # 	# 				)
-# 	# 				bot.send_message(
-# 	# 					chat_id=chat_id,
+# 	# 				update.effective_chat.send_message(
 # 	# 					text='Starting to post in all your accesseble channels',
 # 	# 					reply_markup=start_keyboard(bot.users[chat_id])
 # 	# 					)
 # 	# 			return do_start(bot=bot, update=update, context=context)
-# 	# 		elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['show_posts']:
-# 	# 			if len(bot.users[chat_id].unpublished_posts) > 0:
-# 	# 				bot.users[chat_id].show_unpublished_posts = True
-# 	# 				bot.send_message(
-# 	# 					chat_id=chat_id, 
-# 	# 					text='Select post', 
-# 	# 					reply_markup=unpublished_keyboard(bot.users[chat_id])
-# 	# 					)
-# 	# 				return True
-# 	# 			else:
-# 	# 				bot.send_message(
-# 	# 		    		chat_id=chat_id,
-# 	# 		    		text='All your posts already published',
-# 	# 		    		reply_markup=start_keyboard(bot.users[chat_id])
-# 	# 		    		)
-# 	# 		
-# 	# 		if bot.users[chat_id].show_unpublished_posts:
+			elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['show_posts']:
+				bot.users[chat_id].unpublished_posts = bot.get_posts(chat_id)
+				if len(bot.users[chat_id].unpublished_posts) > 0:
+					bot.users[chat_id].show_unpublished_posts = True
+					update.effective_chat.send_message(
+						text='Select post', 
+						reply_markup=unpublished_keyboard(bot.users[chat_id])
+						)
+					return True
+				else:
+					update.effective_chat.send_message(
+			    		text='All your posts already published',
+			    		reply_markup=start_keyboard(bot.users[chat_id])
+			    		)
+			if bot.users[chat_id].show_unpublished_posts and bot.users[chat_id].data in bot.users[chat_id].unpublished_posts.keys():
 # 	# 			bot.users[chat_id] = find_post(bot.users[chat_id], bot.users[chat_id].data)
-# 	# 			bot.users[chat_id].unpublished_keyboard = True
-# 	# 			# bot.users[chat_id].event[0] = True
-# 	# 			bot.send_message(
-# 	# 				chat_id=chat_id,
-# 	# 				text='You can edit your post',
-# 	# 				reply_markup=find_post_keyboard(bot.users[chat_id]),
-# 	# 			)
+				bot.users[chat_id].unpublished_keyboard = True
+				bot.users[chat_id].show_unpublished_posts = False
+				bot.users[chat_id].update_post = True
+				bot.users[chat_id].event[0] = True
+				bot.users[chat_id].post = bot.users[chat_id].unpublished_posts[bot.users[chat_id].data]
+				bot.users[chat_id].current_post_id = bot.users[chat_id].post.post_id
+				update.effective_chat.send_message(
+					text='You can edit your post',
+					reply_markup=find_post_keyboard(bot.users[chat_id]),
+				)
 # 	# 		if bot.users[chat_id].text[0]:
 # 	# 			bot.users[chat_id].text[0] = False
 # 	# 			if bot.users[chat_id].event[0]:

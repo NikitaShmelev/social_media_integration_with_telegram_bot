@@ -46,9 +46,8 @@ class Post:
         
         
         # self.save_post = False
-        # self.update_post = False
         
-        self.show_unpublished_posts = False
+        
         self.all_channels = False
         
     
@@ -195,7 +194,6 @@ class Post:
         self.media_id = ['', ''] # First - photo, second - movie
         self.check_list = []
         self.publish = False
-        self.show_unpublished_posts = False
         self.all_channels = False
         self.saved = False
 
@@ -230,7 +228,8 @@ class Post:
         )
         conn.commit()
         cur.execute('SELECT id FROM home_post WHERE user_id=?',(user.chat_id, ))
-        user.current_post_id = cur.fetchone()[0]
+        user.current_post_id = cur.fetchall()[-1][0]
+        print(user.current_post_id,'user.current_post_id')
         if media:
             cur.execute('INSERT INTO home_postmedia (POST_ID,MEDIA_1,MEDIA_2,MEDIA_3,MEDIA_4,MEDIA_5,MEDIA_6,MEDIA_7,MEDIA_8,MEDIA_9, MEDIA_10)'
                 ' VALUES(?,?,?,?,?,?,?,?,?,?,?)',(
@@ -250,8 +249,9 @@ class Post:
             conn.commit()
         cur.close()
         conn.close()
-        user.unpublished_posts_reverse[user.current_post_id] = post_date
-        user.unpublished_posts[post_date] = user.current_post_id
+        if not user.save_and_publish:
+            user.unpublished_posts_reverse[post_date] = user.current_post_id
+            user.unpublished_posts[user.current_post_id] = self
         if not self.saved:
             self.clear_post()
             user.event = [False, False]

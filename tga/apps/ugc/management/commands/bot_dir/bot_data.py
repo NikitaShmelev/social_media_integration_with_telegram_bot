@@ -102,7 +102,7 @@ class BotState():
         cur.execute("SELECT * from home_post WHERE user_id=? and PUBLISHED=?",(user.chat_id, 0))
         posts = cur.fetchall()
         for post in posts:
-            user.unpublished_posts[post[1]] = Post(
+            user.unpublished_posts[str(post[1])] = Post(
                 post_id=post[0],
                 created_at=post[1],
                 text=[False, post[2]],
@@ -139,3 +139,41 @@ class BotState():
         del conn, cur, posts, data
         return user
 
+
+    def get_posts(self, chat_id):
+        conn, cur = self.open_db_connection()
+        cur.execute("SELECT * from home_post WHERE user_id=? and PUBLISHED=?",(chat_id, 0))
+        posts = cur.fetchall()
+        unpublished_posts = {}
+        for post in posts:
+            unpublished_posts[str(post[1])] = Post(
+                post_id=post[0],
+                created_at=post[1],
+                text=[False, post[2]],
+            )
+            if post[4]:
+                '''MEDIA'''
+                cur.execute("SELECT * from home_postmedia WHERE post_id=?",(post[0],))
+                media_data = cur.fetchall()[0]
+                unpublished_posts[post[1]].media = {
+                    0: True,
+                    1: media_data[1],
+                    2: media_data[2],
+                    3: media_data[3],
+                    4: media_data[4],
+                    5: media_data[5],
+                    6: media_data[6],
+                    7: media_data[7],
+                    8: media_data[8],
+                    9: media_data[9],
+                    10: media_data[10],
+                }
+                del media_data
+            if post[5]:
+                '''location'''
+                cur.execute("SELECT * from home_postlocation WHERE post_id=?",(post[0],))
+                location_data = cur.fetchall()[0]
+                unpublished_posts[post[0]].location = [True, location_data[1], location_data[2]]
+                del location_data
+        self.close_db_connection(conn, cur)
+        return unpublished_posts

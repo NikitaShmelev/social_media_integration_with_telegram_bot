@@ -92,7 +92,7 @@ def unpublished_keyboard(user):
             keyboard.append(
                 [
                 KeyboardButton(
-                    user.unpublished_posts[i]
+                    str(user.unpublished_posts[i].created_at)
                     ),
                 ]
                 )
@@ -153,10 +153,10 @@ def find_post_keyboard(user):
             KeyboardButton(translates[user.language]['publish_and_update']),
         ],
     ]
-    if user.location[1]:
+    if user.post.location[1]:
         keyboard[1][1] = KeyboardButton(
             translates[user.language]['DELETE_LOCATION'])
-    if user.text[1] != '':
+    if user.post.text[1] != '':
         keyboard[1][0] = KeyboardButton(
             translates[user.language]['DELETE_TEXT'])
     # if user.media[1] != '':
