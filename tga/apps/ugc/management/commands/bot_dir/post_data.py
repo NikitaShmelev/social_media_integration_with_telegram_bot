@@ -1,15 +1,13 @@
 import sqlite3
 from datetime import datetime 
 from telegram import ReplyKeyboardRemove
+from telegram.error import TimedOut
 from telegram import Bot, Update, Location, InputMediaPhoto, InputMediaVideo
 from time import sleep
-try:
-	from .keyboards import LANGUAGE_EN, LANGUAGE_RU, \
-		start_keyboard, conifrm_keyboard, post_keyboard, language_keyboard, email_keyboard, \
-		regisration_keyboard, channels_keyboard, unpublished_keyboard, find_post_keyboard, \
-		help_keyboard, start_page_keyboard
-except ImportError:
-	pass
+from .keyboards import LANGUAGE_EN, LANGUAGE_RU, \
+    start_keyboard, conifrm_keyboard, post_keyboard, language_keyboard, email_keyboard, \
+    regisration_keyboard, channels_keyboard, unpublished_keyboard, find_post_keyboard, \
+    help_keyboard, start_page_keyboard
 from .translates import translates
 
 DATABASE_PATH = './db.sqlite3'
@@ -41,7 +39,6 @@ class Post:
         self.media = media
         self.media_id = ['', ''] # First - photo, second - movie
         self.check_list = []
-        self.publish = False
         self.saved = False 
         
         
@@ -62,7 +59,7 @@ class Post:
     
     
     def send_post(self, update, user, context, chat_id):
-        if user.save_and_publish and not user.all_channels:
+        if (user.save_and_publish or user.update_and_publish) and not user.all_channels:
             chat_id = user.data
         text = self.text[1]
         if user.post.location[1] != '':
@@ -127,16 +124,6 @@ class Post:
                 text=text,
             )
         
-        # if len(user.channels) > 0:
-        #     if user.all_channels:
-        #         for i in user.channels:
-        #             send_post(i)
-        #             sleep(1)
-        #         user.all_channels = False
-        #     else:
-        #         send_post(chat_id)
-        # else:
-        #     send_post(chat_id)
     
     
     def show_post(self, update, user, context):
@@ -147,12 +134,14 @@ class Post:
             user {[type]} -- [description]
             context {class 'telegram.ext.callbackcontext.CallbackContext'} -- [description]
         """
-        if user.update_and_publish:
-            pass
-        elif user.save_and_publish:
+        if user.save_and_publish or user.update_and_publish:
             if not self.saved:
                 self.saved = True
-                self.save(user)
+                if user.update_and_publish:
+                    self.publish = True
+                    self.update_post(user)
+                else:
+                    self.save(user)
             if user.all_channels:
                 for channel in user.channels[1:]:
                     self.send_post(
@@ -160,9 +149,13 @@ class Post:
                     )
                     sleep(1)
             else:
-                self.send_post(
-                    update, user, context, user.data
-                )
+                try:
+                    self.send_post(
+                        update, user, context, user.data
+                    )
+                    sleep(1)
+                except TimedOut as e:
+                    sleep(10)
         else:
             self.send_post(
                 update, user, context, user.chat_id
@@ -229,7 +222,6 @@ class Post:
         conn.commit()
         cur.execute('SELECT id FROM home_post WHERE user_id=?',(user.chat_id, ))
         user.current_post_id = cur.fetchall()[-1][0]
-        print(user.current_post_id,'user.current_post_id')
         if media:
             cur.execute('INSERT INTO home_postmedia (POST_ID,MEDIA_1,MEDIA_2,MEDIA_3,MEDIA_4,MEDIA_5,MEDIA_6,MEDIA_7,MEDIA_8,MEDIA_9, MEDIA_10)'
                 ' VALUES(?,?,?,?,?,?,?,?,?,?,?)',(
@@ -250,9 +242,41 @@ class Post:
         cur.close()
         conn.close()
         if not user.save_and_publish:
-            user.unpublished_posts_reverse[post_date] = user.current_post_id
             user.unpublished_posts[user.current_post_id] = self
         if not self.saved:
             self.clear_post()
             user.event = [False, False]
+        return user
+
+    
+    def update_post(self, user):
+        conn = sqlite3.connect(DATABASE_PATH)
+        cur = conn.cursor()
+        cur.execute('UPDATE home_post set POST_TEXT=?, LOCATION=?, MEDIA=?,PUBLISHED=? WHERE ID= ?',(user.post.text[1], True, True, user.publish, user.current_post_id))
+        conn.commit()
+        if not cur.execute("SELECT * from home_postmedia WHERE post_id=?", (user.current_post_id, )).fetchall():
+            cur.execute('INSERT INTO home_postmedia (POST_ID,MEDIA_1,MEDIA_2,MEDIA_3,MEDIA_4,MEDIA_5,MEDIA_6,MEDIA_7,MEDIA_8,MEDIA_9,MEDIA_10)'
+                        ' VALUES(?,?,?,?,?,?,?,?,?,?,?)', (
+                            user.current_post_id, user.post.media[1], user.post.media[2], user.post.media[3], user.post.media[4],
+                            user.post.media[5], user.post.media[6], user.post.media[7], user.post.media[8], user.post.media[9], user.post.media[10]
+                        )
+                        )
+        else:
+            cur.execute('UPDATE  home_postmedia set MEDIA_1=?,MEDIA_2=?,MEDIA_3=?,MEDIA_4=?,MEDIA_5=?,MEDIA_6=?,MEDIA_7=?,MEDIA_8=?,MEDIA_9=?,MEDIA_10=?'
+                        ' where post_id=?', (
+                            user.post.media[1], user.post.media[2], user.post.media[3], user.post.media[4],
+                            user.post.media[5], user.post.media[6], user.post.media[7], user.post.media[8], 
+                            user.post.media[9], user.post.media[10], user.current_post_id
+                        )
+                        )
+        conn.commit()
+        if not cur.execute("SELECT * from home_postlocation WHERE post_id=?",(user.current_post_id, )).fetchall():
+            cur.execute(
+                'INSERT INTO home_postlocation (POST_ID,LATITUDE,LONGITUDE) VALUES(?,?,?)', (user.current_post_id, user.post.location[1], user.post.location[2]))
+        else:
+            cur.execute('UPDATE  home_postlocation set LATITUDE=?,LONGITUDE=?'
+                        ' where post_id=?', (user.post.location[1], user.post.location[2], user.current_post_id))
+        conn.commit()
+        cur.close()
+        conn.close()
         return user

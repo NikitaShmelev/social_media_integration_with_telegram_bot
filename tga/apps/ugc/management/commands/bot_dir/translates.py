@@ -10,8 +10,7 @@ translates = {
         'wrong_code': "Wrong code. Try to print code again.",
         'exists_email': 'This email address already exists.',
         'help_text': 'Choose bot part you need and press necessary button.',
-
-
+            
 
         # BUTTONS
         'resend_email':'Send email.',
@@ -34,15 +33,14 @@ translates = {
         'list_of_channels': 'Channels list',
         'add_channel': 'Add channel',
         'remove_channel': 'Remove channel',
-
-
+        'view_current_post':'view_current_post',
 
         'nothing_to_cancel': 'Nothing to cancel.',
         'nothing_to_show': 'Nothing to show.',
         'Need confirmation': 'Need confirmation.',
         'Post_canceled': 'Post creation was successfully canceled.',
         'continue_post': "Let's continue create post.",
-        'already':'You are already creating a post.',
+        'already':'You are already work with post.',
         'Post_creation': 'Post creation.',
         'Done': 'Done',
         'Hello': 'Hello ',
@@ -167,7 +165,7 @@ translates = {
         'list_of_channels': 'Список каналов',
         'add_channel': 'Добавить канал',
         'remove_channel': 'Удалить канал',
-
+        'view_current_post':'view_current_post',
 
         
         'bot_added':'Бот был успешно добавлен в текущий канал',
@@ -175,7 +173,7 @@ translates = {
         'nothing_to_cancel': 'Нечего отменять',
         'nothing_to_show': 'Нечего показать',
         'Need confirmation': 'Необходимо подтверждение.',
-        'already': 'Вы уже создаёте пост.',
+        'already': 'Вы уже работаете с постом.',
         'Post_canceled':'Создание поста было успешно отменено.',
         'Post_creation': 'Создание поста.',
         'Item removed': 'Вложение удалено.',

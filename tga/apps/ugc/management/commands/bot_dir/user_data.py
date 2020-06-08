@@ -8,13 +8,10 @@ from .bot_data import BotState
 from .post_data import Post
 from .translates import translates
 from home.models import UserProfile
-try:
-	from .keyboards import LANGUAGE_EN, LANGUAGE_RU, \
-		start_keyboard, conifrm_keyboard, post_keyboard, language_keyboard, email_keyboard, \
-		regisration_keyboard, channels_keyboard, unpublished_keyboard, find_post_keyboard, \
-		help_keyboard, start_page_keyboard
-except ImportError:
-	pass
+from .keyboards import LANGUAGE_EN, LANGUAGE_RU, \
+    start_keyboard, conifrm_keyboard, post_keyboard, language_keyboard, email_keyboard, \
+    regisration_keyboard, channels_keyboard, unpublished_keyboard, find_post_keyboard, \
+    help_keyboard, start_page_keyboard
 
 DATABASE_PATH = './db.sqlite3'
 
@@ -48,6 +45,7 @@ class UserObject():
         self.add_media = False
         
         self.event = [False, False]
+        self.publish = False
         
         
         self.save_and_publish = False
@@ -56,7 +54,6 @@ class UserObject():
         self.show_unpublished_posts = False
         
         self.unpublished_posts = {} # key - created_at (DATETIME)
-        self.unpublished_posts_reverse = {} # switch key with value
         
         self.cancel_post = False
         self.current_post_id = None
@@ -127,7 +124,6 @@ class UserObject():
         self.access = False
         self.code[1] = True 
         self.code[0] = randint(100000,1000000)
-        print(self.code[0])
 
 
     def connect_to_email_server(self):
@@ -306,14 +302,12 @@ class UserObject():
         self.all_channels = False
         self.show_unpublished_posts = False
         self.unpublished_keyboard = False
+        self.publish = False
+        # self.update_post = False
+        self.add_media = False
         if self.post:
             self.post.text[0] = False
-            self.post.location[0] = False
-            self.post.media[0] = False
+            self.post.add_location = False
+            self.post.add_media = False
             
-    
-    # def check_post_creation(self):
-    #     if self.event[0]:
-    #         pass
-    #     else:
-    #         pass
+            

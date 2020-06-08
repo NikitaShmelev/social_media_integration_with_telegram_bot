@@ -47,7 +47,7 @@ def start_keyboard(user):
             KeyboardButton(translates[user.language]['BUTTON3_BOT_HELP']),
         ],
         [
-            KeyboardButton(translates[user.language]['BUTTON4_CREATE_POST']),
+            KeyboardButton(translates[user.language]['view_current_post']) if user.event[0] else KeyboardButton(translates[user.language]['BUTTON4_CREATE_POST']),
             KeyboardButton(translates[user.language]['show_posts']),
         ],
         [   
@@ -103,7 +103,7 @@ def unpublished_keyboard(user):
 
 
 def post_keyboard(user):
-    if user.unpublished_keyboard:
+    if user.unpublished_keyboard or user.update_post:
         return find_post_keyboard(user)
     else:
         keyboard = [
@@ -214,7 +214,7 @@ def channels_keyboard(user):
     ]
     for i in user.channels[1:]:
         keyboard.append([KeyboardButton(str(i))])
-    if user.channels[0] or user.save_and_publish:
+    if user.channels[0] or user.save_and_publish or user.update_and_publish:
         keyboard.append([KeyboardButton(translates[user.language]['ALL_CHANNELS'])])
     return ReplyKeyboardMarkup(
         keyboard=keyboard,

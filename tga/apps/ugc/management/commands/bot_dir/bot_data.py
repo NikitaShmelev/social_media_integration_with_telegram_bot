@@ -100,43 +100,13 @@ class BotState():
         cur.execute("SELECT channel_id from home_channel WHERE user_id=?",(user.chat_id, ))
         user.channels += [i[0] for i in cur.fetchall()]
         cur.execute("SELECT * from home_post WHERE user_id=? and PUBLISHED=?",(user.chat_id, 0))
-        posts = cur.fetchall()
-        for post in posts:
-            user.unpublished_posts[str(post[1])] = Post(
-                post_id=post[0],
-                created_at=post[1],
-                text=[False, post[2]],
-            )
-            if post[4]:
-                '''MEDIA'''
-                cur.execute("SELECT * from home_postmedia WHERE post_id=?",(post[0],))
-                media_data = cur.fetchall()[0]
-                user.unpublished_posts[post[1]].media = {
-                    0: True,
-                    1: media_data[1],
-                    2: media_data[2],
-                    3: media_data[3],
-                    4: media_data[4],
-                    5: media_data[5],
-                    6: media_data[6],
-                    7: media_data[7],
-                    8: media_data[8],
-                    9: media_data[9],
-                    10: media_data[10],
-                }
-                del media_data
-            if post[5]:
-                '''location'''
-                cur.execute("SELECT * from home_postlocation WHERE post_id=?",(post[0],))
-                location_data = cur.fetchall()[0]
-                user.unpublished_posts[post[0]].location = [True, location_data[1], location_data[2]]
-                del location_data
+        user.unpublished_posts = self.get_posts(user.chat_id)    
         print(
             '\n\nUser loged in\n'
             f'Username: {user.username}\nID: {user.chat_id}\nEmail: {user.email}\n\n\n'
             )
         self.close_db_connection(conn, cur)
-        del conn, cur, posts, data
+        del conn, cur, data
         return user
 
 
@@ -154,26 +124,44 @@ class BotState():
             if post[4]:
                 '''MEDIA'''
                 cur.execute("SELECT * from home_postmedia WHERE post_id=?",(post[0],))
-                media_data = cur.fetchall()[0]
-                unpublished_posts[post[1]].media = {
-                    0: True,
-                    1: media_data[1],
-                    2: media_data[2],
-                    3: media_data[3],
-                    4: media_data[4],
-                    5: media_data[5],
-                    6: media_data[6],
-                    7: media_data[7],
-                    8: media_data[8],
-                    9: media_data[9],
-                    10: media_data[10],
-                }
-                del media_data
+                try:
+                    media_data = cur.fetchall()[0]
+                    unpublished_posts[post[1]].media = {
+                        0: True,
+                        1: media_data[1],
+                        2: media_data[2],
+                        3: media_data[3],
+                        4: media_data[4],
+                        5: media_data[5],
+                        6: media_data[6],
+                        7: media_data[7],
+                        8: media_data[8],
+                        9: media_data[9],
+                        10: media_data[10],
+                    }
+                    del media_data
+                except IndexError:
+                    unpublished_posts[post[1]].media = {
+                        0: True,
+                        1: '',
+                        2: '',
+                        3: '',
+                        4: '',
+                        5: '',
+                        6: '',
+                        7: '',
+                        8: '',
+                        9: '',
+                        10: '',
+                    }
             if post[5]:
                 '''location'''
                 cur.execute("SELECT * from home_postlocation WHERE post_id=?",(post[0],))
-                location_data = cur.fetchall()[0]
-                unpublished_posts[post[0]].location = [True, location_data[1], location_data[2]]
-                del location_data
+                try:
+                    location_data = cur.fetchall()[0]
+                    unpublished_posts[post[1]].location = [True, location_data[1], location_data[2]]
+                    del location_data
+                except IndexError:
+                    unpublished_posts[post[1]].location = [False, '', '']
         self.close_db_connection(conn, cur)
         return unpublished_posts

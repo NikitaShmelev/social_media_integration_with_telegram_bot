@@ -16,22 +16,12 @@ from .bot_dir.bot_data import BotState, load_config
 from .bot_dir.user_data import UserObject
 from .bot_dir.post_data import Post
 from .bot_dir.translates import translates
-try:
-	from .bot_dir.functions import take_users, take_user_data, cancel_post,\
-		add_user_to_database, location_for_post, media_for_post, \
-		text_for_post, show_created_post, save_post, \
-		create_post_button, change_language, update_post, \
-		send_email, remove_channel, add_channel, \
-		find_post, take_emails
-except ImportError:
-	pass
-try:
-	from .bot_dir.keyboards import LANGUAGE_EN, LANGUAGE_RU, \
-		start_keyboard, conifrm_keyboard, post_keyboard, language_keyboard, email_keyboard, \
-		regisration_keyboard, channels_keyboard, unpublished_keyboard, find_post_keyboard, \
-		help_keyboard
-except ImportError:
-	pass
+
+from .bot_dir.keyboards import LANGUAGE_EN, LANGUAGE_RU, \
+	start_keyboard, conifrm_keyboard, post_keyboard, language_keyboard, email_keyboard, \
+	regisration_keyboard, channels_keyboard, unpublished_keyboard, find_post_keyboard, \
+	help_keyboard
+
 
 
 config = load_config()
@@ -125,6 +115,7 @@ def take_text(update: Update, context: CallbackContext):
 # 	# 		
 		else:
 			# add event check
+			
 			if bot.users[chat_id].data == translates[bot.users[chat_id].language]['BUTTON3_BOT_HELP']:
 				bot.users[chat_id].clear_variables()
 				update.effective_chat.send_message(
@@ -215,7 +206,8 @@ def take_text(update: Update, context: CallbackContext):
 			elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['remove_channel'] or bot.users[chat_id].remove_channel:
 				bot.users[chat_id].remove_channel = True
 				bot.users[chat_id].delete_channel(update)
-			elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['BUTTON4_CREATE_POST']:
+			elif bot.users[chat_id].data in [translates[bot.users[chat_id].language]['BUTTON4_CREATE_POST'], \
+       				translates[bot.users[chat_id].language]['view_current_post']] and not bot.users[chat_id].post.text[0]:
 				bot.users[chat_id].clear_variables()
 				bot.users[chat_id].create_post_button(update)
     
@@ -225,6 +217,8 @@ def take_text(update: Update, context: CallbackContext):
 			elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['BUTTON5_TEXT_FOR_POST']:
 				if bot.users[chat_id].event[0]:
 					bot.users[chat_id].post.text[0] = True
+					bot.users[chat_id].add_location = False
+					bot.users[chat_id].add_media = False
 					update.effective_chat.send_message(
 							text=translates[bot.users[chat_id].language]['Tap text for post'],
 							reply_markup=post_keyboard(bot.users[chat_id]),
@@ -257,6 +251,9 @@ def take_text(update: Update, context: CallbackContext):
 					if any([bot.users[chat_id].post.text[1], bot.users[chat_id].post.media[1], bot.users[chat_id].post.location[1]]):
 						bot.users[chat_id].post.show_post(update, bot.users[chat_id], context)
 					else:
+						bot.users[chat_id].post.text[0] = False
+						bot.users[chat_id].add_media = False
+						bot.users[chat_id].add_location = False
 						update.effective_chat.send_message(
 							text=translates[bot.users[chat_id].language]['nothing_to_show'],
 							reply_markup=post_keyboard(bot.users[chat_id])
@@ -264,10 +261,13 @@ def take_text(update: Update, context: CallbackContext):
 			elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['BUTTON6_ADD_LOCATION']:
 				if bot.users[chat_id].event[0]:
 					bot.users[chat_id].add_location = True
+					bot.users[chat_id].add_media = False
+					bot.users[chat_id].post.text[0] = False
 					update.effective_chat.send_message(
 						text=translates[bot.users[chat_id].language]['Send location'],
 						reply_markup=post_keyboard(bot.users[chat_id]),
 						)
+					return True
 			elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['DELETE_LOCATION']:
 				if bot.users[chat_id].event[0]:
 					bot.users[chat_id].post.location = [False, '', '']
@@ -278,33 +278,20 @@ def take_text(update: Update, context: CallbackContext):
 			elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['BUTTON7_ADD_MEDIA']:
 				if bot.users[chat_id].event[0]:
 					bot.users[chat_id].add_media = True
+					bot.users[chat_id].add_location = False
+					bot.users[chat_id].post.text[0] = False
 					update.effective_chat.send_message(
 						text=translates[bot.users[chat_id].language]['Send media'],
 						reply_markup=post_keyboard(bot.users[chat_id]),
 						)
-
-
-
-
-# 	# 		
-# 	# 		elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['update_post']:
-# 	# 			if bot.users[chat_id].event[0]:					
-# 	# 				bot.users[chat_id].update_post = True
-# 	# 				update_post(
-# 	# 					bot.users[chat_id], chat_id,
-# 	# 					bot=bot, update=update, context=context,
-# 	# 					)
-# 	# 				update.effective_chat.send_message(
-# 	# 					text=translates[bot.users[chat_id].language]['updated'],
-# 	# 					reply_markup=start_keyboard(bot.users[chat_id]),
-# 	# 				        )
-# 	# 		
-			# 
+					return True
 			elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['CONFIRM_YES']:
 				if bot.users[chat_id].cancel_post:
 					bot.users[chat_id].cancel_post = False
 					bot.users[chat_id].post.clear_post()
 					bot.users[chat_id].event = [False, False]
+					bot.users[chat_id].update_post = False
+					bot.users[chat_id].clear_variables()
 					update.effective_chat.send_message(
 						text=translates[bot.users[chat_id].language]['Post_canceled'],
 						reply_markup=start_keyboard(bot.users[chat_id]),
@@ -366,64 +353,37 @@ def take_text(update: Update, context: CallbackContext):
 							text='Select channel',
 							reply_markup=channels_keyboard(bot.users[chat_id])
 							)
-      
-# 	# 			        save_post(
-# 	# 			            bot.users[chat_id], update.message.chat_id,
-# 	# 			            bot=bot, update=update, context=context
-# 	# 			            )
-# 	# 			        bot.send_message(
-# 	# 				        chat_id=update.message.chat_id,
-# 	# 				        text=translates[bot.users[chat_id].language]['Done'],
-# 	# 				        reply_markup=channels_keyboard(bot.users[chat_id]),
-# 	# 				        )
-# 	# 		elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['publish_and_update']:
-# 	# 			if bot.users[chat_id].event[0]:
-# 	# 				bot.users[chat_id].text[0] = False 
-# 	# 				bot.users[chat_id].update_post = True
-# 	# 				bot.users[chat_id].publish = True
-# 	# 				bot.send_message(
-# 	# 					chat_id=update.message.chat_id,
-# 	# 					text=translates[bot.users[chat_id].language]['Done'],
-# 	# 					reply_markup=channels_keyboard(bot.users[chat_id]),
-# 	# 					)
-# 	# 		if bot.users[chat_id].publish and bot.users[chat_id].data in bot.users[chat_id].channels:
-# 	# 			bot.users[chat_id].current_channel = bot.users[chat_id].data
-# 	# 			return save_post(
-# 	# 				bot.users[chat_id], chat_id,
-# 	# 				bot=bot, update=update,
-# 	# 				context=context
-# 	# 				)
+			
+			elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['update_post']:
+				if bot.users[chat_id].event[0]:
+					bot.users[chat_id].post.update_post(bot.users[chat_id])
+					bot.users[chat_id].post.clear_post()
+					bot.users[chat_id].clear_variables()
+					bot.users[chat_id].event[0] = False
+					bot.users[chat_id].update_post = False
+					update.effective_chat.send_message(
+						text=translates[bot.users[chat_id].language]['updated'],
+						reply_markup=start_keyboard(bot.users[chat_id]),
+					        )
+			elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['publish_and_update']:
+				if bot.users[chat_id].event[0]:
+					bot.users[chat_id].publish = True
+					bot.users[chat_id].update_and_publish = True
+					if bot.users[chat_id].event[0]:
+						update.effective_chat.send_message(
+							text='Select channel',
+							reply_markup=channels_keyboard(bot.users[chat_id])
+							)
 			if bot.users[chat_id].data == translates[bot.users[chat_id].language]['ALL_CHANNELS']:
 				bot.users[chat_id].all_channels = True
-				if bot.users[chat_id].save_and_publish:
+				if bot.users[chat_id].save_and_publish or bot.users[chat_id].update_and_publish:
 					bot.users[chat_id].post.show_post(update, bot.users[chat_id], context)
 					bot.users[chat_id].all_channels = False
-# 	# 			if bot.users[chat_id].update_post:
-# 	# 				bot.users[chat_id] = update_post(
-# 	# 					bot.users[chat_id], chat_id,
-# 	# 					bot=bot, update=update,
-# 	# 					context=context
-# 	# 				)
-# 	# 				update.effective_chat.send_message(
-# 	# 					text='Starting to post in all your accesseble channels',
-# 	# 					reply_markup=start_keyboard(bot.users[chat_id])
-# 	# 				)
-# 	# 				bot.users[chat_id] = cancel_post(bot.users[chat_id])
-# 	# 			else:
-# 	# 				save_post(
-# 	# 					bot.users[chat_id], chat_id,
-# 	# 					bot=bot, update=update,
-# 	# 					context=context
-# 	# 				)
-# 	# 				update.effective_chat.send_message(
-# 	# 					text='Starting to post in all your accesseble channels',
-# 	# 					reply_markup=start_keyboard(bot.users[chat_id])
-# 	# 					)
-# 	# 			return do_start(bot=bot, update=update, context=context)
 			elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['show_posts']:
 				bot.users[chat_id].unpublished_posts = bot.get_posts(chat_id)
 				if len(bot.users[chat_id].unpublished_posts) > 0:
 					bot.users[chat_id].show_unpublished_posts = True
+					bot.users[chat_id].update_post = True
 					update.effective_chat.send_message(
 						text='Select post', 
 						reply_markup=unpublished_keyboard(bot.users[chat_id])
@@ -435,7 +395,6 @@ def take_text(update: Update, context: CallbackContext):
 			    		reply_markup=start_keyboard(bot.users[chat_id])
 			    		)
 			if bot.users[chat_id].show_unpublished_posts and bot.users[chat_id].data in bot.users[chat_id].unpublished_posts.keys():
-# 	# 			bot.users[chat_id] = find_post(bot.users[chat_id], bot.users[chat_id].data)
 				bot.users[chat_id].unpublished_keyboard = True
 				bot.users[chat_id].show_unpublished_posts = False
 				bot.users[chat_id].update_post = True
@@ -446,24 +405,7 @@ def take_text(update: Update, context: CallbackContext):
 					text='You can edit your post',
 					reply_markup=find_post_keyboard(bot.users[chat_id]),
 				)
-# 	# 		if bot.users[chat_id].text[0]:
-# 	# 			bot.users[chat_id].text[0] = False
-# 	# 			if bot.users[chat_id].event[0]:
-# 	# 				if any([bot.users[chat_id].text[0], bot.users[chat_id].location[0]]):
-# 	# 					bot.send_message(
-# 	# 							chat_id=chat_id,
-# 	# 							text=translates[bot.users[chat_id]
-# 	# 											.language]['send_correct_data'],
-# 	# 							reply_markup=post_keyboard(bot.users[chat_id]),
-# 	# 						)
-# 	# 				else:
-# 	# 					bot.users[chat_id].text[1] = bot.users[chat_id].data
-# 	# 					bot.send_message(
-# 	# 							chat_id=chat_id,
-# 	# 							text=translates[bot.users[chat_id].language]['I got text'],
-# 	# 							reply_markup=post_keyboard(bot.users[chat_id]),
-# 	# 					)
-			if bot.users[chat_id].save_and_publish:
+			if bot.users[chat_id].save_and_publish or bot.users[chat_id].update_and_publish:
 				if bot.users[chat_id].data in bot.users[chat_id].channels:
 					bot.users[chat_id].post.show_post(update, bot.users[chat_id], context)
 				elif bot.users[chat_id].data == translates[bot.users[chat_id].language]["ALL_CHANNELS"]:
@@ -501,6 +443,7 @@ def get_media(update: Update, context: CallbackContext):
 	chat_id = update.message.chat_id
 	if chat_id in bot.users:
 		if any([bot.users[chat_id].post.text[0], bot.users[chat_id].add_location]):
+			print('MEDIA VALIDATION')
 			update.effective_chat.send_message(
 				text=translates[bot.users[chat_id]
 								.language]['send_correct_data'],
@@ -555,7 +498,7 @@ def get_media(update: Update, context: CallbackContext):
 def get_location(update: Update, context: CallbackContext):
 	chat_id = update.message.chat_id
 	if chat_id in bot.users:
-		if any([bot.users[chat_id].post.text[0], bot.users[chat_id].post.media[1]]):
+		if any([bot.users[chat_id].post.text[0], bot.users[chat_id].add_media]):
 			update.effective_chat.send_message(
 				text=translates[bot.users[chat_id]
 								.language]['send_correct_data'],
@@ -580,7 +523,7 @@ def get_location(update: Update, context: CallbackContext):
 def get_document(update: Update, context=CallbackContext):
 	chat_id = update.message.chat_id
 	if chat_id in bot.users:
-		if any([bot.users[chat_id].post.text[0], bot.users[chat_id].post.media[0], bot.users[chat_id].post.location[0]]):
+		if any([bot.users[chat_id].post.text[0], bot.users[chat_id].add_media, bot.users[chat_id].add_media]):
 			update.effective_chat.send_message(
 				text=translates[bot.users[chat_id]
 								.language]['send_correct_data'],
@@ -594,7 +537,7 @@ def get_document(update: Update, context=CallbackContext):
 def get_audio(update: Update, context=CallbackContext):
 	chat_id = update.message.chat_id
 	if chat_id in bot.users:
-		if any([bot.users[chat_id].post.text[0], bot.users[chat_id].post.media[0], bot.users[chat_id].post.location[0]]):
+		if any([bot.users[chat_id].post.text[0], bot.users[chat_id].add_media, bot.users[chat_id].add_media]):
 			update.effective_chat.send_message(
 				text=translates[bot.users[chat_id].language]['send_correct_data'],
 				reply_markup=post_keyboard(bot.users[chat_id]),
