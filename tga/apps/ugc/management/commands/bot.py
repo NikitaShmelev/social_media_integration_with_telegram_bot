@@ -2,7 +2,7 @@
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
 from telegram import ReplyKeyboardRemove, Bot, Update
 from telegram.utils.request import Request
-
+from telegram import ParseMode
 
 from django.core.management.base import BaseCommand
 from django.conf import settings
@@ -94,6 +94,7 @@ def take_text(update: Update, context: CallbackContext):
 					if bot.users[chat_id].username != False:
 						bot.users[chat_id].get_name = False
 						bot.add_user_to_database(bot.users[chat_id])
+						bot.users[chat_id].user_registration = True
 						update.effective_chat.send_message(
 							text=f'Welcome {bot.users[chat_id].username}',
 							reply_markup=start_keyboard(bot.users[chat_id])
@@ -192,6 +193,7 @@ def take_text(update: Update, context: CallbackContext):
 					update.effective_chat.send_message(
 						text=translates[bot.users[chat_id].language]['welcome'],
 						reply_markup=start_keyboard(bot.users[chat_id]),
+						parse_mode=ParseMode.MARKDOWN
 					)
 			elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['add_channel'] or bot.users[chat_id].append_channel:
 				bot.users[chat_id].clear_variables()
@@ -326,8 +328,9 @@ def take_text(update: Update, context: CallbackContext):
 						bot.users[chat_id] = bot.users[chat_id].post.save(bot.users[chat_id])
 						# change text
 						update.effective_chat.send_message(
-							text=translates[bot.users[chat_id].language]['Done'],
+							text=translates[bot.users[chat_id].language]['post_saved'],
 							reply_markup=start_keyboard(bot.users[chat_id]),
+							parse_mode=ParseMode.MARKDOWN,
 							)
 			elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['BUTTON10_CANCEL_POST']:
 				if bot.users[chat_id].event[0]:
@@ -513,7 +516,8 @@ def get_location(update: Update, context: CallbackContext):
 				bot.users[chat_id].add_location = False
 				update.effective_chat.send_message(
 					text=translates[bot.users[chat_id].language]['location_accepted'],
-					reply_markup=post_keyboard(bot.users[chat_id])
+					reply_markup=post_keyboard(bot.users[chat_id]),
+					parse_mode=ParseMode.MARKDOWN
 					)
 	else:
 		do_start(update=update, context=context)

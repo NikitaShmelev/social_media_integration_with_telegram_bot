@@ -201,12 +201,12 @@ class UserObject():
                     )
             else:
                 update.effective_chat.send_message(
-                    text='This channel in already exists. Send another channel.',
+                    text=translates[self.language]['channel_exists'],
                     reply_markup=start_page_keyboard(self),
                 )
         else:
             update.effective_chat.send_message(
-                text='Send channel id\n(You can send without @) or send channel link',
+                text=translates[self.language]['send_channel_manual'],
                 reply_markup=start_page_keyboard(self),
                 )
 
@@ -252,8 +252,7 @@ class UserObject():
             else:
                 if len(self.channels) > 1:
                     update.effective_chat.send_message(
-                        text='Send correct channel id(You can send without @) or send channel link.\n'
-                            'Also you can select ypur channel fron channels list',
+                        text=translates[self.language]['delete_channel'],
                         reply_markup=channels_keyboard(self)
                     )
                 else:

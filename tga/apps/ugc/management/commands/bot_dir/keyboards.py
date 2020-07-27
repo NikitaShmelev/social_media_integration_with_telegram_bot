@@ -44,18 +44,20 @@ def help_keyboard(user):
 def start_keyboard(user):
     keyboard = [
         [
-            KeyboardButton(translates[user.language]['BUTTON3_BOT_HELP']),
+            KeyboardButton(translates[user.language]['view_current_post']) if user.event[0] else KeyboardButton(translates[user.language]['BUTTON4_CREATE_POST']),
+            
         ],
         [
-            KeyboardButton(translates[user.language]['view_current_post']) if user.event[0] else KeyboardButton(translates[user.language]['BUTTON4_CREATE_POST']),
-            KeyboardButton(translates[user.language]['show_posts']),
+            KeyboardButton(translates[user.language]['show_posts'])
         ],
         [   
             KeyboardButton(translates[user.language]['list_of_channels']),
             KeyboardButton(translates[user.language]['add_channel']),
             KeyboardButton(translates[user.language]['remove_channel'])
         ],
-        [
+        [   
+
+            KeyboardButton(translates[user.language]['BUTTON3_BOT_HELP']),
             KeyboardButton(translates[user.language]['CHANGE_LANGUAGE']),
         ],
     ]

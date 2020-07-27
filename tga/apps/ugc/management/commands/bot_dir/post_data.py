@@ -1,9 +1,13 @@
 import sqlite3
-from datetime import datetime 
+
 from telegram import ReplyKeyboardRemove
-from telegram.error import TimedOut
+# from telegram.error import TimedOut
 from telegram import Bot, Update, Location, InputMediaPhoto, InputMediaVideo
+from telegram import ParseMode
+
+from datetime import datetime 
 from time import sleep
+
 from .keyboards import LANGUAGE_EN, LANGUAGE_RU, \
     start_keyboard, conifrm_keyboard, post_keyboard, language_keyboard, email_keyboard, \
     regisration_keyboard, channels_keyboard, unpublished_keyboard, find_post_keyboard, \
@@ -54,6 +58,7 @@ class Post:
         update.effective_chat.send_message(
                 text=translates[user.language]['I got text'],
                 reply_markup=post_keyboard(user),
+                parse_mode=ParseMode.MARKDOWN
                 )
     
     
@@ -75,7 +80,7 @@ class Post:
             context.bot.send_location(
                 chat_id=chat_id,
                 location=location,
-                    )
+                )
         media = []
         for i in range(1, len(user.post.media)):
             test = user.post.media[i]
@@ -118,7 +123,7 @@ class Post:
                     caption=text,
                     video=user.post.media[1][1:],
                     )
-        if len(media) == 0:
+        if len(media) == 0 and text:
             context.bot.send_message(
                 chat_id=chat_id,
                 text=text,
@@ -154,7 +159,8 @@ class Post:
                         update, user, context, user.data
                     )
                     sleep(1)
-                except TimedOut as e:
+                except:
+                    # TimedOut
                     sleep(10)
         else:
             self.send_post(
@@ -254,14 +260,7 @@ class Post:
         cur = conn.cursor()
         cur.execute('UPDATE home_post set POST_TEXT=?, LOCATION=?, MEDIA=?,PUBLISHED=? WHERE ID= ?',(user.post.text[1], True, True, user.publish, user.current_post_id))
         conn.commit()
-        if not cur.execute("SELECT * from home_postmedia WHERE post_id=?", (user.current_post_id, )).fetchall():
-            cur.execute('INSERT INTO home_postmedia (POST_ID,MEDIA_1,MEDIA_2,MEDIA_3,MEDIA_4,MEDIA_5,MEDIA_6,MEDIA_7,MEDIA_8,MEDIA_9,MEDIA_10)'
-                        ' VALUES(?,?,?,?,?,?,?,?,?,?,?)', (
-                            user.current_post_id, user.post.media[1], user.post.media[2], user.post.media[3], user.post.media[4],
-                            user.post.media[5], user.post.media[6], user.post.media[7], user.post.media[8], user.post.media[9], user.post.media[10]
-                        )
-                        )
-        else:
+        if cur.execute("SELECT * from home_postmedia WHERE post_id=?", (user.current_post_id, )).fetchall():
             cur.execute('UPDATE  home_postmedia set MEDIA_1=?,MEDIA_2=?,MEDIA_3=?,MEDIA_4=?,MEDIA_5=?,MEDIA_6=?,MEDIA_7=?,MEDIA_8=?,MEDIA_9=?,MEDIA_10=?'
                         ' where post_id=?', (
                             user.post.media[1], user.post.media[2], user.post.media[3], user.post.media[4],
@@ -270,10 +269,7 @@ class Post:
                         )
                         )
         conn.commit()
-        if not cur.execute("SELECT * from home_postlocation WHERE post_id=?",(user.current_post_id, )).fetchall():
-            cur.execute(
-                'INSERT INTO home_postlocation (POST_ID,LATITUDE,LONGITUDE) VALUES(?,?,?)', (user.current_post_id, user.post.location[1], user.post.location[2]))
-        else:
+        if cur.execute("SELECT * from home_postlocation WHERE post_id=?",(user.current_post_id, )).fetchall():
             cur.execute('UPDATE  home_postlocation set LATITUDE=?,LONGITUDE=?'
                         ' where post_id=?', (user.post.location[1], user.post.location[2], user.current_post_id))
         conn.commit()
