@@ -230,7 +230,7 @@ class UserObject():
                     BotState().close_db_connection(conn, cur)
                     self.clear_variables()
                     update.effective_chat.send_message(
-                        text='channel_removed',
+                        text=translates[self.language]['channel_removed'],
                         reply_markup=start_keyboard(self),
 
                     )
@@ -239,13 +239,13 @@ class UserObject():
                 else:
                     self.clear_variables()
                     update.effective_chat.send_message(
-                        text='Post removing was successfully canceled.',
+                        text=translates[self.language]['cancel_remove'],
                         reply_markup=start_keyboard(self),
                     )
                     return False
             if self.current_channel in self.channels and self.data != translates[self.language]['remove_channel']:
                 update.effective_chat.send_message(
-                    text='confirm_action',
+                    text=translates[self.language]['Need confirmation'],
                     reply_markup=conifrm_keyboard(self),
                 )
                 

@@ -99,21 +99,6 @@ def take_text(update: Update, context: CallbackContext):
 							text=f'Welcome {bot.users[chat_id].username}',
 							reply_markup=start_keyboard(bot.users[chat_id])
 							)
-			
-			
-				# bot.users[chat_id].post.add_text(update, bot.users[chat_id])
-# 	# 			if bot.users[chat_id].event[0]:
-# 	# 				bot.send_message(
-# 	# 						chat_id=chat_id,
-# 	# 						text=translates[bot.users[chat_id]
-# 	# 										.language]['Tap text for post'],
-# 	# 						reply_markup=post_keyboard(bot.users[chat_id]),
-# 	# 					)
-# 	# 				return text_for_post(bot.users[chat_id])
-			
-# 	# 		        return location_for_post(bot.users[chat_id])
-# 	# 		
-# 	# 		
 		else:
 			# add event check
 			
@@ -129,6 +114,7 @@ def take_text(update: Update, context: CallbackContext):
 						text=translates[bot.users[chat_id].language]['create_guide'],
 						reply_markup=help_keyboard(
 							bot.users[chat_id]),
+						parse_mode='MARKDOWN'
                         )
 			elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['how_to_update']:
 				bot.users[chat_id].clear_variables()
@@ -136,6 +122,7 @@ def take_text(update: Update, context: CallbackContext):
 						text=translates[bot.users[chat_id].language]['update_guide'],
 						reply_markup=help_keyboard(
 							bot.users[chat_id]),
+						parse_mode='MARKDOWN'
                         )
 			elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['text_guide']:
 				bot.users[chat_id].clear_variables()
@@ -143,6 +130,7 @@ def take_text(update: Update, context: CallbackContext):
 						text=translates[bot.users[chat_id].language]['text_usage'],
 						reply_markup=help_keyboard(
 							bot.users[chat_id]),
+						parse_mode='MARKDOWN'
                         )
 			elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['location_guide']:
 				bot.users[chat_id].clear_variables()
@@ -150,6 +138,7 @@ def take_text(update: Update, context: CallbackContext):
 						text=translates[bot.users[chat_id].language]['location_usage'],
 						reply_markup=help_keyboard(
 							bot.users[chat_id]),
+						parse_mode='MARKDOWN'
                         )
 			elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['media_guide']:
 				bot.users[chat_id].clear_variables()
@@ -157,13 +146,7 @@ def take_text(update: Update, context: CallbackContext):
 						text=translates[bot.users[chat_id].language]['media_usage'],
 						reply_markup=help_keyboard(
 							bot.users[chat_id]),
-                        )
-			elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['media_guide']:
-				bot.users[chat_id].clear_variables()
-				update.effective_chat.send_message(
-                        text=translates[bot.users[chat_id].language]['media_usage'],
-						reply_markup=help_keyboard(
-							bot.users[chat_id]),
+						parse_mode='MARKDOWN'
                         )
 			elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['work_with_channels']:
 				bot.users[chat_id].clear_variables()
@@ -171,6 +154,7 @@ def take_text(update: Update, context: CallbackContext):
                         text=translates[bot.users[chat_id].language]['channels_usage'],
 						reply_markup=help_keyboard(
 							bot.users[chat_id]),
+						parse_mode='MARKDOWN'
                         )
 			elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['CHANGE_LANGUAGE']:
 				bot.users[chat_id].clear_variables()
@@ -302,14 +286,14 @@ def take_text(update: Update, context: CallbackContext):
 					bot.users[chat_id].post.clear_post()
 					bot.users[chat_id].event = [False, False]
 					update.effective_chat.send_message(
-						text='Post creation was finished. You were redirected on the start page.',
+						text=translates[bot.users[chat_id].language]['creation_finished'],
 						reply_markup=start_keyboard(bot.users[chat_id]),
 					)
 			elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['CONFIRM_NO']:
 				if bot.users[chat_id].cancel_post:
 					bot.users[chat_id].cancel_post = False
 					update.effective_chat.send_message(
-						text='You were returned to post creation',
+						text=translates[bot.users[chat_id].language]['returned_to_creation'],
 						reply_markup=post_keyboard(bot.users[chat_id]),
 					)
 				if bot.users[chat_id].post.saved:
@@ -321,7 +305,7 @@ def take_text(update: Update, context: CallbackContext):
 				if bot.users[chat_id].event[0]:
 					if not any([bot.users[chat_id].post.text[1], bot.users[chat_id].post.media[1], bot.users[chat_id].post.location[1]]):
 						update.effective_chat.send_message(
-							text='Nothing to save',
+							text=translates[bot.users[chat_id].language]['nothing_to_save'],
 							reply_markup=post_keyboard(bot.users[chat_id])
 							) 
 					elif any([bot.users[chat_id].post.text[1], bot.users[chat_id].post.media[1], bot.users[chat_id].post.location[1]]):

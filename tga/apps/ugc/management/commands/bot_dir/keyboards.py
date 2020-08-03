@@ -161,8 +161,6 @@ def find_post_keyboard(user):
     if user.post.text[1] != '':
         keyboard[1][0] = KeyboardButton(
             translates[user.language]['DELETE_TEXT'])
-    # if user.media[1] != '':
-    #     keyboard[1].append(KeyboardButton(translates[user.language]['DELETE_MEDIA']))
     return ReplyKeyboardMarkup(
         keyboard=keyboard,
         resize_keyboard=True,

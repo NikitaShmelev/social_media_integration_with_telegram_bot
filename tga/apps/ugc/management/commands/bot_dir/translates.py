@@ -24,7 +24,7 @@ translates = {
         'CONFIRM_YES': "Do it",
         'BUTTON5_TEXT_FOR_POST': 'Add text',
         'BUTTON6_ADD_LOCATION': 'Add location',
-        'BUTTON7_ADD_MEDIA': 'Add media',
+        'BUTTON7_ADD_MEDIA': 'Work with photo/video',
         'BUTTON10_CANCEL_POST': 'Cancel creation',
         'BUTTON9_SAVE_POST': 'Save',
         'BUTTON8_SHOW_POST': 'Show',
@@ -38,11 +38,11 @@ translates = {
         'remove_channel': 'Remove channel',
         'view_current_post':'Show current post',
         'delete_channel': 'Send channel id or link. Aslo you can pick channel from keyboard.',
-
+        'select_channel': 'You can select channel for post sending',
         'nothing_to_cancel': 'Nothing to cancel.',
         'nothing_to_show': 'Nothing to show.',
         'Need confirmation': 'Need confirmation.',
-        'Post_canceled': 'Post creation was successfully canceled.',
+        'Post_canceled': 'Post creation was canceled.',
         'continue_post': "Let's continue create post.",
         'already':'You are already work with post.',
         'Post_creation': 'Post creation.',
@@ -65,13 +65,12 @@ translates = {
         
         'location_deleted': 'Location was successfully removed',
         'select_channel_to_remove': 'Select channel to remove',
-
-
+        'channel_removed': 'Channel has been removed. You can add channel again if it will be necessary.',
+        'cancel_remove': 'Post removing was canceled.',
 
 
         'channel_added': 'Channel successfully added',
         'action_canсeled': 'Action canceled',
-        'channel_removed': 'Channel was removed.',
         'publish_and_save':'Publish&Save',
         'show_posts':'Show unpublished posts',
         'ALL_CHANNELS': 'Select all channels',
@@ -99,6 +98,9 @@ translates = {
         'channel_exists': 'This channel is already exists in your channels list',
         'Code_has_been_sent':"Code has been sent. Please print this code here to continue.",
         'i_got_name':"I got your name.\nSend another name, if you want to change the previous one.",
+        'creation_finished': 'Post creation was finished.',
+        'returned_to_creation': 'You were returned to post creation.',
+        'nothing_to_save': 'Can\'t save blank post, add something.',
         ###
         'create_guide':
             "Press 'Create post' button. In next steps you can add text, location, media to your post.\n\n"
@@ -137,6 +139,7 @@ translates = {
             "Send selected number to remove if you are still at adding media stage.\n"
             "Press 'Add media' button if you are pressed another button except 'Show' button.\n"
             "You can send item's number to remove it after this action.\n",
+        'no_channels_to_remove': 'You have no channels to remove',
     },
 
 
@@ -153,8 +156,10 @@ translates = {
         'name_to_sign_up': 'Верный код, теперь введите своё имя',
         'wrong_code': "Вы ввели неверный код, попробуйте ещё раз",
         'exists_email': 'Пользователь с таким email уже существует.',
-        'help_text': 'Выберите интересующий Вас раздел и нажните на соответствующую кнопку.',
-
+        'help_text': 'Выберите интересующий Вас раздел.',
+        'channel_removed': 
+                        'Каначал удалён из списка доступных каналов.'
+                        '\nВы всегда сможете добавить канал ещё раз.',
 
 
         # BUTTONS
@@ -169,7 +174,7 @@ translates = {
         'CONFIRM_YES': "Сделать это",
         'BUTTON5_TEXT_FOR_POST': 'Добавить текст',
         'BUTTON6_ADD_LOCATION': 'Добавить локацию',
-        'BUTTON7_ADD_MEDIA': 'Добавить фото/видео',
+        'BUTTON7_ADD_MEDIA': 'Работа с фото/видео',
         'BUTTON10_CANCEL_POST': f'{chr(9888)}Удалить пост{chr(9888)}',
         'BUTTON9_SAVE_POST': 'Сохранить пост',
         'CHANGE_LANGUAGE': 'Изменить язык',
@@ -190,7 +195,7 @@ translates = {
         'nothing_to_show': 'Нечего показать',
         'Need confirmation': 'Необходимо подтверждение.',
         'already': 'Вы уже работаете с постом.',
-        'Post_canceled':'Создание поста было успешно отменено.',
+        'Post_canceled':'Создание поста было отменено.',
         'Post_creation': 'Создание поста.',
         'Item removed': 'Вложение удалено.',
         'Done': 'Done.',
@@ -221,43 +226,85 @@ translates = {
                     ' кнопку `Показать неопубликованные посты`',
         'channel_added': 'Канал успешно добавлен',
         'action_canсeled': 'Действие отменено',
-        'channel_removed': 'Канал удалён',
         'publish_and_save': 'Опубликовать и сохранить пост',
         'show_posts':'Показать неопубликованные посты',
         'ALL_CHANNELS': 'Выбрать все каналы',
         'DELETE_TEXT': 'Убрать текст',
         'text_deleted': 'Техт был успешно удалён из поста',
         'DELETE_MEDIA': 'Удалить медиа \\TO DO',
-        'publish_and_update': 'Обновить и опубликовать ',
-
+        'publish_and_update': 'Обновить и опубликовать',
+        'returned_to_creation': 'Вы были возвращены к созданию поста.',
         'delete_channel': 'Вышлите id канала или ссылку на канал. Также можно выбрать канал в клавиатуре',
         'update_post': 'Обновить пост',
-        'updated': 'обновлено',
+        'updated': 
+                'Пост обновлён. Так как пост ещё не был опубликован, то он находится в разделе '
+                'неопубликованных постов.',
         'welcome':
                 'Вы перешли к начальной клавиатуре. Если вы работали с постом, то его состояние '
-                'не потеряно. Но состояние поста будет потеряно после моей перезагрузки, поэтому'
-                f'нажмите кнопку {chr(96)}Посмотреть текущий пост{chr(96)}.\n'
-                f'После этого нажмите {chr(96)}Обновить пост{chr(96)} или {chr(96)}Сохранить пост{chr(96)}.'
-                'Также можно удалить пост или сохранить с возвожностью публикации.',
-        'how_to_create': 'Инструкция по созданию поста',
-        'how_to_update': 'Инструкция по обновлению поста',
+                'не потеряно. Cостояние поста будет потеряно после перезагрузки Бота, поэтому'
+                f' нажмите кнопку {chr(96)}Посмотреть текущий пост{chr(96)}.\n'
+                f'После этого нажмите {chr(96)}Обновить пост{chr(96)} или {chr(96)}Сохранить пост{chr(96)}.\n',
+        'how_to_create': 'Создание поста',
+        'how_to_update': 'Обновление поста',
         'text_guide': 'Работа с текстом',
         'location_guide': 'Работа с локацией',
-        'media_guide': 'Работа с медиа файлами',
+        'media_guide': 'Работа с фото/видео',
         'work_with_channels': 'Работа с каналами',
         'check_email': "Проверьте введённый email. Нажмите 'Выслать код', если всё в порядке.",
-        'send_correct_data': "Вышлите формат данных, с которыми сейчас работаете.",
+        'send_correct_data': "Вы выслали неверный формат данных. Нельзя при работе с локацией отправлять фото и тому подобное.",
         'Code_has_been_sent':"Код был отправлен. Пожалуйста, напишите этот код здесь, чтобы продолжить.",
         'i_got_name':"Я получил ваше имя.\nВышлите имя ещё раз, если хотите изменить его.",
+        'creation_finished': 'Создание поста закончено.',
+        'nothing_to_save': 'Нельзя сохранять пустой пост, добавьте что-то.',
+        'cancel_remove': 'Удаление канала из списка Ваших каналов отменено.',
+        'no_channels_to_remove': 'Вы ещё не добавили ни одного канала.',
+        'select_channel': 'Вы можете выбрать канал для отправки поста.',
         ###
-        'cant_add_bot': 'Can\'t add bot to this chat. Print correct chat or add bot to this chat.'
-                        'You have to add bot to chat and send this chat.',
-        'create_guide': 'create_guide',
-        'update_guide': 'create_guide',
-        'text_usage': 'text_usage',
-        'location_usage': 'Location usage guide',
-        'media_usage': 'Media usage guide',
-        'channels_usage': 'channels_usage',
+
+        'cant_add_bot': 
+                    'Не получилось добавить бота. Вышлите верный id или ссылку.'
+                    'Также бот должен быть добавлен в канал с возможность отправки сообщений.',
+       'create_guide':
+                    f'Для начала создания поста необходимо нажать кнопку {chr(96)}Создать пост{chr(96)}.\n'
+                    'Далее Вы можете добавить текст, локацию, фото/видео к посту.\n'
+                    '\nПост может состоять из чего-то одного, например, из теста, так и из текста, локации и фото/видео одновременно.\n'
+                    f'После создания поста его можно сохранить, нажав кнопку {chr(96)}Сохранить пост{chr(96)}.\n'
+                    f'\nТакже пост можно сразу опубликовать, нажав кнопку {chr(96)}Сохранить и опубликовать{chr(96)}, '
+                    'после этого необходимо выбрать канал(или несколько) в который будет отправлен пост.\n'
+                    f'\nДля получения интрукций по работе с фото/видео, текстом, локацией или каналами нажмите соответствующие кнопки.',
+        'update_guide':
+            f'Нажмите {chr(96)}Показать неопубликованные посты{chr(96)}, далее выберите пост по дате создания.\n'
+            'Далее вы можете добавить(заменить или удалить) текст, видео/фото и(или) локацию. Для этого используйте соответствующие кнопки.\n\n'
+            'В процессе обновления данных в посте вы можете переключаться на другие клавиатуры. '
+            'После того, как Вы сделали всё необходимое, пост необходимо обновить. Для этого нажмите '
+            f'{chr(96)}Обновить пост{chr(96)}. \n\nПост будет обновлён и всё ещё будет находиться в списке неопубликованных, если '
+            f'хотите его сразу опубликовать, то нажмите {chr(96)}Обновить и опубликовать{chr(96)}.\n'
+            '\nДалее необходимо выбрать хотя бы один канал, используя соответствующие кнопки.',
+        'channels_usage':
+            f'Чтобы добавить канал, в котором можно опубликовать пост, нажмите {chr(96)}Добавить канал{chr(96)}. '
+            'Бота необходимо добавить в канал в качестве администратора с возможностью отправки сообщений.\n'
+            f'Вышлите боту ссылку на канал или его id.'
+            f'Чтобы удалить канал из списка добавленных каналов нажмите {chr(96)}Удалить канал{chr(96)}.'
+            'Далее в клавиатуре выберите необходимый канал.\n'
+            f'Чтобы посмотреть список доступных для публикации постов каналов нажмите {chr(96)}Список каналов{chr(96)}.',
+        'text_usage':
+            f'Для добавления текста к посту нажмите {chr(96)}Добавить текст{chr(96)}.\n'
+            'После этого отправьте текстовое сообщение, где количество символов не превышает 1024. '
+            'Иначе Telegram разделит пост на несколько сообщений.\n'
+            f'Для удаления текста из поста нажмите {chr(96)}Удалить текст{chr(96)}.',
+        'location_usage':
+            f'Чтобы добавить локацию нажмите {chr(96)}Добавить локацию{chr(96)}.'
+            'Далее вышлите локацию.\n'
+            f'Для удаления локации нажмите {chr(96)}Удалить локацию{chr(96)}.\n\n'
+            'При публикации поста локация будет выслана отдельным сообщением из-за особенности работы Telegram.',
+        'media_usage':
+            f'Для начала добавления фото/видео нажмите {chr(96)}Работа с фото/видео{chr(96)}.\n'
+            'Максимум можно добавить 10 элементов. Выберите файлы и вышлите боту.\n'
+            '\nБот вышлет Вам номера вложений, это может вам пригодиться для удаления элемента из поста.\n'
+            'Если вы не прекратили работу с фото/видео, то для удаления элемента вышлите его номер.\n'
+            f'Если вы прекратили работу с фото/видео и хотите удалить элемент, то нажмите {chr(96)}Работа с фото/видео{chr(96)}.\n'
+            'Если пока количество медиа вложений не равно 10, то Вы можете высылать фото/видео.'
+            ,
 
     }
 }
