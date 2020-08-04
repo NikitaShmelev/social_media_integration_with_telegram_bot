@@ -84,11 +84,7 @@ def conifrm_keyboard(user):
 
 
 def unpublished_keyboard(user):
-    keyboard = [
-        [
-            KeyboardButton(translates[user.language]['START_PAGE']),
-        ],
-    ]
+    keyboard = list()
     if len(user.unpublished_posts) > 0:
         for i in user.unpublished_posts.keys():
             keyboard.append(
@@ -98,6 +94,10 @@ def unpublished_keyboard(user):
                     ),
                 ]
                 )
+        keyboard.reverse()
+        keyboard.insert(0, [
+            KeyboardButton(translates[user.language]['START_PAGE']),
+        ],)
     return ReplyKeyboardMarkup(
         keyboard=keyboard,
         resize_keyboard=True,

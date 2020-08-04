@@ -67,6 +67,10 @@ class Post:
         if (user.save_and_publish or user.update_and_publish) and not user.all_channels:
             chat_id = user.data
         text = self.text[1]
+        if len(text) <= 1024:
+            caption_for_media = text
+        else:
+            caption_for_media = ''
         if user.post.location[1] != '':
             latitude = user.post.location[1]
             longitude = user.post.location[2]
@@ -89,7 +93,7 @@ class Post:
                     if len(media) == 0:
                         media.append(InputMediaPhoto(
                             user.post.media[i][1:],
-                            text)
+                            caption_for_media)
                             )
                     else:
                         media.append(InputMediaPhoto(
@@ -99,7 +103,7 @@ class Post:
                     if len(media) == 0:
                         media.append(InputMediaVideo(
                             user.post.media[i][1:],
-                            text)
+                            caption_for_media)
                             )
                     else:
                         media.append(InputMediaVideo(
@@ -114,16 +118,16 @@ class Post:
             if self.media[1][0] == 'p':
                 context.bot.send_photo(
                     chat_id=chat_id,
-                    caption=text,
+                    caption=caption_for_media,
                     photo=user.post.media[1][1:],
                     )
             else:
                 context.bot.send_video(
                     chat_id=chat_id,
-                    caption=text,
+                    caption=caption_for_media,
                     video=user.post.media[1][1:],
                     )
-        if len(media) == 0 and text:
+        if len(media) == 0 and text or caption_for_media == '':
             context.bot.send_message(
                 chat_id=chat_id,
                 text=text,

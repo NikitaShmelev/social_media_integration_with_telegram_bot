@@ -372,7 +372,7 @@ def take_text(update: Update, context: CallbackContext):
 					bot.users[chat_id].show_unpublished_posts = True
 					bot.users[chat_id].update_post = True
 					update.effective_chat.send_message(
-						text='Select post', 
+						text=translates[bot.users[chat_id].language]['Select post'], 
 						reply_markup=unpublished_keyboard(bot.users[chat_id])
 						)
 					return True
