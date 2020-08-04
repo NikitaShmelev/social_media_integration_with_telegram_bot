@@ -5,8 +5,8 @@ from .models import Feedback
 from .forms import FeedbackForm
 import sqlite3
 
-DATABASE_PATH = './db.sqlite3' # development
-# DATABASE_PATH = './social_media_integration_wtih_telegram_bot/db.sqlite3' # deploy
+# DATABASE_PATH = './db.sqlite3' # development
+DATABASE_PATH = './social_media_integration_wtih_telegram_bot/db.sqlite3' # deploy
 
 
 def index(request):
