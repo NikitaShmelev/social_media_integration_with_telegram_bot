@@ -2,6 +2,7 @@ from email_validator import validate_email, EmailNotValidError
 from telegram import ReplyKeyboardRemove
 # from telegram import Chat
 from telegram.error import BadRequest
+from telegram import ParseMode
 from random import randint
 import smtplib
 from .bot_data import BotState
@@ -68,10 +69,11 @@ class UserObject():
     def validate_user_email(self, update, emails):
         if self.email not in emails:
             try:
-                validation = validate_email(self.email)
+                validate_email(self.email)
                 update.effective_chat.send_message(
                     text=translates[self.language]['check_email'],
                     reply_markup=email_keyboard(self),
+                    parse_mode='MARkDOWN'
                 )
                 self.check_email = False
                 self.access = True
@@ -145,6 +147,7 @@ class UserObject():
         update.effective_chat.send_message(
                 text=translates[self.language]['check_email_for_code'],
                 reply_markup=ReplyKeyboardRemove(),
+                parse_mode='MARKDOWN',
                 )
 
 

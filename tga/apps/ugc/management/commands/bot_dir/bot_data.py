@@ -7,13 +7,11 @@ from datetime import datetime
 from home.models import UserProfile, Channel, Post, PostMedia, PostLocation 
 
 from .post_data import Post
-try:
-	from .keyboards import LANGUAGE_EN, LANGUAGE_RU, \
-		start_keyboard, conifrm_keyboard, post_keyboard, language_keyboard, email_keyboard, \
-		regisration_keyboard, channels_keyboard, unpublished_keyboard, find_post_keyboard, \
-		help_keyboard
-except ImportError:
-	pass
+from .keyboards import LANGUAGE_EN, LANGUAGE_RU, \
+    start_keyboard, conifrm_keyboard, post_keyboard, language_keyboard, email_keyboard, \
+    regisration_keyboard, channels_keyboard, unpublished_keyboard, find_post_keyboard, \
+    help_keyboard
+
 
 logger = getLogger(__name__)
 

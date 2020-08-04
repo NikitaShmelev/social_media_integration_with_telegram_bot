@@ -378,7 +378,7 @@ def take_text(update: Update, context: CallbackContext):
 					return True
 				else:
 					update.effective_chat.send_message(
-			    		text='All your posts already published',
+			    		text=translates[bot.users[chat_id].language]['All your posts already published'],
 			    		reply_markup=start_keyboard(bot.users[chat_id])
 			    		)
 			if bot.users[chat_id].show_unpublished_posts and bot.users[chat_id].data in bot.users[chat_id].unpublished_posts.keys():
@@ -389,7 +389,7 @@ def take_text(update: Update, context: CallbackContext):
 				bot.users[chat_id].post = bot.users[chat_id].unpublished_posts[bot.users[chat_id].data]
 				bot.users[chat_id].current_post_id = bot.users[chat_id].post.post_id
 				update.effective_chat.send_message(
-					text='You can edit your post',
+					text=translates[bot.users[chat_id].language]['You can edit your post'],
 					reply_markup=find_post_keyboard(bot.users[chat_id]),
 				)
 			if bot.users[chat_id].save_and_publish or bot.users[chat_id].update_and_publish:
@@ -547,8 +547,8 @@ class Command(BaseCommand):
 		
 		bot = Bot(
 			request=request,
-			# token=bot.token, # production
-			token='1086886864:AAH4iytj0B5KvpdFcf-N6akkuuAEOym7iG4', # development
+			token='902495020:AAH42KO9_MpcBLa0XHRjB4wg1yOesgsEf7Y', # production
+			# token='1086886864:AAH4iytj0B5KvpdFcf-N6akkuuAEOym7iG4', # development
 		)
 		updater = Updater(
 			bot=bot,
