@@ -224,6 +224,7 @@ class UserObject():
                     self.current_channel = f'@{self.data}'
             else:
                 if self.data == translates[self.language]['CONFIRM_YES']:
+                    self.channels.remove(self.current_channel)
                     conn, cur =  BotState().open_db_connection()
                     cur.execute(
                         "DELETE FROM home_channel WHERE channel_id=? and user_id=?",
@@ -237,6 +238,7 @@ class UserObject():
                         reply_markup=start_keyboard(self),
 
                     )
+                    
                     del conn, cur
                     return True
                 else:

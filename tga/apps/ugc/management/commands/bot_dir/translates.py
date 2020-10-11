@@ -89,6 +89,7 @@ translates = {
                 f'{chr(96)}Save{chr(96)} or {chr(96)}Update{chr(96)} else post\'s info will be lost after my reboot.',
         'how_to_create': 'Post create guide',
         'how_to_update': 'Post update guide',
+        'you_have_no_channels': 'You didn\'t add any channel',
         'text_guide': 'Text usage guide',
         'location_guide': 'Location usage guide',
         'post_saved': 'Post has been successfully saved. '
@@ -190,6 +191,7 @@ translates = {
         'CHANGE_LANGUAGE': 'Изменить язык',
         'BUTTON8_SHOW_POST': 'Показать пост',
         'list_of_channels': 'Список каналов',
+        'you_have_no_channels': 'Вы не добавляли каналы',
         'add_channel': 'Добавить канал',
         'remove_channel': 'Удалить канал',
         'view_current_post':'Посмотреть текущий пост',

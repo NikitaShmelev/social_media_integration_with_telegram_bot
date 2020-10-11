@@ -212,6 +212,7 @@ def channels_keyboard(user):
             KeyboardButton(translates[user.language]['START_PAGE']),
         ],
     ]
+    print(user.channels)
     for i in user.channels[1:]:
         keyboard.append([KeyboardButton(str(i))])
         # or user.save_and_publish or user.update_and_publish

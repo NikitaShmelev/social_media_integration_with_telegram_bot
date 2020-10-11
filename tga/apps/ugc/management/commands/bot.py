@@ -184,11 +184,17 @@ def take_text(update: Update, context: CallbackContext):
 				bot.users[chat_id].append_channel = True
 				bot.users[chat_id].add_channel(update, context=context)
 			elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['list_of_channels']:
-				bot.users[chat_id].clear_variables()
-				update.effective_chat.send_message(
-					text=translates[bot.users[chat_id].language]['list_of_channels'],
-					reply_markup=channels_keyboard(bot.users[chat_id]),
-				)
+				if len(bot.users[chat_id].channels) > 1:
+					bot.users[chat_id].clear_variables()
+					update.effective_chat.send_message(
+						text=translates[bot.users[chat_id].language]['list_of_channels'],
+						reply_markup=channels_keyboard(bot.users[chat_id]),
+					)
+				else:
+					update.effective_chat.send_message(
+						text=translates[bot.users[chat_id].language]['you_have_no_channels'],
+						reply_markup=start_keyboard(bot.users[chat_id]),
+					)
 			elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['remove_channel'] or bot.users[chat_id].remove_channel:
 				bot.users[chat_id].remove_channel = True
 				bot.users[chat_id].delete_channel(update)
@@ -546,9 +552,9 @@ class Command(BaseCommand):
 		)
 		
 		bot = Bot(
-			request=request,
-			token='902495020:AAH42KO9_MpcBLa0XHRjB4wg1yOesgsEf7Y', # production
-			# token='1086886864:AAH4iytj0B5KvpdFcf-N6akkuuAEOym7iG4', # development
+			# request=request,
+			# token='902495020:AAH42KO9_MpcBLa0XHRjB4wg1yOesgsEf7Y', # production
+			token='1086886864:AAH4iytj0B5KvpdFcf-N6akkuuAEOym7iG4', # development
 		)
 		updater = Updater(
 			bot=bot,
