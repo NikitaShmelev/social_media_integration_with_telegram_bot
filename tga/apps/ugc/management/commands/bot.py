@@ -28,6 +28,17 @@ config = load_config()
 logger = getLogger(__name__)
 bot = BotState()
 
+@debug_requests
+def send_log_message(user_message, update: Update, context: CallbackContext):
+	try:
+		chat_id = update.message.chat_id
+		context.bot.send_message(
+				chat_id='@CHANNEL_FOR_LOGS',
+				text=f"CHAT_ID: {chat_id})\n"
+						f"MESSAGE: \n\n{user_message}",
+			)
+	except:
+		pass
 
 
 @debug_requests
@@ -58,6 +69,8 @@ def do_start(update: Update, context=CallbackContext):
 
 @debug_requests
 def take_text(update: Update, context: CallbackContext):
+	chat_id = update.message.chat_id
+	send_log_message(update.message.text, update, context=context)
 	chat_id = update.message.chat_id
 	if chat_id in bot.users:
 		bot.users[chat_id].data = update.message.text
@@ -433,6 +446,7 @@ def take_text(update: Update, context: CallbackContext):
 
 @debug_requests
 def get_media(update: Update, context: CallbackContext):
+	send_log_message('MEDIA_FILE', update, context=context)
 	chat_id = update.message.chat_id
 	if chat_id in bot.users:
 		if any([bot.users[chat_id].post.text[0], bot.users[chat_id].add_location]):
@@ -489,6 +503,7 @@ def get_media(update: Update, context: CallbackContext):
 
 @debug_requests
 def get_location(update: Update, context: CallbackContext):
+	send_log_message('LOCATION_FILE', update, context=context)
 	chat_id = update.message.chat_id
 	if chat_id in bot.users:
 		if any([bot.users[chat_id].post.text[0], bot.users[chat_id].add_media]):

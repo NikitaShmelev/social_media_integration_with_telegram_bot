@@ -179,7 +179,7 @@ class UserObject():
                 self.current_channel = f'@{self.data}'
             if self.current_channel not in self.channels:
                 try:
-                    context.bot.send_message(                        
+                    context.bot.send_message(                 
                         chat_id=self.current_channel,
                         text=translates[self.language]['bot_added'],
                     )
