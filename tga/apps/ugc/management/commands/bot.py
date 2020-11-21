@@ -450,7 +450,6 @@ def get_media(update: Update, context: CallbackContext):
 	chat_id = update.message.chat_id
 	if chat_id in bot.users:
 		if any([bot.users[chat_id].post.text[0], bot.users[chat_id].add_location]):
-			print('MEDIA VALIDATION')
 			update.effective_chat.send_message(
 				text=translates[bot.users[chat_id]
 								.language]['send_correct_data'],
@@ -568,8 +567,8 @@ class Command(BaseCommand):
 		
 		bot = Bot(
 			# request=request,
-			# token='902495020:AAH42KO9_MpcBLa0XHRjB4wg1yOesgsEf7Y', # production
-			token='1086886864:AAH4iytj0B5KvpdFcf-N6akkuuAEOym7iG4', # development
+			token='902495020:AAH42KO9_MpcBLa0XHRjB4wg1yOesgsEf7Y', # production
+			# token='1086886864:AAH4iytj0B5KvpdFcf-N6akkuuAEOym7iG4', # development
 		)
 		updater = Updater(
 			bot=bot,

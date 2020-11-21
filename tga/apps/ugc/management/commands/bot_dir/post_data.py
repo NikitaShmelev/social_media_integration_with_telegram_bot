@@ -127,12 +127,14 @@ class Post:
                     caption=caption_for_media,
                     video=user.post.media[1][1:],
                     )
-        if len(media) == 0 and text or caption_for_media == '':
-            context.bot.send_message(
-                chat_id=chat_id,
-                text=text,
-            )
-        
+        try:
+            if len(media) == 0 and text or caption_for_media == '':
+                context.bot.send_message(
+                    chat_id=chat_id,
+                    text=text,
+                )
+        except:
+            pass
     
     
     def show_post(self, update, user, context):
@@ -205,6 +207,7 @@ class Post:
         
         
     def save(self, user):
+        print(self.location, 'SAVE_MONENT')
         if self.location[1] != '':
             location = True
         else:
@@ -240,7 +243,7 @@ class Post:
                     )
             )
             conn.commit()
-        elif location:
+        if location:
 
             cur.execute('INSERT INTO home_postlocation (POST_ID,LATITUDE,LONGITUDE)'
                 ' VALUES(?,?,?)',
