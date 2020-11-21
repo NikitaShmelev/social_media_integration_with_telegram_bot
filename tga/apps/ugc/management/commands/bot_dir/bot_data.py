@@ -155,11 +155,7 @@ class BotState():
             if post[5]:
                 '''location'''
                 cur.execute("SELECT * from home_postlocation WHERE post_id=?",(post[0],))
-                # try:
                 location_data = cur.fetchall()[0]
                 unpublished_posts[post[1]].location = [True, location_data[1], location_data[2]]
-                #     del location_data
-                # except IndexError:
-                #     unpublished_posts[post[1]].location = [False, '', '']
         self.close_db_connection(conn, cur)
         return unpublished_posts

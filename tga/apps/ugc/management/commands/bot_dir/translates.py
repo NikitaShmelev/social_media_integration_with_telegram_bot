@@ -25,7 +25,7 @@ translates = {
         'BUTTON5_TEXT_FOR_POST': 'Add text',
         'BUTTON6_ADD_LOCATION': 'Add location',
         'BUTTON7_ADD_MEDIA': 'Work with photo/video',
-        'BUTTON10_CANCEL_POST': 'Cancel creation',
+        'BUTTON10_CANCEL_POST': 'Delete post',
         'BUTTON9_SAVE_POST': 'Save',
         'BUTTON8_SHOW_POST': 'Show',
         'START_PAGE': 'Show start keyboard',
@@ -110,6 +110,7 @@ translates = {
         'creation_finished': 'Post creation was finished.',
         'returned_to_creation': 'You were returned to post creation.',
         'nothing_to_save': 'Can\'t save blank post, add something.',
+        'Post_deleted': 'Post deleted.',
         ###
         'create_guide':
             f"Press {chr(96)}Create post{chr(96)} button to start post creation. In next steps you can add text, location, photo or(and) videon to your post.\n\n"
@@ -271,6 +272,7 @@ translates = {
         'cancel_remove': 'Удаление канала из списка Ваших каналов отменено.',
         'no_channels_to_remove': 'Вы ещё не добавили ни одного канала.',
         'select_channel': 'Вы можете выбрать канал для отправки поста.',
+        'Post_deleted': 'Пост удалён',
         ###
 
         'cant_add_bot': 

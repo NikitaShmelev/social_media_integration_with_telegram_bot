@@ -292,15 +292,25 @@ def take_text(update: Update, context: CallbackContext):
 					return True
 			elif bot.users[chat_id].data == translates[bot.users[chat_id].language]['CONFIRM_YES']:
 				if bot.users[chat_id].cancel_post:
+					if bot.users[chat_id].update_post:
+						bot.users[chat_id].post.delete_post_from_db()
+						del bot.users[chat_id].unpublished_posts[bot.users[chat_id].post.created_at]
+						update.effective_chat.send_message(
+							text=translates[bot.users[chat_id].language]['Post_deleted'],
+							reply_markup=start_keyboard(bot.users[chat_id]),
+						)
+					else:
+						update.effective_chat.send_message(
+							text=translates[bot.users[chat_id].language]['Post_canceled'],
+							reply_markup=start_keyboard(bot.users[chat_id]),
+						)
 					bot.users[chat_id].cancel_post = False
 					bot.users[chat_id].post.clear_post()
 					bot.users[chat_id].event = [False, False]
 					bot.users[chat_id].update_post = False
 					bot.users[chat_id].clear_variables()
-					update.effective_chat.send_message(
-						text=translates[bot.users[chat_id].language]['Post_canceled'],
-						reply_markup=start_keyboard(bot.users[chat_id]),
-					)
+
+					
 				if bot.users[chat_id].post.saved:
 					bot.users[chat_id].post.clear_post()
 					bot.users[chat_id].event = [False, False]

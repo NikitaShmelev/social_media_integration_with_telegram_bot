@@ -283,3 +283,21 @@ class Post:
         cur.close()
         conn.close()
         return user
+
+    
+    def delete_post_from_db(self):
+        conn = sqlite3.connect(DATABASE_PATH)
+        cur = conn.cursor()
+        cur.execute("SELECT * from home_post WHERE id=?",(self.post_id,))
+        post = cur.fetchone()
+        print(post)
+        if post[4]:
+            # media existance 
+            cur.execute("DELETE from home_postmedia WHERE post_id=?",(self.post_id,))
+        if post[5]:
+            # location existance 
+            cur.execute("DELETE from home_postlocation WHERE post_id=?",(self.post_id,))
+        cur.execute("DELETE from home_post WHERE id=?",(self.post_id,))
+        conn.commit()
+        cur.close()
+        conn.close()
